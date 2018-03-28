@@ -19,7 +19,6 @@ class PreventConcurrentLoginsMiddleware(MiddlewareMixin):
             if hasattr(request.user, 'session_control'):
                 session_key_in_visitor_db = request.user.session_control.session_key
                 if session_key_in_visitor_db != key_from_cookie:
-                    # Delete the Session object from database and cache
                     engine.SessionStore(session_key_in_visitor_db).delete()
                     request.user.session_control.session_key = key_from_cookie
                     request.user.session_control.save()
