@@ -1,0 +1,43 @@
+{% extends 'base_generic.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    {% if sms_authentication_failed %}
+        <div class="loginErrorMessageDiv">短信验证失败。请您确认您填写的手机号码，然后再获取一个新的验证码试一次。如您需要帮助，请联系我们。</div>
+    {% endif %}
+
+    {% if form.errors %}
+        {% for key,value in form.errors.items %} 
+            <div class="loginErrorMessageDiv">{{ value }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div id="signupFormWrapper">
+        <div id="loginFormCardTitle" class="d-flex justify-content-center align-items-center">
+            <div></div>
+        </div>
+        <form class="loginForm" method="post" action="{% url 'request_sms_code' %}">
+        {% csrf_token %}
+            <div class="loginInputDiv" id="loginFormUsernameDiv">
+              <label for="{{ form.mobile.id_for_label }}">手机号 </label>{{ form.mobile }}
+            </div>
+            <div class="loginInputDiv" id="smsVerificationCodeDiv">
+              <label for="{{ form.verification_code.id_for_label }}">短信验证码 </label>{{ form.verification_code }}<div id="smsBtn">获取验证码</div>
+            </div>
+            <div>
+              <button type="submit" class="loginPageButton">验证</button>
+            </div>
+        </form>
+        <div id="loginFormLinktoSignup" class="d-flex justify-content-center align-items-center">
+            <div>已经有账号？<a href="{% url 'login'%}"><span>立即登录</span></a></div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script>let for_signup_django = false;</script>
+    <script src="{% static 'sms/scripts/signup.js' %}"></script>
+{% endblock js %}

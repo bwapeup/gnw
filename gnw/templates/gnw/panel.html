@@ -1,0 +1,67 @@
+{% extends "base_generic.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<section id="controlPanelCardBoxesSection">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="controlPanelCardBox myBlue">我的测试</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="controlPanelCardBox myLightBlue">学习资源</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="controlPanelCardBox myGreen">家长空间</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="controlPanelCardBox myRed">系统设定</div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="enrolledClassesHeadingSection">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div id="enrolledClassesHeading">我正在上的课程：</div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="enrolledClassesContainerSection">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="mycard-deck panelCardDeck">
+                  {% for class in enrolled_classes %}
+                      <div class="card">
+                        <div class="imageOverlayColorWrapper">
+                            {% if class.course.slug|upper == 'GRAMMAR_LEVEL_1_PART_1' %}
+                                {% static 'gnw/assets/img/courses/coursecoverimg9.jpg' as cover_photo%}
+                            {% endif %}
+                            <img class="card-img-top img-fluid" src="{{cover_photo}}" alt="">
+                            <div id="courseOneOverlay"></div>
+                        </div>
+                        <div class="card-body">
+                          <h2 class="card-title">{{class.course.course_name}}</h2>
+                          {% if class.course.slug|upper == 'GRAMMAR_LEVEL_1_PART_1' %}
+                              <p class="card-teacher-info">老师：Saralyn，美国密苏里州公立小学老师</p>
+                              <p class="card-teacher-info">教学经验(年)：15+</p>
+                          {% endif %}
+                        </div>
+                        <div class="card-footer bg-white">
+                          <a href="{% url 'class' slug=class.course.slug %}" class="myLinkBtn coverCurriculumButton courseBtn">进入课堂</a>
+                        </div>
+                      </div>
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}
