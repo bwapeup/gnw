@@ -103,7 +103,7 @@ ENV/
 # Extra ones
 bin/
 media/
-static/
+video/
 *.sqlite3
 *.bak
 docs/locale/
