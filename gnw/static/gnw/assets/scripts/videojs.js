@@ -16,11 +16,11 @@ let nextBtn = document.querySelector("button.nextLecture");
 nextBtn.addEventListener("click", function(){
     if (next_url.indexOf('download') >= 0)
         {
-            let download_link = document.createElement('a');
-            download_link.href = next_url;
-            download_link.setAttribute('download', '');
-            download_link.dispatchEvent(new MouseEvent('click'));
-            ajax_record_completed_LM(next_uuid_django);
+            //let download_link = document.createElement('a');
+            //download_link.href = next_url;
+            //download_link.setAttribute('download', '');
+            //download_link.dispatchEvent(new MouseEvent('click'));
+            //ajax_record_completed_LM(next_uuid_django);
             window.location.assign(course_url_django);
         }
     else

@@ -26,33 +26,45 @@
                     <div class="unitBlock">{{unit.unit_name}}</div>
                     
                     {% for lesson in unit.lesson_set.all|dictsort:"lesson_number" %}
-                    <div class="lessonBlock">
-                        <div class="lessonIconContainer"><i class="far fa-star"></i></div><div class="lessonTitleContainer"><a data-toggle="collapse" href="#collapse{{forloop.parentloop.counter}}{{forloop.counter}}" class="lessonLink">Lesson {{forloop.counter}}: {{lesson.lesson_name}}</a></div>
-                    </div>
+                    
+                    <a data-toggle="collapse" href="#collapse{{forloop.parentloop.counter}}{{forloop.counter}}" class="lessonLink">
+                        <div class="lessonBlock">
+                            <div class="lessonIconContainer"><i class="far fa-star"></i></div>
+                            <div class="lessonTitleContainer">Lesson {{forloop.counter}}: {{lesson.lesson_name}}</div>
+                        </div>
+                    </a>
                     
                     <div class="collapse extraMaterialBlock" id="collapse{{forloop.parentloop.counter}}{{forloop.counter}}">
-                        <ul>
-                            {% for lesson_material in lesson.lesson_material_set.all|dictsort:"material_number" %}
-                            <li>
-                                <a {% if lesson_material.random_slug in completed_LMs %}
+
+                        {% for lesson_material in lesson.lesson_material_set.all|dictsort:"material_number" %}
+                   
+                            <div class="LMContainer"
+                                   {% if lesson_material.random_slug in completed_LMs %}
                                         data-completed
                                    {% else %}
                                         data-incomplete
-                                   {% endif %} 
-                                   {% if lesson_material.material_type == 'DL' %} 
+                                   {% endif %}
+                                 
+                                   {% if lesson_material.material_type == 'DL' %}
+                                            
                                         {% with download_url|add:lesson_material.file_name as file_download_url %} 
-                                        href="{% static file_download_url %}" download data-uuid="{{lesson_material.random_slug}}"
-                                        {% endwith %} 
+                                            data-href="{% static file_download_url %}" 
+                                        {% endwith %}
+                                        
+                                        data-download="true" data-uuid="{{lesson_material.random_slug}}"
+                                 
                                    {% else %}
-                                        href="{% url lesson_material.material_type slug=course_slug uuid=lesson_material.random_slug %}"
+
+                                        data-href="{% url lesson_material.material_type slug=course_slug uuid=lesson_material.random_slug %}"
+                                        data-download="false"
+                                 
                                    {% endif %}
                                    data-unit-number="{{unit.unit_number}}"
                                    data-lesson-number="{{lesson.lesson_number}}"
-                                   data-LM-number="{{lesson_material.material_number}}">{{lesson_material.material_title}}</a>
-                            </li>
-                            
-                            {% endfor %}
-                        </ul>
+                                   data-LM-number="{{lesson_material.material_number}}">({{forloop.counter}}) {{lesson_material.material_title}}</div>
+                       
+                        {% endfor %}
+
                     </div>
                     
                     {% endfor %}
@@ -69,204 +81,250 @@
 {% block js %}
 
 <script>
-    let enforce_LM_order = true; //Set it to false if no order of study is to be enforced
-    let current_LM_in_unit = {};
-    let completed_lesson = 0;
-    let incomplete_lessons = 0;
-    
-    //Put a green checkmark next to a completed LM and Lesson or a gray
-    //next to an incomplete Lesson
-    let completed_LMs = document.querySelectorAll("[data-completed]");
-    for(let i=0;i<completed_LMs.length;i++)
-        {
-            completed_LMs[i].insertAdjacentHTML('afterend', '<i class="fas fa-check" style="color:lawngreen"></i>');
-        }
-    let collapseBoxes = document.querySelectorAll(".extraMaterialBlock");
-    for(let i=0;i<collapseBoxes.length;i++)
-        {
-            let incomplete_LMs = collapseBoxes[i].querySelectorAll("[data-incomplete]");
-            let complete_LMs = collapseBoxes[i].querySelectorAll("[data-completed]");
-            
-            if (incomplete_LMs.length === 0 && complete_LMs.length === 0) //Empty lesson, still under construction
-                {
-                    $(collapseBoxes[i]).prev().append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="far fa-circle" style="color:silver"></i></div>');
-                    incomplete_lessons++;
-                }
-            else if (incomplete_LMs.length > 0 && complete_LMs.length === 0 || incomplete_LMs.length > 0 && complete_LMs.length > 0)
-                {
-                    $(collapseBoxes[i]).prev().append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="far fa-circle" style="color:silver"></i></div>');
-                    incomplete_lessons++;
-                }
-            else
-                {
-                    $(collapseBoxes[i]).prev().append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="fas fa-check" style="color:lawngreen"></i></div>');
-                    completed_lesson++;
-                }
-        }
-    
-    //Indicate how many lessons have been completed below the course title at the top
-    document.getElementById("lessonsCompletedNumber").textContent = completed_lesson + "";
-    document.getElementById("totalLessonsNumber").textContent = (completed_lesson + incomplete_lessons) + "";
-    
-    //Attach event to file download links so that when it's clicked 
-    //it's recorded as complete via ajax to the server and a green checkmark
-    //is placed next to it
-    let file_download_links = document.querySelectorAll("[download]");
-    for(let i=0; i<file_download_links.length; i++)
-        {
-            if (file_download_links[i].hasAttribute("data-incomplete"))
-                {
-                    file_download_links[i].addEventListener("click", file_download_update);
-                }
-        }
-    
-    function file_download_update(e)
+    (function course_page_setup()
     {
-        let link = e.target;
-        link.insertAdjacentHTML('afterend', '<i class="fas fa-check" style="color:lawngreen"></i>');
-        let uuid = link.getAttribute("data-uuid");
-        ajax_record_completed_LM(uuid);
-        link.removeEventListener("click", file_download_update);
-        window.location.reload(true); //So the checkmark and completed lessons at the top are updated after the click
-    }
+        let enforce_LM_order = true; //Set it to false if no order of study is to be enforced
+        let current_LM_in_unit = {};
+        let completed_lesson = 0;
+        let incomplete_lessons = 0;
+
+        //Put a green checkmark next to a completed LM and Lesson or a gray
+        //next to an incomplete Lesson
+        (function update_icons()
+        {
+            let completed_LMs = document.querySelectorAll("[data-completed]");
+            for(let i=0;i<completed_LMs.length;i++)
+                {
+                    completed_LMs[i].insertAdjacentHTML('beforeend', '<i class="fas fa-check" style="color:lawngreen"></i>');
+                }
+            let collapseBoxes = document.querySelectorAll(".extraMaterialBlock");
+            for(let i=0;i<collapseBoxes.length;i++)
+                {
+                    let incomplete_LMs = collapseBoxes[i].querySelectorAll("[data-incomplete]");
+                    let complete_LMs = collapseBoxes[i].querySelectorAll("[data-completed]");
+
+                    if (incomplete_LMs.length === 0 && complete_LMs.length === 0) //Empty lesson, still under construction
+                        {
+                            $(collapseBoxes[i]).prev().children(".lessonBlock").append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="far fa-circle" style="color:silver"></i></div>');
+                            incomplete_lessons++;
+                        }
+                    else if (incomplete_LMs.length > 0 && complete_LMs.length === 0 || incomplete_LMs.length > 0 && complete_LMs.length > 0)
+                        {
+                            $(collapseBoxes[i]).prev().children(".lessonBlock").append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="far fa-circle" style="color:silver"></i></div>');
+                            incomplete_lessons++;
+                        }
+                    else
+                        {
+                            $(collapseBoxes[i]).prev().children(".lessonBlock").append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="fas fa-check" style="color:lawngreen"></i></div>');
+                            completed_lesson++;
+                        }
+                }
+        })();
+        
+
+        //Indicate how many lessons have been completed below the course title at the top
+        (function update_lessons_completed_number()
+        {
+            document.getElementById("lessonsCompletedNumber").textContent = completed_lesson + "";
+            document.getElementById("totalLessonsNumber").textContent = (completed_lesson + incomplete_lessons) + "";
+        })();
+        
+        //Attach event to file download links so that when it's clicked 
+        //it's recorded as complete via ajax to the server
+        file_download_update.ajaxsent = {};
+        let file_download_links = document.querySelectorAll("[data-download='true']");
+        for(let i=0; i<file_download_links.length; i++)
+            {
+                file_download_links[i].addEventListener("click", file_download_update);
+                let uuid = file_download_links[i].getAttribute("data-uuid");
+
+                if (file_download_links[i].hasAttribute("data-incomplete"))
+                    {
+                        file_download_update.ajaxsent[uuid] = false;
+                    }
+                else
+                    {
+                        file_download_update.ajaxsent[uuid] = true;
+                    }
+            }
+
+        function file_download_update(e)
+        {
+            let link = e.target;
+            let download_link = document.createElement('a');
+            download_link.href = link.getAttribute("data-href");
+            download_link.setAttribute('download', '');
+            let uuid = link.getAttribute("data-uuid");
+            
+            download_link.dispatchEvent(new MouseEvent('click'));
+                    
+            if (file_download_update.ajaxsent[uuid]===false)
+                {
+                    ajax_record_completed_LM(uuid);
+                }
+        }
+
+        //Attach event to other LM links so that when it's clicked 
+        //it's rendered and the student is taken to the new page in current browser
+        let LM_links = document.querySelectorAll("[data-download='false']");
+        for(let i=0; i<LM_links.length; i++)
+            {
+                LM_links[i].addEventListener("click", view_LM);
+            }
+
+        function view_LM(e)
+        {
+            let link = e.target;
+            let link_href = link.getAttribute("data-href");
+            window.location.assign(link_href);
+        }
+
+        //Attach event to each incomplete LM so that order is enforced
+        //Also create a dict to store latest LM in each unit that should be worked on
+        if (enforce_LM_order)
+            {
+                let LM_set = document.querySelectorAll("[data-incomplete]");
+                for(let i=0;i<LM_set.length;i++)
+                    {
+                        let unit_number = LM_set[i].getAttribute("data-unit-number");
+                        if (!(unit_number in current_LM_in_unit))
+                            {
+                                current_LM_in_unit[unit_number] = {}; 
+                                current_LM_in_unit[unit_number]["lesson_number"] = LM_set[i].getAttribute("data-lesson-number");
+                                current_LM_in_unit[unit_number]["LM_number"] = LM_set[i].getAttribute("data-LM-number");
+                                current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
+                            }
+                        else
+                            {
+                                let test_lesson_number = LM_set[i].getAttribute("data-lesson-number");
+                                if (test_lesson_number < current_LM_in_unit[unit_number]["lesson_number"])
+                                    {
+                                        current_LM_in_unit[unit_number]["lesson_number"] = test_lesson_number;
+                                        current_LM_in_unit[unit_number]["LM_number"] = LM_set[i].getAttribute("data-LM-number");
+                                        current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
+                                    }
+                                else if (test_lesson_number === current_LM_in_unit[unit_number]["lesson_number"])
+                                    {
+                                        let test_LM_number = LM_set[i].getAttribute("data-LM-number");
+                                        if (test_LM_number < current_LM_in_unit[unit_number]["LM_number"])
+                                            {
+                                                current_LM_in_unit[unit_number]["LM_number"] = test_LM_number;
+                                                current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
+                                            }
+                                    }
+                            }   
+                    }
+
+                //Remove the normal event listeners on all out-of-order LMs and attach warning instead
+                for(let i=0;i<LM_set.length;i++)
+                    {
+                        let LM = LM_set[i];
+                        let unit_number = LM.getAttribute("data-unit-number");
+                        let lesson_number = LM.getAttribute("data-lesson-number");
+                        let LM_number = LM.getAttribute("data-LM-number");
+
+                        if (current_LM_in_unit[unit_number]["lesson_number"] !== lesson_number)
+                            {
+                                LM.setAttribute("data-href", "");
+
+                                if ($(LM).data("download")===true)
+                                    {
+                                        LM.removeEventListener("click", file_download_update);
+                                    }
+                                else
+                                    {
+                                        LM.removeEventListener("click", view_LM);
+                                    }
+                                LM.addEventListener("click", enforce_order);
+                            }
+                        else
+                            {
+                                if (current_LM_in_unit[unit_number]["LM_number"] !== LM_number)
+                                    {
+                                        LM.setAttribute("data-href", "");
+
+                                        if ($(LM).data("download")===true)
+                                            {
+                                                LM.removeEventListener("click", file_download_update);
+                                            }
+                                        else
+                                            {
+                                                LM.removeEventListener("click", view_LM);
+                                            }
+                                        LM.addEventListener("click", enforce_order);
+                                    }
+                            }
+                    }
+            }
+        function enforce_order(e)
+        {
+            e.preventDefault();
+            let LM = e.target;
+            let unit_number = LM.getAttribute("data-unit-number");
+
+            alert("请按顺序学习，先完成 Lesson " + current_LM_in_unit[unit_number]["lesson_number"] + "- " + current_LM_in_unit[unit_number]["LM_title"]);
+        }
+    })();
     
     function ajax_record_completed_LM(uuid)
-    {
-        var ajax_url = "/progress/ajax/record_completed_lm/";
-
-        function getCookie(name) 
         {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') 
+            var ajax_url = "/progress/ajax/record_completed_lm/";
+
+            function getCookie(name) 
             {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) 
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') 
                 {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) 
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) 
                     {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) 
+                        {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
                     }
                 }
+                return cookieValue;
             }
-            return cookieValue;
-        }
 
-        var csrftoken = getCookie('csrftoken');
+            var csrftoken = getCookie('csrftoken');
 
-        function csrfSafeMethod(method) 
-        {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
+            function csrfSafeMethod(method) 
+            {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
             }
-        });
 
-        $.ajax({
-            url: ajax_url,
-            data: {random_slug: uuid},
-            type: "POST",
-            dataType : "text",
-        })
-        // Code to run if the request succeeds (is done);
-        // The response is passed to the function
-        .done(function(result){
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
 
-        }) //
-        // Code to run if the request fails; the raw request and
-        // status codes are passed to the function
-        .fail(function( xhr, status, errorThrown ) {
-            console.log( "Error: " + errorThrown );
-            console.log( "Status: " + status );
-            console.dir( xhr );
-        })
-    }
-    
-    //Attach event to each incomplete LM so that order is enforced
-    //Also create a dict to store latest LM in each unit that should be worked on
-    if (enforce_LM_order)
-        {
-            let LM_set = document.querySelectorAll("[data-incomplete]");
-            for(let i=0;i<LM_set.length;i++)
-                {
-                    let unit_number = LM_set[i].getAttribute("data-unit-number");
-                    if (!(unit_number in current_LM_in_unit))
-                        {
-                            current_LM_in_unit[unit_number] = {}; 
-                            current_LM_in_unit[unit_number]["lesson_number"] = LM_set[i].getAttribute("data-lesson-number");
-                            current_LM_in_unit[unit_number]["LM_number"] = LM_set[i].getAttribute("data-LM-number");
-                            current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
-                        }
-                    else
-                        {
-                            let test_lesson_number = LM_set[i].getAttribute("data-lesson-number");
-                            if (test_lesson_number < current_LM_in_unit[unit_number]["lesson_number"])
-                                {
-                                    current_LM_in_unit[unit_number]["lesson_number"] = test_lesson_number;
-                                    current_LM_in_unit[unit_number]["LM_number"] = LM_set[i].getAttribute("data-LM-number");
-                                    current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
-                                }
-                            else if (test_lesson_number === current_LM_in_unit[unit_number]["lesson_number"])
-                                {
-                                    let test_LM_number = LM_set[i].getAttribute("data-LM-number");
-                                    if (test_LM_number < current_LM_in_unit[unit_number]["LM_number"])
-                                        {
-                                            current_LM_in_unit[unit_number]["LM_number"] = test_LM_number;
-                                            current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
-                                        }
-                                }
-                        }   
-                }
-            
-            //Remove the links in each 'a' tag on all out-of-order LMs
-            for(let i=0;i<LM_set.length;i++)
-                {
-                    let LM = LM_set[i];
-                    let unit_number = LM.getAttribute("data-unit-number");
-                    let lesson_number = LM.getAttribute("data-lesson-number");
-                    let LM_number = LM.getAttribute("data-LM-number");
-                    
-                    if (current_LM_in_unit[unit_number]["lesson_number"] !== lesson_number)
-                        {
-                            LM.setAttribute("href", "");
-                            
-                            if (LM.hasAttribute("download"))
-                                {
-                                    LM.removeEventListener("click", file_download_update);
-                                }
-                            LM.addEventListener("click", enforce_order);
-                        }
-                    else
-                        {
-                            if (current_LM_in_unit[unit_number]["LM_number"] !== LM_number)
-                                {
-                                    LM.setAttribute("href", "");
-                                    
-                                    if (LM.hasAttribute("download"))
-                                        {
-                                            LM.removeEventListener("click", file_download_update);
-                                        }
-                                    LM.addEventListener("click", enforce_order);
-                                }
-                        }
-                }
+            $.ajax({
+                url: ajax_url,
+                data: {random_slug: uuid},
+                type: "POST",
+                dataType : "text",
+            })
+            // Code to run if the request succeeds (is done);
+            // The response is passed to the function
+            .done(function(result){
+                window.location.reload(); //Reload the page after a download is downloaded for the 1st time.
+            }) //
+            // Code to run if the request fails; the raw request and
+            // status codes are passed to the function
+            .fail(function( xhr, status, errorThrown ) {
+                console.log( "Error: " + errorThrown );
+                console.log( "Status: " + status );
+                console.dir( xhr );
+            })
         }
-    function enforce_order(e)
-    {
-        e.preventDefault();
-        let LM = e.target;
-        let unit_number = LM.getAttribute("data-unit-number");
-        
-        alert("请按顺序学习，先完成 Lesson " + current_LM_in_unit[unit_number]["lesson_number"] + "-" + current_LM_in_unit[unit_number]["LM_title"]);
-    }
 </script>
 
 {% endblock js %}
