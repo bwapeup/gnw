@@ -315,7 +315,9 @@
             // Code to run if the request succeeds (is done);
             // The response is passed to the function
             .done(function(result){
-                window.location.reload(); //Reload the page after a download is downloaded for the 1st time.
+                setTimeout(function(){
+                    window.location.reload(); //Reload the page after a download is downloaded for the 1st time.
+                }, 3000)
             }) //
             // Code to run if the request fails; the raw request and
             // status codes are passed to the function
