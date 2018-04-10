@@ -102,7 +102,7 @@ def reset_password(request, token):
             update_session_auth_hash(request, request.user)
             return redirect(reverse('panel'))
         else:
-            return render(request, 'sms/reset_password.html', {'form': form, 'sms_authentication_failed': True})
+            return render(request, 'sms/reset_password.html', {'form': form, 'token_hex_str':token, 'sms_authentication_failed': True})
             
 
 
@@ -122,7 +122,7 @@ def ajax_send_sms_verification_code(request):
             
             return HttpResponse("sms sent")
         else:
-            if (timezone.now() - sms_request.created).total_seconds() > 0: #Consider using F() and timedelta(seconds=180)
+            if (timezone.now() - sms_request.created).total_seconds() > 180: #Consider using F() and timedelta(seconds=180)
                 verification_code = '1234567' #User.objects.make_random_password(length=7, allowed_chars='1234567890')
                 SMS_Code.objects.create(mobile=mobile_number, code=verification_code, created = timezone.now())
                 
