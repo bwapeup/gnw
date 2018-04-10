@@ -44,7 +44,7 @@ urlpatterns += [
 #Request sms verification for password reset, etc. 
 urlpatterns += [
     url(r'^sms_request/$', sms_views.request_sms_code, name='request_sms_code'),
-    url(r'^sms_password_change/$', sms_views.reset_password, name='reset_password'),
+    url(r'^sms_password_change/(?P<token>\w+)/$', sms_views.reset_password, name='reset_password'),
 ]
 
 urlpatterns += [
