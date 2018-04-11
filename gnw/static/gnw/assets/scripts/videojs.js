@@ -7,9 +7,13 @@ let wrongAnswerBox = document.getElementById("wrongAnswerHintBox");
 
 //When the video finishes, display button to go next
 vid.addEventListener("ended", function(){
-    document.getElementById("nextButtonBox").classList.add("show");
-    ajax_record_completed_LM(uuid_django);
+    ajax_record_completed_LM(uuid_django, ajax_success);
 });
+
+function ajax_success()
+{
+    document.getElementById("nextButtonBox").classList.add("show");
+}
 
 //Button to go to the next module
 let nextBtn = document.querySelector("button.nextLecture");
@@ -226,7 +230,7 @@ function button_handler(e)
 
 //Record completed LMs via Ajax
 //-----------------------------------------------
-function ajax_record_completed_LM(uuid)
+function ajax_record_completed_LM(uuid, ajax_success)
 {
     var ajax_url = "/progress/ajax/record_completed_lm/";
     
@@ -275,7 +279,7 @@ function ajax_record_completed_LM(uuid)
     // Code to run if the request succeeds (is done);
     // The response is passed to the function
     .done(function(result){
-        
+        ajax_success();
     }) //
     // Code to run if the request fails; the raw request and
     // status codes are passed to the function

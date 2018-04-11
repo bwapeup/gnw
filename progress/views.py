@@ -27,4 +27,4 @@ def ajax_record_completed_lm(request):
         else:
             return HttpResponse("LM doesn't exist")            
     else:
-        return redirect(reverse('index'))
+        return HttpResponse("")
