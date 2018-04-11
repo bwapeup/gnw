@@ -150,7 +150,28 @@
 
         function file_download_update(e)
         {
-            let link = e.target;
+            let eventTrigger = e.target;
+            let link;
+
+            if (eventTrigger.classList.contains("LMContainer")) //The link itself was clicked on
+                 {
+                     link = eventTrigger;
+                 }
+            else
+                {
+                    let foundLink = false;
+
+                    while(!foundLink)
+                        {
+                            eventTrigger = eventTrigger.parentElement;
+                            if (eventTrigger.classList.contains("LMContainer"))
+                                {
+                                    link = eventTrigger;
+                                    foundLink = true;
+                                }
+                        }
+                }
+
             let download_link = document.createElement('a');
             download_link.href = link.getAttribute("data-href");
             download_link.setAttribute('download', '');
@@ -173,8 +194,29 @@
             }
 
         function view_LM(e)
-        {
-            let link = e.target;
+        {            
+            let eventTrigger = e.target;
+            let link;
+
+            if (eventTrigger.classList.contains("LMContainer")) //The link itself was clicked on
+                 {
+                     link = eventTrigger;
+                 }
+            else
+                {
+                    let foundLink = false;
+
+                    while(!foundLink)
+                        {
+                            eventTrigger = eventTrigger.parentElement;
+                            if (eventTrigger.classList.contains("LMContainer"))
+                                {
+                                    link = eventTrigger;
+                                    foundLink = true;
+                                }
+                        }
+                }
+
             let link_href = link.getAttribute("data-href");
             window.location.assign(link_href);
         }
