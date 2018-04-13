@@ -9,6 +9,7 @@ class SMS_Code(models.Model):
     created = models.DateTimeField()
     verified = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+    tries = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.mobile

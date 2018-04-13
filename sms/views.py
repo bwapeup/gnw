@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
+from django.db.models import F
 from .models import SMS_Code, Token
 from people.models import Student
 from django.contrib.auth.forms import SetPasswordForm
@@ -23,7 +24,7 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             mobile_number = form.cleaned_data.get('username')
-            sms_request = SMS_Code.objects.filter(mobile=mobile_number, verified=False, expired=False).order_by('-created').first()
+            sms_request = SMS_Code.objects.filter(mobile=mobile_number, verified=False, expired=False, tries__lt=3).order_by('-created').first()
             if sms_request is None:
                 return render(request, 'sms/signup.html', {'form': form, 'sms_authentication_failed': True})
             else:
@@ -31,6 +32,8 @@ def signup(request):
                     return render(request, 'sms/signup.html', {'form': form, 'sms_authentication_failed': True})
                 else:
                     if sms_request.code != form.cleaned_data.get('verification_code'):
+                        sms_request.tries = F('tries') + 1
+                        sms_request.save()
                         return render(request, 'sms/signup.html', {'form': form, 'sms_authentication_failed': True})
                     else:
                         form.save()
@@ -57,7 +60,7 @@ def request_sms_code(request):
             mobile_number = form.cleaned_data.get('mobile')
             current_user = User.objects.filter(username=mobile_number).first()
             if current_user is not None:
-                sms_request = SMS_Code.objects.filter(mobile=mobile_number, verified=False, expired=False).order_by('-created').first()
+                sms_request = SMS_Code.objects.filter(mobile=mobile_number, verified=False, expired=False, tries__lt=3).order_by('-created').first()
                 if sms_request is None:
                     return render(request, 'sms/sms_request.html', {'form': form, 'sms_authentication_failed': True})
                 else:
@@ -65,6 +68,8 @@ def request_sms_code(request):
                         return render(request, 'sms/sms_request.html', {'form': form, 'sms_authentication_failed': True})
                     else:
                         if sms_request.code != form.cleaned_data.get('verification_code'):
+                            sms_request.tries = F('tries') + 1
+                            sms_request.save()
                             return render(request, 'sms/sms_request.html', {'form': form, 'sms_authentication_failed': True})
                         else:
                             sms_request.verified = True
