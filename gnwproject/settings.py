@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'progress',
     'session_control',
     'storages',
+    'admin_honeypot',
 ]
 
 MIDDLEWARE = [
@@ -139,6 +140,12 @@ X_FRAME_OPTIONS = 'DENY'
 # Yunpian SMS
 #----------------------------------------------------------
 YUNPIAN_APIKEY = config('YUNPIAN_APIKEY')
+#----------------------------------------------------------
+
+
+# Admin Honeypot
+#----------------------------------------------------------
+ADMIN_HONEYPOT_EMAIL_ADMINS = False
 #----------------------------------------------------------
 
 
