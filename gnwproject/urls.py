@@ -13,8 +13,8 @@ urlpatterns += [
     url(r'^$', gnw_views.index, name='index'),
     url(r'^signup/$', sms_views.signup, name='signup'),
     url(r'^panel/$', gnw_views.panel, name='panel'),
-    url(r'^panel/my_courses/(?P<slug>\w+)/$', gnw_views.course, name='class'),
-    url(r'^panel/my_courses/(?P<slug>\w+)/lecture/(?P<uuid>\d+)/$', gnw_views.lecture, name='VD'),
+    url(r'^panel/my_courses/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
+    url(r'^panel/my_courses/(?P<slug>[\w-]+)/lecture/(?P<uuid>\d+)/$', gnw_views.lecture, name='VD'),
 ]
 
 #The main courses page listing all the courses available with links to each individual course
