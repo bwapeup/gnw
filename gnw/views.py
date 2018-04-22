@@ -6,7 +6,7 @@ from enrollment.models import Enrollment
 from progress.models import Completed_Learning_Materials
 from django.http import HttpResponse
 
-
+@xframe_options_exempt
 def index(request):
     return render(request, 'gnw/index.html',)
 
