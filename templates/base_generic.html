@@ -5,7 +5,7 @@
       {% load static %}
         
       {% block title %}
-            <title>飞猫英语</title>
+            <title>飞猫学堂</title>
       {% endblock title %}
         
       <meta charset="utf-8">
@@ -20,7 +20,7 @@
       {% endblock headUsualJS %}
         
       {% block css %}
-            <link href="{% static 'gnw/assets/style/css_main.css' %}" rel="stylesheet">
+            <link href="{% static 'gnw/assets/style/css_main_v2.css' %}" rel="stylesheet">
       {% endblock css %}
         
     </head>
@@ -31,7 +31,7 @@
         {% block navbar %}
                 <nav class="navbar navbar-expand-sm navbar-light nav-fill sticky-top">
                     <div class="container">
-                        <a href="{% url 'index'%}" class="navbar-brand">飞猫英语</a>
+                        <a href="{% url 'index'%}" class="navbar-brand">飞猫学堂</a>
                         <button class="navbar-toggler" data-toggle="collapse" data-target="#navNavbar"><span class="navbar-toggler-icon"></span></button>
                         <div class=" collapse navbar-collapse" id="navNavbar">
                             <ul class="navbar-nav ml-auto">
@@ -86,7 +86,7 @@
                         <span>&nbsp;</span>
                         <span class="footerTextItem"><a href="#">关于我们</a></span>
                     </div>
-                    <div  class="footerBox">Copyright 2018 飞猫英语 | 沪ICP备：xxxxxxxx号</div>
+                    <div  class="footerBox">Copyright 2018 © 飞猫学堂 | 沪ICP备：xxxxxxxx号</div>
                 </footer>
         {% endblock footer %}
 

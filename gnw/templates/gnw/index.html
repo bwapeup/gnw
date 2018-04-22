@@ -5,11 +5,12 @@
 {% block content %}
 
 <div id="coverImageContainer">
-    <img src="{% static 'gnw/assets/img/frontpageimg1.jpg' %}" class="img-fluid">
+    <img src="{% static 'gnw/assets/img/frontpagecoverimg.jpg' %}" class="img-fluid">
     <div id="boxOverCoverImage">
-        <p id="coverTextTitle">美国小学语法、阅读、写作课</p>
-        <p id="coverText">美国小学内容，美国小学老师，适合中国学生的教学方法。轻松在家学到教科书和原版读物背后的深度英语技能。</p>
-        <button class="coverCurriculumButton">我们的课程</button>
+        <p id="coverTextTitle">美国小学语法、写作、思维课</p>
+        <p class="coverText">美国小学内容，适合中国学生的教学方法。</p>
+        <p class="coverText">教科书和原版读物背后的深度英语技能。</p>
+        <a href="{% url 'courses_main_page' %}" class="myLinkBtn coverCurriculumButton frontPageBtn">我们的课程</a>
     </div>
 </div>
 
@@ -18,20 +19,20 @@
         <div class="row">
             <div class="col-sm-4">
                 <figure class="threeIconsRowFigure">
-                    <img src="{% static 'gnw/assets/img/frontpagegrammar.svg' %}">
+                    <img src="{% static 'gnw/assets/img/frontpagegrammarimg.svg' %}">
                     <figcaption>语法</figcaption>
                 </figure>
             </div>
             <div class="col-sm-4">
                 <figure class="threeIconsRowFigure">
-                    <img src="{% static 'gnw/assets/img/frontpagebook.svg' %}">
-                    <figcaption>阅读</figcaption>
+                    <img src="{% static 'gnw/assets/img/frontpagewritingimg.svg' %}">
+                    <figcaption>写作</figcaption>
                 </figure>
             </div>
             <div class="col-sm-4">
                 <figure class="threeIconsRowFigure">
-                    <img src="{% static 'gnw/assets/img/frontpagewriting.svg' %}">
-                    <figcaption>写作</figcaption>
+                    <img src="{% static 'gnw/assets/img/frontpagethinkingimg.svg' %}">
+                    <figcaption>思维</figcaption>
                 </figure>
             </div>
         </div>
@@ -41,9 +42,14 @@
 <section class="frontPageBlockText" id="frontPageBlockTextOne">
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col-md-2">
+                <div class="rowTextIcon">
+                    <img src="{% static 'gnw/assets/img/frontpageknowledgeimg.svg' %}">
+                </div>
+            </div>
+            <div class="col-md-10">
                 <p class="blockTextTitle">教科书和原版读物背后的深度英语技能</p>
-                <p class="blockTextBody">即使是生长在美国、母语为英语的孩子，也需要十多年以上的不断输入和学习，才能领悟出语法、阅读、写作背后的各种规律与技巧。对缺乏语言环境的中国孩子来说，要从消极理解到积极并正确地使用，单靠“大量输入”是不够的。必须将课本和原版读物所要教的语言技能挖掘、提炼出来，系统地学习和巩固，才能发展出接近英语国家同龄学生的语感和主动使用的能力。</p>
+                <p class="blockTextBody">对缺乏语言环境的中国孩子来说，要从消极理解到积极并正确地使用英语，除了大量输入，还必须将课本和原版读物所要教的语言和思维技能挖掘、提炼出来，系统地学习和巩固，才能发展出接近英语国家同龄学生的语感和主动使用的能力。</p>
             </div>
         </div>
     </div>
@@ -52,9 +58,14 @@
 <section class="frontPageBlockText" id="frontPageBlockTextTwo">
     <div class="container">
         <div class="row">
-            <div class="col">
-                <p class="blockTextTitle">美国小学内容，美国小学老师，适合中国孩子的教学方法</p>
-                <p class="blockTextBody">共同核心标准(Common Core State Standards)是美国K-12教育的大纲。它详细列出美国各年级学生应该掌握的每个知识点。但在英语部分里，有很多知识点对母语为英语的学生来说很容易理解，但对非母语的学生来说，存在许多知识断层(knowledge gap)。我们的课程围绕共同核心里语法、阅读、写作部分重要的知识点，由美国小学老师上课，用 scaffolding 和 visualization 等教学方法，填充每一个知识点所需要的背景知识，层层递进，最终达到让学生掌握和熟练使用的目的。</p>
+            <div class="col-md-2">
+                <div class="rowTextIcon">
+                    <img src="{% static 'gnw/assets/img/frontpageteachimg.svg' %}">
+                </div>
+            </div>
+            <div class="col-md-10">
+                <p class="blockTextTitle">美国小学内容，适合中国孩子的教学方法</p>
+                <p class="blockTextBody">课程围绕美国共同核心标准((Common Core State Standards))里语法和写作部分重要的知识点，用 scaffolding 和 visualization 等教学方法，填充每一个知识点所需要的背景知识，层层递进，最终达到让学生掌握和熟练使用的目的。</p>
             </div>
         </div>
     </div>
