@@ -83,25 +83,25 @@
 <script>
     (function course_page_setup()
     {
-        let enforce_LM_order = true; //Set it to false if no order of study is to be enforced
-        let current_LM_in_unit = {};
-        let completed_lesson = 0;
-        let incomplete_lessons = 0;
+        var enforce_LM_order = true; //Set it to false if no order of study is to be enforced
+        var current_LM_in_unit = {};
+        var completed_lesson = 0;
+        var incomplete_lessons = 0;
 
         //Put a green checkmark next to a completed LM and Lesson or a gray
         //next to an incomplete Lesson
         (function update_icons()
         {
-            let completed_LMs = document.querySelectorAll("[data-completed]");
-            for(let i=0;i<completed_LMs.length;i++)
+            var completed_LMs = document.querySelectorAll("[data-completed]");
+            for(var i=0;i<completed_LMs.length;i++)
                 {
                     completed_LMs[i].insertAdjacentHTML('beforeend', '<i class="fas fa-check" style="color:lawngreen"></i>');
                 }
-            let collapseBoxes = document.querySelectorAll(".extraMaterialBlock");
-            for(let i=0;i<collapseBoxes.length;i++)
+            var collapseBoxes = document.querySelectorAll(".extraMaterialBlock");
+            for(var i=0;i<collapseBoxes.length;i++)
                 {
-                    let incomplete_LMs = collapseBoxes[i].querySelectorAll("[data-incomplete]");
-                    let complete_LMs = collapseBoxes[i].querySelectorAll("[data-completed]");
+                    var incomplete_LMs = collapseBoxes[i].querySelectorAll("[data-incomplete]");
+                    var complete_LMs = collapseBoxes[i].querySelectorAll("[data-completed]");
 
                     if (incomplete_LMs.length === 0 && complete_LMs.length === 0) //Empty lesson, still under construction
                         {
@@ -132,11 +132,11 @@
         //Attach event to file download links so that when it's clicked 
         //it's recorded as complete via ajax to the server
         file_download_update.ajaxsent = {};
-        let file_download_links = document.querySelectorAll("[data-download='true']");
-        for(let i=0; i<file_download_links.length; i++)
+        var file_download_links = document.querySelectorAll("[data-download='true']");
+        for(var i=0; i<file_download_links.length; i++)
             {
                 file_download_links[i].addEventListener("click", file_download_update);
-                let uuid = file_download_links[i].getAttribute("data-uuid");
+                var uuid = file_download_links[i].getAttribute("data-uuid");
 
                 if (file_download_links[i].hasAttribute("data-incomplete"))
                     {
@@ -150,8 +150,8 @@
 
         function file_download_update(e)
         {
-            let eventTrigger = e.target;
-            let link;
+            var eventTrigger = e.target;
+            var link;
 
             if (eventTrigger.classList.contains("LMContainer")) //The link itself was clicked on
                  {
@@ -159,7 +159,7 @@
                  }
             else
                 {
-                    let foundLink = false;
+                    var foundLink = false;
 
                     while(!foundLink)
                         {
@@ -172,10 +172,10 @@
                         }
                 }
 
-            let download_link = document.createElement('a');
+            var download_link = document.createElement('a');
             download_link.href = link.getAttribute("data-href");
             download_link.setAttribute('download', '');
-            let uuid = link.getAttribute("data-uuid");
+            var uuid = link.getAttribute("data-uuid");
             
             download_link.dispatchEvent(new MouseEvent('click'));
                     
@@ -187,16 +187,16 @@
 
         //Attach event to other LM links so that when it's clicked 
         //it's rendered and the student is taken to the new page in current browser
-        let LM_links = document.querySelectorAll("[data-download='false']");
-        for(let i=0; i<LM_links.length; i++)
+        var LM_links = document.querySelectorAll("[data-download='false']");
+        for(var i=0; i<LM_links.length; i++)
             {
                 LM_links[i].addEventListener("click", view_LM);
             }
 
         function view_LM(e)
         {            
-            let eventTrigger = e.target;
-            let link;
+            var eventTrigger = e.target;
+            var link;
 
             if (eventTrigger.classList.contains("LMContainer")) //The link itself was clicked on
                  {
@@ -204,7 +204,7 @@
                  }
             else
                 {
-                    let foundLink = false;
+                    var foundLink = false;
 
                     while(!foundLink)
                         {
@@ -217,7 +217,7 @@
                         }
                 }
 
-            let link_href = link.getAttribute("data-href");
+            var link_href = link.getAttribute("data-href");
             window.location.assign(link_href);
         }
 
@@ -225,10 +225,10 @@
         //Also create a dict to store latest LM in each unit that should be worked on
         if (enforce_LM_order)
             {
-                let LM_set = document.querySelectorAll("[data-incomplete]");
-                for(let i=0;i<LM_set.length;i++)
+                var LM_set = document.querySelectorAll("[data-incomplete]");
+                for(var i=0;i<LM_set.length;i++)
                     {
-                        let unit_number = LM_set[i].getAttribute("data-unit-number");
+                        var unit_number = LM_set[i].getAttribute("data-unit-number");
                         if (!(unit_number in current_LM_in_unit))
                             {
                                 current_LM_in_unit[unit_number] = {}; 
@@ -238,7 +238,7 @@
                             }
                         else
                             {
-                                let test_lesson_number = LM_set[i].getAttribute("data-lesson-number");
+                                var test_lesson_number = LM_set[i].getAttribute("data-lesson-number");
                                 if (test_lesson_number < current_LM_in_unit[unit_number]["lesson_number"])
                                     {
                                         current_LM_in_unit[unit_number]["lesson_number"] = test_lesson_number;
@@ -247,7 +247,7 @@
                                     }
                                 else if (test_lesson_number === current_LM_in_unit[unit_number]["lesson_number"])
                                     {
-                                        let test_LM_number = LM_set[i].getAttribute("data-LM-number");
+                                        var test_LM_number = LM_set[i].getAttribute("data-LM-number");
                                         if (test_LM_number < current_LM_in_unit[unit_number]["LM_number"])
                                             {
                                                 current_LM_in_unit[unit_number]["LM_number"] = test_LM_number;
@@ -258,12 +258,12 @@
                     }
 
                 //Remove the normal event listeners on all out-of-order LMs and attach warning instead
-                for(let i=0;i<LM_set.length;i++)
+                for(var i=0;i<LM_set.length;i++)
                     {
-                        let LM = LM_set[i];
-                        let unit_number = LM.getAttribute("data-unit-number");
-                        let lesson_number = LM.getAttribute("data-lesson-number");
-                        let LM_number = LM.getAttribute("data-LM-number");
+                        var LM = LM_set[i];
+                        var unit_number = LM.getAttribute("data-unit-number");
+                        var lesson_number = LM.getAttribute("data-lesson-number");
+                        var LM_number = LM.getAttribute("data-LM-number");
 
                         if (current_LM_in_unit[unit_number]["lesson_number"] !== lesson_number)
                             {
@@ -301,8 +301,8 @@
         function enforce_order(e)
         {
             e.preventDefault();
-            let LM = e.target;
-            let unit_number = LM.getAttribute("data-unit-number");
+            var LM = e.target;
+            var unit_number = LM.getAttribute("data-unit-number");
 
             alert("请按顺序学习，先完成 Lesson " + current_LM_in_unit[unit_number]["lesson_number"] + "- " + current_LM_in_unit[unit_number]["LM_title"]);
         }
