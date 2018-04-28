@@ -1,5 +1,5 @@
 //Attach event listener to SMS request button
-let smsBtn = document.getElementById("smsBtn");
+var smsBtn = document.getElementById("smsBtn");
 smsBtn.addEventListener("click", requestSMS);
 
 //Request SMS event handler
@@ -8,23 +8,23 @@ function requestSMS()
     smsBtn.removeEventListener("click", requestSMS);
     smsBtn.classList.add("disabled");
     
-    let priorErrorMsg = document.querySelectorAll('.smsErrorMsg');
+    var priorErrorMsg = document.querySelectorAll('.smsErrorMsg');
     if (priorErrorMsg.length > 0)
         {
-            for (let i=priorErrorMsg.length-1; i>-1; i--)
+            for (var i=priorErrorMsg.length-1; i>-1; i--)
                 {
                     priorErrorMsg[i].parentElement.removeChild(priorErrorMsg[i]);
                 }
         }
     
-    let mobile_errors = false;
-    let password_length_error = false;
-    let password_match_error = false;
-    let password_numeric_error = false;
+    var mobile_errors = false;
+    var password_length_error = false;
+    var password_match_error = false;
+    var password_numeric_error = false;
     
     
     //First check if a mobile number has been entered properly
-    let mobileNum = document.querySelector("#loginFormUsernameDiv input").value.trim();
+    var mobileNum = document.querySelector("#loginFormUsernameDiv input").value.trim();
     
     if (mobileNum.length!==11) 
         {
@@ -42,8 +42,8 @@ function requestSMS()
     //Check the password inputs
     if (for_signup_django)
         {
-            let password1 = document.querySelector("#password1InputDiv input").value
-            let password2 = document.querySelector("#password2InputDiv input").value
+            var password1 = document.querySelector("#password1InputDiv input").value
+            var password2 = document.querySelector("#password2InputDiv input").value
 
             if (password1.length<8)
                 {
@@ -143,7 +143,7 @@ function ajax_request_sms_verification_code(mobile_number)
     // Code to run if the request succeeds (is done);
     // The response is passed to the function
     .done(function(result){
-        let smsBtn = document.getElementById("smsBtn");
+        var smsBtn = document.getElementById("smsBtn");
         
         if (for_signup_django)
             {
@@ -154,7 +154,7 @@ function ajax_request_sms_verification_code(mobile_number)
                 var countdown = 30;
             }
         
-        let myInterval = setInterval(function(){
+        var myInterval = setInterval(function(){
             smsBtn.textContent = countdown;
             countdown--;
             if (countdown<0)
