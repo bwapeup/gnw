@@ -106,7 +106,8 @@ function runVideo(stoppingTimes, stoppingFunctions)
                     if (i < stoppingFunctions.length)
                         {
                             vid.removeAttribute("controls");
-                            stoppingFunctions[i]();
+                            //stoppingFunctions[i]();
+                            alert("Stopped at stopping times" + i);
                             i++;
                         }
 
