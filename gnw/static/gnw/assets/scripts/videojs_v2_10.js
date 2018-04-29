@@ -45,25 +45,42 @@ function closeFeedbackWindow(e)
 
 function exitFullScreenMode()
 {
-    if ('webkitExitFullscreen' in document)
+    if ('fullscreenElement' in document && document.fullscreenElement
+            ||
+        'webkitDisplayingFullscreen' in vid && vid.webkitDisplayingFullscreen
+            ||
+        'mozFullScreenElement' in document && document.mozFullScreenElement
+            ||
+        'msFullscreenElement' in document && document.msFullscreenElement)
         {
-            document.webkitExitFullscreen();
-        }
-    else if ('webkitExitFullscreen' in vid)
-        {
-            vid.webkitExitFullscreen();
-        }
-    else if ('webkitExitFullScreen' in vid)
-        {
-            vid.webkitExitFullScreen();
-        }
-    else if ('mozCancelFullScreen' in document)
-        {
-            document.mozCancelFullScreen();
-        }
-    else if ('exitFullscreen' in document)
-        {
-            document.exitFullscreen();
+            if ('webkitExitFullscreen' in document)
+                {
+                    document.webkitExitFullscreen();
+                }
+            else if ('webkitExitFullscreen' in vid)
+                {
+                    vid.webkitExitFullscreen();
+                }
+            else if ('webkitExitFullScreen' in document)
+                {
+                    document.webkitExitFullScreen();
+                }
+            else if ('webkitExitFullScreen' in vid)
+                {
+                    vid.webkitExitFullScreen();
+                }
+            else if ('mozCancelFullScreen' in document)
+                {
+                    document.mozCancelFullScreen();
+                }
+            else if ('msExitFullscreen' in document)
+                {
+                    document.msExitFullscreen();
+                }
+            else if ('exitFullscreen' in document)
+                {
+                    document.exitFullscreen();
+                }
         }
 }
 //=========================================================
