@@ -45,7 +45,7 @@ function closeFeedbackWindow(e)
 
 function exitFullScreenMode()
 {
-    document.webkitExitFullscreen();
+    //document.webkitExitFullscreen();
 }
 //=========================================================
 //=========================================================
@@ -320,7 +320,6 @@ function videoFunction851085()
     //===========================================
     var question_function0 = function(){
         exitFullScreenMode();
-        alert("past exit full screen");
         
         //Create the selections and button.
         exerciseBox.innerHTML="";
