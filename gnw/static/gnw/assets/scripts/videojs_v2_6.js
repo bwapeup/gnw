@@ -45,7 +45,7 @@ function closeFeedbackWindow(e)
 
 function exitFullScreenMode()
 {
-    //document.webkitExitFullscreen();
+    document.webkitExitFullScreen();
 }
 //=========================================================
 //=========================================================
