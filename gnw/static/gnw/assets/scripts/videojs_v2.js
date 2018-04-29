@@ -1,9 +1,9 @@
 //=================GLOBAL==================================
 //=========================================================
-let next_url = next_url_django;
-let vid = document.querySelector("video");
-let exerciseBox = document.getElementById("exerciseBox");
-let wrongAnswerBox = document.getElementById("wrongAnswerHintBox");
+var next_url = next_url_django;
+var vid = document.querySelector("video");
+var exerciseBox = document.getElementById("exerciseBox");
+var wrongAnswerBox = document.getElementById("wrongAnswerHintBox");
 
 //When the video finishes, display button to go next
 vid.addEventListener("ended", function(){
@@ -16,11 +16,11 @@ function ajax_success()
 }
 
 //Button to go to the next module
-let nextBtn = document.querySelector("button.nextLecture");
+var nextBtn = document.querySelector("button.nextLecture");
 nextBtn.addEventListener("click", function(){
     if (next_url.indexOf('download') >= 0)
         {
-            //let download_link = document.createElement('a');
+            //var download_link = document.createElement('a');
             //download_link.href = next_url;
             //download_link.setAttribute('download', '');
             //download_link.dispatchEvent(new MouseEvent('click'));
@@ -34,7 +34,7 @@ nextBtn.addEventListener("click", function(){
 });
 
 //The button to close the wrong answer feedback window
-let wrong_answer_button = document.querySelector(".wrongAnswerButton");
+var wrong_answer_button = document.querySelector(".wrongAnswerButton");
 wrong_answer_button.addEventListener("click", closeFeedbackWindow);
 
 function closeFeedbackWindow(e)
@@ -60,8 +60,8 @@ function runVideo(stoppingTimes, stoppingFunctions)
 {
 
     //Mark the current time every half a second
-    let myInterval;
-    let currentPos;
+    var myInterval;
+    var currentPos;
     
     //Seeking forward is disabled, but backward is allowed.
     vid.addEventListener("seeking", function(){
@@ -71,8 +71,8 @@ function runVideo(stoppingTimes, stoppingFunctions)
             }
     });
     
-    let i=0;
-    let stopMarker = stoppingTimes[i];
+    var i=0;
+    var stopMarker = stoppingTimes[i];
 
     vid.addEventListener("playing", function(){
         document.getElementById("nextButtonBox").classList.remove("show");
@@ -130,7 +130,7 @@ function runVideo(stoppingTimes, stoppingFunctions)
 selectAnswer.firstTime = true;
 function selectAnswer(e)
 {
-    let boxNode = e.target;
+    var boxNode = e.target;
     if (!boxNode.classList.contains("selection")) 
         {
             var foundBox = false;
@@ -148,8 +148,8 @@ function selectAnswer(e)
     if (document.querySelectorAll(".selection.answer").length < 2) //Only one right answer
         {
             boxNode.classList.add("selected");
-            let sentences = document.querySelectorAll(".selection.selected");
-            for (let i=sentences.length-1; i>-1; i--)
+            var sentences = document.querySelectorAll(".selection.selected");
+            for (var i=sentences.length-1; i>-1; i--)
                 {
                     if (sentences[i]!==boxNode)
                         {
@@ -165,7 +165,7 @@ function selectAnswer(e)
 
     if (selectAnswer.firstTime)
         {
-            let btn_check_answers = document.querySelector("button");
+            var btn_check_answers = document.querySelector("button");
             btn_check_answers.addEventListener("click", button_handler);
             btn_check_answers.disabled = false;
             btn_check_answers.classList.remove("notActive");
@@ -180,18 +180,18 @@ function selectAnswer(e)
 //-----------------------------------------------
 function button_handler(e)
 {
-    let btn_check_answers = document.querySelector(".checkAnswer");
+    var btn_check_answers = document.querySelector(".checkAnswer");
     if (!btn_check_answers.disabled)
         {
             btn_check_answers.disabled = true;
 
-            let answerSelection = document.querySelectorAll(".selection.selected");
-            let rightAnswerSelection = document.querySelectorAll(".selection.answer");
-            let all_correct = false;
+            var answerSelection = document.querySelectorAll(".selection.selected");
+            var rightAnswerSelection = document.querySelectorAll(".selection.answer");
+            var all_correct = false;
 
             if (answerSelection.length === rightAnswerSelection.length)
                 {
-                    for(let i=0; i<answerSelection.length;i++)
+                    for(var i=0; i<answerSelection.length;i++)
                         {
                             if (!answerSelection[i].classList.contains("answer"))
                                 {
@@ -312,13 +312,13 @@ function videoFunction851085()
 {
     //Define the stopping times
     //===========================================
-    let stoppingTimes = [101,113,131,141,234,263,295,324,358,425,456];
-    let stoppingFunctions = [];
+    var stoppingTimes = [101,113,131,141,234,263,295,324,358,425,456];
+    var stoppingFunctions = [];
     //===========================================
     
     //Define the stopping functions
     //===========================================
-    let question_function0 = function(){
+    var question_function0 = function(){
         exitFullScreenMode();
         
         //Create the selections and button.
@@ -326,8 +326,8 @@ function videoFunction851085()
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>1</span><span class='selection'>2</span><span class='selection'>3</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -339,15 +339,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
 
-    let question_function1 = function(){
+    var question_function1 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>1</span><span class='selection'>2</span><span class='selection'>3</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -359,15 +359,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
 
-    let question_function2 = function(){
+    var question_function2 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>1</span><span class='selection answer'>2</span><span class='selection'>3</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -379,15 +379,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
 
-    let question_function3 = function(){
+    var question_function3 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>1</span><span class='selection'>2</span><span class='selection answer'>3</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -399,15 +399,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
 
-    let question_function4 = function(){
+    var question_function4 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>singular</span><span class='selection'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -419,15 +419,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
     
-    let question_function5 = function(){
+    var question_function5 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>singular</span><span class='selection answer'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -437,15 +437,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
     
-    let question_function6 = function(){
+    var question_function6 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>singular</span><span class='selection answer'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -455,15 +455,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
     
-    let question_function7 = function(){
+    var question_function7 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>singular</span><span class='selection'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -473,15 +473,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
     
-    let question_function8 = function(){
+    var question_function8 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>singular</span><span class='selection answer'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -491,15 +491,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
     
-    let question_function9 = function(){
+    var question_function9 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>dog</span><span class='selection answer'>tree</span><span class='selection'>cats</span><span class='selection'>apples</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -509,15 +509,15 @@ function videoFunction851085()
         exerciseBox.classList.add("show");
     }
     
-    let question_function10 = function(){
+    var question_function10 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>dog</span><span class='selection'>tree</span><span class='selection answer'>cats</span><span class='selection answer'>apples</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -551,13 +551,13 @@ function videoFunction812630()
 {
     //Define the stopping times
     //===========================================
-    let stoppingTimes = [34,63,92,120,142,164,198];
-    let stoppingFunctions = [];
+    var stoppingTimes = [34,63,92,120,142,164,198];
+    var stoppingFunctions = [];
     //===========================================
     
     //Define the stopping functions
     //===========================================
-    let question_function0 = function(){
+    var question_function0 = function(){
         exitFullScreenMode();
         
         //Create the selections and button.
@@ -565,8 +565,8 @@ function videoFunction812630()
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>singular</span><span class='selection answer'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -578,15 +578,15 @@ function videoFunction812630()
         exerciseBox.classList.add("show");
     }
 
-    let question_function1 = function(){
+    var question_function1 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>singular</span><span class='selection answer'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -598,15 +598,15 @@ function videoFunction812630()
         exerciseBox.classList.add("show");
     }
 
-    let question_function2 = function(){
+    var question_function2 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>singular</span><span class='selection'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -618,7 +618,7 @@ function videoFunction812630()
         exerciseBox.classList.add("show");
     }
 
-    let question_function3 = function(){
+    var question_function3 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
@@ -626,8 +626,8 @@ function videoFunction812630()
 
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -639,15 +639,15 @@ function videoFunction812630()
         exerciseBox.classList.add("show");
     }
 
-    let question_function4 = function(){
+    var question_function4 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>singular</span><span class='selection'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -659,15 +659,15 @@ function videoFunction812630()
         exerciseBox.classList.add("show");
     }
     
-    let question_function5 = function(){
+    var question_function5 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>singular</span><span class='selection'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
@@ -677,15 +677,15 @@ function videoFunction812630()
         exerciseBox.classList.add("show");
     }
     
-    let question_function6 = function(){
+    var question_function6 = function(){
         exitFullScreenMode();
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection'>singular</span><span class='selection answer'>plural</span></div><button class='checkAnswer notActive'>Submit</button>";
 
         //Attach selection event to the multiple choices.
-        let sentences = document.querySelectorAll(".selection");
-        for (let i=0; i<sentences.length; i++)
+        var sentences = document.querySelectorAll(".selection");
+        for (var i=0; i<sentences.length; i++)
             {
                 sentences[i].addEventListener("click", selectAnswer);
             }
