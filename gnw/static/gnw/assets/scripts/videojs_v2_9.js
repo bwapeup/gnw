@@ -45,13 +45,26 @@ function closeFeedbackWindow(e)
 
 function exitFullScreenMode()
 {
-    alert("webkitDisplayingFullscreen exists in video: " + ('webkitDisplayingFullscreen' in vid));
-    alert("webkitDisplayingFullscreen exists in document: " + ('webkitDisplayingFullscreen' in document));
-    alert("webkitExitFullScreen exists in video: " + ('webkitExitFullScreen' in vid));
-    alert("webkitExitFullScreen exists in document: " + ('webkitExitFullScreen' in document));
-    alert("webkitExitFullscreen exists in video: " + ('webkitExitFullscreen' in vid));
-    alert("webkitExitFullscreen exists in document: " + ('webkitExitFullscreen' in document));
-    //vid.webkitExitFullScreen();
+    if ('webkitExitFullscreen' in document)
+        {
+            document.webkitExitFullscreen();
+        }
+    else if ('webkitExitFullscreen' in vid)
+        {
+            vid.webkitExitFullscreen();
+        }
+    else if ('webkitExitFullScreen' in vid)
+        {
+            vid.webkitExitFullScreen();
+        }
+    else if ('mozCancelFullScreen' in document)
+        {
+            document.mozCancelFullScreen();
+        }
+    else if ('exitFullscreen' in document)
+        {
+            document.exitFullscreen();
+        }
 }
 //=========================================================
 //=========================================================
