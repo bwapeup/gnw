@@ -320,12 +320,11 @@ function videoFunction851085()
     //===========================================
     var question_function0 = function(){
         exitFullScreenMode();
+        alert("past exit full screen");
         
         //Create the selections and button.
         exerciseBox.innerHTML="";
         exerciseBox.innerHTML="<div id='selectionsBox'><span class='selection answer'>1</span><span class='selection'>2</span><span class='selection'>3</span></div><button class='checkAnswer notActive'>Submit</button>";
-        
-        alert(exerciseBox.innerHTML);
 
         //Attach selection event to the multiple choices.
         var sentences = document.querySelectorAll(".selection");
