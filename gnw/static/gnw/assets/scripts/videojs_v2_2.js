@@ -106,8 +106,7 @@ function runVideo(stoppingTimes, stoppingFunctions)
                     if (i < stoppingFunctions.length)
                         {
                             vid.removeAttribute("controls");
-                            //stoppingFunctions[i]();
-                            alert("Stopped at stopping times" + i);
+                            stoppingFunctions[i]();
                             i++;
                         }
 
@@ -320,6 +319,7 @@ function videoFunction851085()
     //Define the stopping functions
     //===========================================
     var question_function0 = function(){
+        alert("inside function");
         exitFullScreenMode();
         
         //Create the selections and button.
