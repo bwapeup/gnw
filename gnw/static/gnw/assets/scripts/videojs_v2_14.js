@@ -192,18 +192,24 @@ function selectAnswer(e)
         }
     else  //There are multiple right answers
         {
-            //boxNode.classList.toggle("selected");
-            if (boxNode.classList.contains("selected"))
+            boxNode.classList.toggle("selected");
+            var sentences = document.querySelectorAll(".selection");
+            for (var i=sentences.length-1; i>-1; i--)
                 {
-                    boxNode.classList.remove("selected");
-                    boxNode.style.display = "none";
-                    boxNode.style.display = "inline-block";
-                }
-            else
-                {
-                    boxNode.classList.add("selected");
-                    boxNode.style.display = "none";
-                    boxNode.style.display = "inline-block";
+                    if (sentences[i]!==boxNode)
+                        {
+                            if (sentences[i].classList.contains("selected"))
+                                {
+                                    sentences[i].classList.remove("selected");
+                                    sentences[i].classList.add("selected");
+                                }
+                            else
+                                {
+                                    sentences[i].classList.add("selected");
+                                    sentences[i].classList.remove("selected");
+                                }
+                            break;
+                        }
                 }
         }
 
