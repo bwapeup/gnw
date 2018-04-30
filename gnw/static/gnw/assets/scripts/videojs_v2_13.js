@@ -196,10 +196,14 @@ function selectAnswer(e)
             if (boxNode.classList.contains("selected"))
                 {
                     boxNode.classList.remove("selected");
+                    boxNode.style.display = "none";
+                    boxNode.style.display = "inline-block";
                 }
             else
                 {
                     boxNode.classList.add("selected");
+                    boxNode.style.display = "none";
+                    boxNode.style.display = "inline-block";
                 }
         }
 
