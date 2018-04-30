@@ -192,7 +192,15 @@ function selectAnswer(e)
         }
     else  //There are multiple right answers
         {
-            boxNode.classList.toggle("selected");
+            //boxNode.classList.toggle("selected");
+            if (boxNode.classList.contains("selected"))
+                {
+                    boxNode.classList.remove("selected");
+                }
+            else
+                {
+                    boxNode.classList.add("selected");
+                }
         }
 
 
