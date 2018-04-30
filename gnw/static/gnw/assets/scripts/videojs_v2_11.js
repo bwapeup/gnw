@@ -20,11 +20,6 @@ var nextBtn = document.querySelector("button.nextLecture");
 nextBtn.addEventListener("click", function(){
     if (next_url.indexOf('download') >= 0)
         {
-            //var download_link = document.createElement('a');
-            //download_link.href = next_url;
-            //download_link.setAttribute('download', '');
-            //download_link.dispatchEvent(new MouseEvent('click'));
-            //ajax_record_completed_LM(next_uuid_django);
             window.location.assign(course_url_django);
         }
     else
@@ -43,15 +38,17 @@ function closeFeedbackWindow(e)
     document.querySelector(".checkAnswer").disabled = false;
 }
 
+//When an exercise comes up, test if video is in fullscreen and if it,
+//calls the right function depending on browser to exit fullscreen.
 function exitFullScreenMode()
 {
-    if ('fullscreenElement' in document && document.fullscreenElement
+    if (('fullscreenElement' in document && document.fullscreenElement)
             ||
-        'webkitDisplayingFullscreen' in vid && vid.webkitDisplayingFullscreen
+        ('webkitDisplayingFullscreen' in vid && vid.webkitDisplayingFullscreen)
             ||
-        'mozFullScreenElement' in document && document.mozFullScreenElement
+        ('mozFullScreenElement' in document && document.mozFullScreenElement)
             ||
-        'msFullscreenElement' in document && document.msFullscreenElement)
+        ('msFullscreenElement' in document && document.msFullscreenElement))
         {
             if ('webkitExitFullscreen' in document)
                 {
