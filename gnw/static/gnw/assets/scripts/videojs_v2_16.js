@@ -193,7 +193,15 @@ function selectAnswer(e)
     else  //There are multiple right answers
         {
             boxNode.classList.toggle("selected");
-            $(boxNode).css("z-index", "5");
+            var sentences = document.querySelectorAll(".selection");
+            for (var i=sentences.length-1; i>-1; i--)
+                {
+                    if (sentences[i]!==boxNode)
+                        {
+                            $(sentences[i]).css("z-index", "5");
+                            break;
+                        }
+                }
         }
 
 
