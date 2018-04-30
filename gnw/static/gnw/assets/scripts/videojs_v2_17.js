@@ -180,7 +180,7 @@ function selectAnswer(e)
 
     if (document.querySelectorAll(".selection.answer").length < 2) //Only one right answer
         {
-            boxNode.classList.add("selected");
+            boxNode.classList.toggle("selected");
             var sentences = document.querySelectorAll(".selection.selected");
             for (var i=sentences.length-1; i>-1; i--)
                 {
@@ -193,15 +193,6 @@ function selectAnswer(e)
     else  //There are multiple right answers
         {
             boxNode.classList.toggle("selected");
-            var sentences = document.querySelectorAll(".selection");
-            for (var i=sentences.length-1; i>-1; i--)
-                {
-                    if (sentences[i]!==boxNode)
-                        {
-                            $(sentences[i]).css("z-index", "5");
-                            break;
-                        }
-                }
         }
 
 
@@ -258,7 +249,7 @@ function button_handler(e)
                         selectAnswer.firstTime = true;
                         vid.setAttribute("controls", "");
                         vid.play();
-                    }, 2000);
+                    }, 1000);
 
                 }
             else  //Wrong answer
