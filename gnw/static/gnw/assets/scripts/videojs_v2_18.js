@@ -249,7 +249,7 @@ function button_handler(e)
                         selectAnswer.firstTime = true;
                         vid.setAttribute("controls", "");
                         vid.play();
-                    }, 1000);
+                    }, 800);
 
                 }
             else  //Wrong answer
