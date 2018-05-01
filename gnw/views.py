@@ -15,19 +15,19 @@ def courses_main_page(request):
 
 @login_required
 def panel(request):
-    enrolled_classes = Enrollment.objects.filter(user=request.user).select_related('course')
+    enrolled_classes = Enrollment.objects.filter(user=request.user, is_current=True).select_related('course')
     return render(request, 'gnw/panel.html', {'enrolled_classes':enrolled_classes})
 
 @login_required 
 def course(request, slug):
     #Check (1) whether the course requested exists, and (2) whether the user is enrolled in it
-    if not Enrollment.objects.filter(user=request.user, course__slug=slug).exists():
+    if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
         return redirect(reverse('panel'))
     
     course = Course.objects.filter(slug=slug).prefetch_related('unit_set__lesson_set__lesson_material_set').first()
 
     a = Completed_Learning_Materials.objects
-    b = a.filter(enrollment__user=request.user, lesson_material__lesson__unit__course__slug=slug)
+    b = a.filter(enrollment__user=request.user, enrollment__is_current=True, lesson_material__lesson__unit__course__slug=slug)
     clms = b.values_list('lesson_material__random_slug', flat=True)
 
     download_url = 'gnw/assets/download/'
@@ -38,7 +38,7 @@ def course(request, slug):
 
 @login_required
 def lecture(request, slug, uuid):
-    if not Enrollment.objects.filter(user=request.user, course__slug=slug).exists():
+    if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
         return redirect(reverse('panel'))
 
     learning_material = get_object_or_404(Lesson_Material, random_slug=uuid)

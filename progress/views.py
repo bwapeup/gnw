@@ -15,7 +15,7 @@ def ajax_record_completed_lm(request):
         uuid = request.POST.get('random_slug')
         lm = Lesson_Material.objects.filter(random_slug = uuid).first()
         if lm is not None:
-            my_enrollment = Enrollment.objects.filter(user=request.user, course=lm.lesson.unit.course).first()
+            my_enrollment = Enrollment.objects.filter(user=request.user, course=lm.lesson.unit.course, is_current=True).first()
             if my_enrollment is not None:
                 if not Completed_Learning_Materials.objects.filter(enrollment=my_enrollment, lesson_material=lm).exists():
                     Completed_Learning_Materials.objects.create(enrollment=my_enrollment, lesson_material=lm)
