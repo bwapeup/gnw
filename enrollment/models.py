@@ -36,7 +36,7 @@ class Enrollment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
     enrollment_date = models.DateField(default=date.today)
     enrollment_type = models.ForeignKey(Enrollment_Type, on_delete=models.PROTECT)
-    is_current = models.BooleanField(default=True)
+    is_current = models.BooleanField(default=False)
 
     class Meta:
         indexes = [
