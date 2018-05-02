@@ -1,0 +1,47 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+    {% if no_student_account %}
+        <div class="loginErrorMessageDiv">您没有学生账号。如您需要帮助，请联系我们。</div>
+
+    {% elif account_update_success %}
+        <div class="loginErrorMessageDiv">您的信息已更新。谢谢！</div>
+
+    {% else %}
+
+        {% if form.errors %}
+            {% for key,value in form.errors.items %} 
+                <div class="loginErrorMessageDiv">{{ value }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div id="signupFormWrapper">
+            <div id="loginFormCardTitle" class="d-flex justify-content-center align-items-center">
+                <div></div>
+            </div>
+            <form class="loginForm" method="post" action="{% url 'update_student_info' %}">
+            {% csrf_token %}
+                <div class="updateInfoInputDiv" id="loginFormUsernameDiv">
+                  <label for="{{ form.parent_name.id_for_label }}">家长名字 </label>{{ form.parent_name }}
+                </div>
+                <div class="updateInfoInputDiv">
+                  <label for="{{ form.student_name.id_for_label }}">孩子名字 </label>{{ form.student_name }}
+                </div>
+                <div class="updateInfoInputDiv">
+                  <label for="{{ form.student_birth_date.id_for_label }}">孩子生日 </label>{{ form.student_birth_date }}
+                </div>
+                <div class="updateInfoInputDiv">
+                  <label for="{{ form.student_gender.id_for_label }}">孩子性别 </label>{{ form.student_gender }}
+                </div>
+                <div class="updateInfoInputDiv">
+                  <label for="{{ form.city.id_for_label }}">所在城市 </label>{{ form.city }}
+                </div>
+                <div>
+                  <button type="submit" class="loginPageButton">确定</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+{% endblock %}

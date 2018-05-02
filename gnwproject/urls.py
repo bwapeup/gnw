@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from gnw import views as gnw_views
 from sms import views as sms_views
+from people import views as people_views
 
 urlpatterns = [
     url(r'^ycchtliaaau/', admin.site.urls, name='admin-page'),
@@ -13,6 +14,8 @@ urlpatterns += [
     url(r'^$', gnw_views.index, name='index'),
     url(r'^signup/$', sms_views.signup, name='signup'),
     url(r'^panel/$', gnw_views.panel, name='panel'),
+    url(r'^panel/update_my_info/$', people_views.update_student_info, name='update_student_info'),
+    url(r'^panel/show_my_info/$', people_views.show_my_info, name='show_my_info'),
     url(r'^panel/my_courses/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
     url(r'^panel/my_courses/(?P<slug>[\w-]+)/lecture/(?P<uuid>\d+)/$', gnw_views.lecture, name='VD'),
 ]

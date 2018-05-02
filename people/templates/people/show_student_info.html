@@ -1,0 +1,40 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+    <div id="signupFormWrapper">
+        <div id="loginFormCardTitle" class="d-flex justify-content-center align-items-center">
+            <div>我的信息</div>
+        </div>
+        <div class="loginForm">
+            {% if is_student %}
+                <div class="studentInfoItem">
+                  <span>注册手机： </span>{{ mobile }}
+                </div>
+            {% else %}
+                <div class="studentInfoItem">
+                  <span>用户名： </span>{{ username }}
+                </div>
+            {% endif %}
+            <div class="studentInfoItem">
+              <span>家长名字： </span>{{ parent_name }}
+            </div>
+            <div class="studentInfoItem">
+              <span>孩子名字： </span>{{ student_name }}
+            </div>
+            <div class="studentInfoItem">
+              <span>孩子生日： </span>{{ student_birth_date }}
+            </div>
+            <div class="studentInfoItem">
+              <span>孩子性别： </span>{{ student_gender }}
+            </div>
+            <div class="studentInfoItem" id="lastStudentInfoItem">
+              <span>所在城市： </span>{{ city }}
+            </div>
+        </div>
+        <div id="loginFormLinktoSignup" class="d-flex justify-content-center align-items-center">
+            <div><a href="{% url 'update_student_info'%}"><span>更改信息</span></a></div>
+        </div>
+    </div>
+
+{% endblock %}

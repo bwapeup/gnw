@@ -21,7 +21,7 @@
       {% endblock headUsualJS %}
         
       {% block css %}
-            <link href="{% static 'gnw/assets/style/css_main_v3_1.css' %}" rel="stylesheet">
+            <link href="{% static 'gnw/assets/style/css_main_v3_2.css' %}" rel="stylesheet">
       {% endblock css %}
         
     </head>
@@ -51,11 +51,9 @@
                                         <i class="fas fa-user"></i>
                                     </a>
                                     <div class="dropdown-menu">
-                                        {% comment %}
-                                        <a href="#" class="dropdown-item">
+                                        <a href="{% url 'show_my_info'%}" class="dropdown-item">
                                             <i class="fas fa-user-circle fa-lg"></i> 我的信息
                                         </a>
-                                        {% endcomment %}
                                         <a href="{% url 'logout'%}" class="dropdown-item">
                                             <i class="fas fa-sign-out-alt fa-lg"></i> 退出登录
                                         </a>

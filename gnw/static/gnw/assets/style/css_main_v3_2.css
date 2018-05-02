@@ -552,6 +552,32 @@ footer a:hover {
 /*=====================*/
 
 
+
+/* Show My Info Page */
+/*=====================*/
+.studentInfoItem {
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    height: auto;
+    text-align: left;
+}
+
+#lastStudentInfoItem {
+    margin-bottom: 0rem;
+}
+
+.updateInfoInputDiv {
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    height: auto;
+    text-align: left;
+}
+/*=====================*/
+
+
+
 /* Courses Main Page */
 /*=====================*/
 #courseCardsSection {
