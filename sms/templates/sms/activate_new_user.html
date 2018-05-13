@@ -18,11 +18,12 @@
         <div id="loginFormCardTitle" class="d-flex justify-content-center align-items-center">
             <div></div>
         </div>
-        <form class="loginForm" method="post" action="{% url 'signup' %}">
+        <form class="loginForm" method="post" action="{% url 'activate_new_user' token=token_hex_str %}">
         {% csrf_token %}
-            <div class="loginInputDiv" id="loginFormUsernameDiv">
-              <label for="{{ form.username.id_for_label }}">手机号 </label>{{ form.username }}
+            <div class="studentInfoItem" id="signupMobile">
+              <span>手机号码： </span>{{ mobile }}
             </div>
+            <input id='id_username' name='username' type='hidden' value='{{mobile}}'>
             <div class="loginInputDiv" id="password1InputDiv">
               <label for="{{ form.password1.id_for_label }}">密码 </label>{{ form.password1 }}
             </div>
@@ -33,7 +34,7 @@
               <label for="{{ form.verification_code.id_for_label }}">短信验证码 </label>{{ form.verification_code }}<div id="smsBtn">获取验证码</div>
             </div>
             <div>
-              <button type="submit" class="loginPageButton">注册</button>
+              <button type="submit" class="loginPageButton">确认</button>
             </div>
         </form>
         <div id="loginFormLinktoSignup" class="d-flex justify-content-center align-items-center">
@@ -45,5 +46,6 @@
 
 {% block js %}
     <script>var for_signup_django = true;</script>
-    <script src="{% static 'sms/scripts/signup_v2.js' %}"></script>
+    <script>var token_django = '{{token_hex_str}}';</script>
+    <script src="{% static 'sms/scripts/signup_v3.js' %}"></script>
 {% endblock js %}

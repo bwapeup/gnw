@@ -12,7 +12,8 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^$', gnw_views.index, name='index'),
-    url(r'^signup/$', sms_views.signup, name='signup'),
+    url(r'^signup/$', sms_views.signup_captcha, name='signup'),
+    url(r'^signup/activate/(?P<token>\w+)/$', sms_views.activate_new_user, name='activate_new_user'),
     url(r'^panel/$', gnw_views.panel, name='panel'),
     url(r'^panel/update_my_info/$', people_views.update_student_info, name='update_student_info'),
     url(r'^panel/show_my_info/$', people_views.show_my_info, name='show_my_info'),
@@ -27,17 +28,22 @@ urlpatterns += [
 
 #Ajax to request sms sign-up verification
 urlpatterns += [
-    url(r'^ajax/request_sms/$', sms_views.ajax_send_sms_verification_code, name='ajax_send_sms_verification_code'),
+    url(r'^ajax/request_sms/(?P<token>\w+)/$', sms_views.ajax_send_sms_verification_code, name='ajax_send_sms_verification_code'),
 ]
 
 #Request sms verification for password reset, etc. 
 urlpatterns += [
-    url(r'^sms_request/$', sms_views.request_sms_code, name='request_sms_code'),
-    url(r'^sms_password_change/(?P<token>\w+)/$', sms_views.reset_password, name='reset_password'),
+    url(r'^reset_password_request/$', sms_views.reset_password_captcha, name='reset_password_captcha'),
+    url(r'^reset_password_sms/(?P<token>\w+)/$', sms_views.reset_password_sms, name='reset_password_sms'),
+    url(r'^reset_password_confirm/(?P<token>\w+)/$', sms_views.reset_password_confirm, name='reset_password_confirm'),
 ]
 
 urlpatterns += [
     url(r'^progress/', include('progress.urls')),
+]
+
+urlpatterns += [
+    url(r'^captcha/', include('captcha.urls')),
 ]
 
 

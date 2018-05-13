@@ -515,6 +515,16 @@ footer a:hover {
     width: 15rem;
 }
 
+#captchaDiv input {
+    width: 18rem;
+}
+
+#captchaDiv img {
+    display: inline-block;
+    width: 8.5rem;
+    height: auto;
+}
+
 #smsBtn {
     display: inline-block;
     text-align: center;
@@ -541,12 +551,12 @@ footer a:hover {
 
 #smsBtn.disabled {
     cursor: default;
+    background-color: silver;
 }
 
 #smsBtn.disabled:hover {
     color: rgba(0,0,0,0.7);
     box-shadow: 0 0 3px 0px rgba(46, 60, 73, 0.4);
-    background-color: #f1c40f;
 }
 
 /*=====================*/
@@ -562,6 +572,11 @@ footer a:hover {
     height: auto;
     text-align: left;
 }
+
+#signupMobile {
+    padding-left: 4.5rem;
+}
+
 
 #lastStudentInfoItem {
     margin-bottom: 0rem;

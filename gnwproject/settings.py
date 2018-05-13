@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'session_control',
     'storages',
     'admin_honeypot',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,13 @@ YUNPIAN_APIKEY = config('YUNPIAN_APIKEY')
 # Admin Honeypot
 #----------------------------------------------------------
 ADMIN_HONEYPOT_EMAIL_ADMINS = False
+#----------------------------------------------------------
+
+
+# Django Simple Captcha
+#----------------------------------------------------------
+CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_dots',)
+CAPTCHA_OUTPUT_FORMAT = u'%(text_field)s %(hidden_field)s %(image)s'
 #----------------------------------------------------------
 
 

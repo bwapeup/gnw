@@ -1,6 +1,7 @@
 //Attach event listener to SMS request button
 var smsBtn = document.getElementById("smsBtn");
 smsBtn.addEventListener("click", requestSMS);
+var registration_token = token_django + '';
 
 //Request SMS event handler
 function requestSMS()
@@ -17,27 +18,9 @@ function requestSMS()
                 }
         }
     
-    var mobile_errors = false;
     var password_length_error = false;
     var password_match_error = false;
     var password_numeric_error = false;
-    
-    
-    //First check if a mobile number has been entered properly
-    var mobileNum = document.querySelector("#loginFormUsernameDiv input").value.trim();
-    
-    if (mobileNum.length!==11) 
-        {
-            mobile_errors = true;
-        }
-    else if (!(/^\d+$/.test(mobileNum)))
-        {
-            mobile_errors = true;
-        }
-    else if (mobileNum[0]!=='1')
-        {
-            mobile_errors = true;
-        }
     
     //Check the password inputs
     if (for_signup_django)
@@ -62,11 +45,6 @@ function requestSMS()
         }
     
     //Then output error messages or send SMS if no errors
-    if (mobile_errors)
-        {
-            document.getElementById("loginFormUsernameDiv").insertAdjacentHTML("afterend", "<div class='smsErrorMsg'>请输入有效的手机号</div>");
-        }
-    
     if (password_length_error)
         {
             document.getElementById("password1InputDiv").insertAdjacentHTML("afterend", "<div class='smsErrorMsg'>密码长度不能少于8个数字与字母的组合</div>");
@@ -82,10 +60,9 @@ function requestSMS()
             document.getElementById("password1InputDiv").insertAdjacentHTML("afterend", "<div class='smsErrorMsg'>密码不能全部是数字，需要至少一个字母。</div>");
         }
     
-    if (!(mobile_errors || password_length_error || password_match_error || password_numeric_error))
+    if (!(password_length_error || password_match_error || password_numeric_error))
         {
-            //Ajax to view to send sms
-            ajax_request_sms_verification_code(mobileNum);
+            ajax_request_sms_verification_code(registration_token);
         }
     else
         {
@@ -94,9 +71,9 @@ function requestSMS()
         }
 }
 
-function ajax_request_sms_verification_code(mobile_number)
+function ajax_request_sms_verification_code(registration_token)
 {
-    var ajax_url = "/ajax/request_sms/";
+    var ajax_url = "/ajax/request_sms/" + registration_token + '/';
     
     function getCookie(name) 
     {
@@ -136,23 +113,15 @@ function ajax_request_sms_verification_code(mobile_number)
     
     $.ajax({
         url: ajax_url,
-        data: {mobile: mobile_number},
+        data: {},
         type: "POST",
         dataType : "text",
     })
     // Code to run if the request succeeds (is done);
     // The response is passed to the function
     .done(function(result){
-        var smsBtn = document.getElementById("smsBtn");
         
-        if (for_signup_django)
-            {
-                var countdown = 180;
-            }
-        else
-            {
-                var countdown = 30;
-            }
+        var countdown = 90;
         
         var myInterval = setInterval(function(){
             smsBtn.textContent = countdown;
