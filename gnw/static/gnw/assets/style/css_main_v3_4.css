@@ -403,7 +403,17 @@ footer a:hover {
     margin-top: 2rem;
 }
 
+.modal .modal-title, .modal .modal-body p, .modal .modal-content button {
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
 
+.modal .modal-body p {
+    font-size: 1.7rem;
+}
+
+.modal .modal-content button {
+    font-size: 1.4rem;
+}
 /*=====================*/
 
 

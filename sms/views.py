@@ -1,17 +1,17 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, update_session_auth_hash
-from django.core.urlresolvers import reverse
-from django.contrib.auth import get_user_model
-from django.db.models import F
-from .models import SMS_Code, Token, Registration_Token
-from people.models import Student
-from django.contrib.auth.forms import SetPasswordForm
-from .forms import SignUpForm, RequestSMSCodeForm, CaptchaScreenForm
 from django.utils import timezone
-from yunpian_python_sdk.model import constant as YC
-from yunpian_python_sdk.ypclient import YunpianClient
 from django.conf import settings
 from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, update_session_auth_hash, get_user_model
+from django.contrib.auth.forms import SetPasswordForm
+from django.core.urlresolvers import reverse
+from django.db.models import F
+from .models import SMS_Code, Token, Registration_Token
+from .forms import SignUpForm, RequestSMSCodeForm, CaptchaScreenForm
+from people.models import Student
+from yunpian_python_sdk.model import constant as YC
+from yunpian_python_sdk.ypclient import YunpianClient
 from uuid import uuid4
 
 
@@ -95,6 +95,7 @@ def activate_new_user(request, token):
                 sms.save()
                 registration_token.verified = True
                 registration_token.save()
+                messages.success(request, '欢迎加入飞猫学堂!')
                 return redirect(reverse('panel'))
         else:
             context = {}
@@ -198,6 +199,7 @@ def reset_password_confirm(request, token):
             change_psswd_token.verified = True
             change_psswd_token.save()
             update_session_auth_hash(request, request.user)
+            messages.success(request, '密码更改成功。下次登陆请记住输入新密码。')
             return redirect(reverse('panel'))
         else:
             return render(request, 'sms/reset_password.html', {'form': form, 'token_hex_str':token, 'password_change_failed': True})

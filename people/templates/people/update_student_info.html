@@ -4,10 +4,6 @@
 
     {% if no_student_account %}
         <div class="loginErrorMessageDiv">您没有学生账号。如您需要帮助，请联系我们。</div>
-
-    {% elif account_update_success %}
-        <div class="loginErrorMessageDiv">您的信息已更新。谢谢！</div>
-
     {% else %}
 
         {% if form.errors %}

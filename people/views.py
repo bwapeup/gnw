@@ -1,7 +1,9 @@
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from .forms import StudentInfoUpdateForm
 from .models import Student
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
 
 
 @login_required
@@ -14,7 +16,8 @@ def update_student_info(request):
         form = StudentInfoUpdateForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            return render(request, 'people/update_student_info.html', {'account_update_success':True})
+            messages.success(request, '信息更改成功！')
+            return redirect(reverse('show_my_info'))
         else:
             return render(request, 'people/update_student_info.html', {'form': form}) 
     else:

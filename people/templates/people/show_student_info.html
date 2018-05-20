@@ -2,6 +2,29 @@
 
 {% block content %}
 
+{% if messages %}
+    <div class="modal" id="infoUpdatedModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">飞猫学堂</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              {% for message in messages %}
+                <p>{{message}}</p>
+              {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endif %}
+
     <div id="signupFormWrapper">
         <div id="loginFormCardTitle" class="d-flex justify-content-center align-items-center">
             <div>我的信息</div>
@@ -38,3 +61,15 @@
     </div>
 
 {% endblock %}
+
+{% block js %}
+
+{% if messages %}
+    <script>
+        $(document).ready(function(){
+            $("#infoUpdatedModal").modal('show');
+        });
+    </script>
+{% endif %}
+
+{% endblock js %}
