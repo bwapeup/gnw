@@ -92,6 +92,32 @@ AUTH_PASSWORD_VALIDATORS = [
 #----------------------------------------------------------
 
 
+
+# Email
+#----------------------------------------------------------
+
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+
+DEFAULT_FROM_EMAIL = 'Feimao <noreply@feimaoclasstest.xyz>'
+EMAIL_SUBJECT_PREFIX = '[Feimao System] '
+#----------------------------------------------------------
+
+
+
+# Admins and Managers
+#----------------------------------------------------------
+
+ADMINS = [('Admin', config('FEIMAO_ADMIN_EMAIL', default=''))]
+MANAGERS = [('Manager', config('FEIMAO_MANAGER_EMAIL', default=''))]
+#----------------------------------------------------------
+
+
+
 # Internationalization
 #----------------------------------------------------------
 

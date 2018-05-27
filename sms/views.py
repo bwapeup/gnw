@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash, get_user_model
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.urlresolvers import reverse
+from django.core.mail import mail_managers
 from django.db.models import F
 from .models import SMS_Code, Token, Registration_Token
 from .forms import SignUpForm, RequestSMSCodeForm, CaptchaScreenForm
@@ -96,6 +97,10 @@ def activate_new_user(request, token):
                 registration_token.verified = True
                 registration_token.save()
                 messages.success(request, '欢迎加入飞猫学堂!')
+                mail_managers(
+                    'New User Registration; ' + 'Time: ' + str(timezone.now()),
+                    'User mobile: ' + str(registration_token.mobile),
+                )
                 return redirect(reverse('panel'))
         else:
             context = {}
