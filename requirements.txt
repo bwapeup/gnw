@@ -1,4 +1,4 @@
-Django==1.11.13
+Django==1.11.29
 python-decouple==3.1
 yunpian-python-sdk==1.0.0
 django-admin-honeypot==1.0.0
