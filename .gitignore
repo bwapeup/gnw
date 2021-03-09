@@ -109,3 +109,5 @@ video/
 docs/locale/
 node_modules/
 tests/report/
+settings_local.py
+.vscode/
