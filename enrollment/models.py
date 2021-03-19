@@ -2,9 +2,9 @@ from django.db import models
 from django.conf import settings
 from gnw.models import Course
 from datetime import date
-from partial_index import PartialIndex
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 
 #======================================================
 #Enrollment_Type:
@@ -39,8 +39,8 @@ class Enrollment(models.Model):
     is_current = models.BooleanField(default=True)
 
     class Meta:
-        indexes = [
-            PartialIndex(fields=['user', 'course'], unique=True, where='is_current')
+        constraints = [
+            models.UniqueConstraint(fields=["user", "course"], condition=Q(is_current=True), name='unique_user_enrolled_in_current_course'),
         ]
 
     def clean(self):

@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('gnw', '0001_initial'),
-        ('enrollment', '0001_initial'),
+        ('enrollment', '0001_squashed_0007_auto_20210309_1719'),
     ]
 
     operations = [

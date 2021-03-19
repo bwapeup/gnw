@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from gnw.models import Course, Unit, Lesson, Lesson_Material
 from enrollment.models import Enrollment

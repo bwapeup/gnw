@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash, get_user_model
 from django.contrib.auth.forms import SetPasswordForm
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import mail_managers
 from django.db.models import F
 from .models import SMS_Code, Token, Registration_Token
