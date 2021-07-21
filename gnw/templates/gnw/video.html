@@ -1,0 +1,31 @@
+{% extends "base_lecture.html" %}
+
+{% load static %}
+
+{% block exercise %}
+    <div id="videoBox">
+        <video id="myvideo" controls preload="auto">
+            <source src="{% static video_file_url %}" type="video/mp4">
+        </video>
+        <div class="" id="nextButtonBox">
+            {% if next_lesson_type == 'VIDEO' %}
+                <a href="{% url 'video' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
+            {% elif next_lesson_type == 'NONE' %}
+                <a href="{% url 'class' slug=course_slug %}"><button class="nextLecture">Home</button></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock exercise %}
+
+{% block js %}
+        {{ video_questions_dict|json_script:"video_questions_dict" }}
+        <script>
+            let video_questions = JSON.parse(document.getElementById('video_questions_dict').textContent);
+        </script>
+        <script>
+            let img_url = "{% static img_url %}";
+        </script>
+        {% with js_url|add:'videojs_v2_42.js' as video_js_url %}
+            <script src="{% static video_js_url %}"></script>
+        {% endwith %}
+{% endblock js %}

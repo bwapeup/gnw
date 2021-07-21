@@ -1,0 +1,1040 @@
+html {
+    font-size: 10px;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+}
+
+/* For the sticky footer */
+/*=====================*/
+html, body {
+  height: 100%;
+  margin: 0;
+}
+.pushWrapper {
+  min-height: 100%;
+  background-color: #FAF7F5; /* Make sure this comes before navbar and footer! Otherwise colors will be off.*/
+
+  /* Equal to height of footer */
+  /* But also accounting for potential margin-bottom of last child */
+
+  margin-bottom: -7rem;
+}
+footer,
+.push {
+  height: 7rem;
+}
+
+footer {
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    background-color: #dce775;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: rgba(0,0,0,0.35);
+    text-align: center;
+}
+
+@media (max-width: 330px) {
+    footer {
+        font-size: 1rem; /* For footer text on mobile */
+    }
+}
+
+
+footer a {
+    color: rgba(0,0,0,0.35);
+}
+
+footer a:hover {
+    color: rgba(0,0,0,0.35);
+}
+
+.footerBox {
+    padding-top: 1rem;
+}
+
+.footerTextItem {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+/*=====================*/
+
+
+/* Nav Bar */
+/*=====================*/
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 1px 20px 0 rgba(46,61,73,.2);
+}
+
+.navbar-light .navbar-nav .nav-link, .navbar-brand {
+    color: darkslategrey;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-left: 1.5rem;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+@media (min-width: 576px) {
+    .navbar-light .navbar-nav .nav-link.signup {
+        background-color: limegreen;
+        color: white;
+        border-radius: 1rem;
+    }
+
+    .navbar-light .navbar-nav .nav-link.login {
+        background-color: deepskyblue;
+        color: white;
+        border-radius: 1rem;
+    }
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #f1c40f;
+}
+
+@media (max-width: 576px) {
+    .navbar-light .navbar-nav .nav-link {
+        border-bottom: 1px solid silver;
+    }
+    
+    .navbar-light .navbar-nav .nav-link.first-nav-link {
+        border-top: 1px solid silver;
+    }
+}
+
+.navbar .dropdown .dropdown-menu .dropdown-item {
+    font-size: 1.3rem;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+/*=====================*/
+
+
+/* Front page cover image*/
+/*=====================*/
+#coverImageContainer {
+    width: 100%;
+    position: relative;
+}
+
+#coverImageContainer img {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+/* Might be deleted */
+#boxOverCoverImage {
+    position: absolute;
+    top:40%;
+    left: 50%;
+    z-index: 2;
+    text-align: center;
+    background-color: #fff;
+    /*width: 34%;*/
+    min-width: 44rem;
+    text-align: center;
+    border-radius: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    transform: translate(-50%, -50%);
+}
+
+/* Might be deleted */
+#boxOverCoverImage #coverTextTitle {
+    font-size: 2.7rem;
+    color: deepskyblue;
+    font-weight: bolder;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+/* Might be deleted */
+#boxOverCoverImage .coverText {
+    font-size: 1.7rem;
+    color: #503920;
+    margin-bottom: 0rem;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+@media (max-width: 991px) {
+    #boxOverCoverImage {
+        top: 50%;
+    }
+    
+    #boxOverCoverImage #coverTextTitle {
+        font-size: 2.4rem;
+    }
+    
+    #boxOverCoverImage .coverText {
+        display: none;
+    }
+}
+
+@media (max-width: 575px) {
+    #boxOverCoverImage {
+        display: none;
+    }
+}
+
+/*=====================*/
+
+
+/* Button like the one on the front page and derivatives */
+/*=====================*/
+.coverCurriculumButton {
+    cursor: pointer;
+    display: block;
+    color: white;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    font-size: 2rem; 
+    font-weight: 800;
+    letter-spacing: 0.15rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background-color: #02b3e4;
+    margin: 2rem auto 0;
+    border: none;
+    border-radius: 0.4rem;
+    box-shadow: 12px 15px 20px rgba(0, 0, 0, 0.1);
+    padding: 0.8rem 2.5rem; 
+    transition-property: box-shadow, background-color;
+    transition-duration: 0.2s, 0.2s;
+    transition-timing-function: ease-in-out, ease-in-out;
+    transition-delay: initial, initial; 
+}
+
+.coverCurriculumButton:hover,
+.coverCurriculumButton:active {
+    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.3);
+    background-color: #148bb1;
+    text-decoration: none;
+    color: white;
+}
+
+.myLinkBtn {
+    display: inline-block;
+}
+
+.myLinkBtn.coverCurriculumButton {
+    margin-top: 0.5rem;
+}
+
+.myLinkBtn.coverCurriculumButton.frontPageBtn {
+    margin-top: 2rem;
+}
+
+/*Button used on course cards*/
+.myLinkBtn.coverCurriculumButton.courseBtn {
+    margin: 0rem;
+    padding: 0.6rem 2rem;
+    font-size: 1.3rem;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+@media (max-width: 991px) {
+    .myLinkBtn.coverCurriculumButton.frontPageBtn {
+        margin-top: 0.7rem;
+        font-size: 1.8rem;
+    }
+}
+/*=====================*/
+
+
+/* Front page rows below cover image */
+/*=====================*/
+#threeIconsRow {
+    background-color: #FAF7F5;
+    border-bottom: 0.5px solid #dce775;
+}
+
+.threeIconsRowFigure {
+    padding-top: 2.5rem;
+    font-size: 2.8rem;
+    font-weight: 600;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    text-align: center;
+}
+
+.threeIconsRowFigure img {
+    width: 30%;
+    height: 30%;
+}
+
+.threeIconsRowFigure figcaption {
+    margin: 1.9rem auto;
+    color: #503920;
+}
+
+#frontPageBlockTextOne {
+    background-color: #fff;
+}
+
+.frontPageBlockText {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 0.5px solid #dce775;
+}
+
+/*Might be deleted */
+.blockTextTitle {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #503920;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+/*Might be deleted */
+.blockTextBody {
+    margin-top: 2rem;
+    font-size: 1.6rem;
+    color: #503920;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+.rowTextIcon {
+    text-align: center;
+}
+
+.rowTextIcon img {
+    width: 70%;
+    height: 70%;
+}
+
+@media (max-width: 1199px) {
+    .rowTextIcon img {
+        width: 90%;
+        height: 90%;
+    }
+}
+
+@media (max-width: 991px) {
+    .rowTextIcon img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .rowTextIcon img {
+        display: none;
+    }
+}
+
+#frontPageBlockTextTwo {
+    background-color: #FAF7F5;
+}
+
+#frontPageBlockTextThree {
+    text-align: center;
+    background-color: #fff;
+}
+/*=====================*/
+
+
+/* 我的教室 */
+/*=====================*/
+#controlPanelCardBoxesSection {
+    margin-top: 3rem;
+}
+.controlPanelCardBox {
+    background-color: #fff;
+    transition: box-shadow 0.23s;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 4px 13px 0 rgba(0,0,0,0.12);
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: bolder;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    padding-top: 1.7rem;
+    padding-bottom: 1.7rem;
+    margin-bottom: 2.5rem;
+    color: #fff;
+}
+
+@media (max-width: 576px) {
+    .controlPanelCardBox {
+        margin-bottom: 0rem;
+    }
+}
+
+.controlPanelCardBox:hover {
+    box-shadow: 0 13px 25px 0 rgba(0,0,0,0.2);
+}
+
+.myBlue {
+    background-color: rgba(33, 150, 243, 1);
+}
+
+.myLightBlue {
+    background-color: rgba(64, 196, 255, 1);
+}
+
+.myGreen {
+    background-color: rgba(0, 200, 83, 1);
+}
+
+.myRed {
+    background-color: rgba(2,204,186,1);
+}
+
+#enrolledClassesHeadingSection {
+    margin-top: 3rem;
+}
+
+#enrolledClassesHeading {
+    font-size: 2.9rem;
+    text-align: left;
+    color: #02b3e4;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    border-bottom: 1.2px solid silver;
+}
+
+#enrolledClassesContainerSection {
+    margin-top: 2rem;
+}
+
+.modal .modal-title, .modal .modal-body p, .modal .modal-content button {
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+.modal .modal-body p {
+    font-size: 1.7rem;
+}
+
+.modal .modal-content button {
+    font-size: 1.4rem;
+}
+/*=====================*/
+
+
+
+/* Login Page */
+/*=====================*/
+.loginErrorMessageDiv {
+    color: red;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.loginErrorMessageDiv ul, .loginErrorMessageDiv li {
+    list-style-type: none;
+}
+
+#loginFormWrapper {
+    margin: 6rem auto 1rem;
+    width: 40rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+#loginFormWrapper input {
+    width: 27rem;
+}
+
+#loginFormCardTitle {
+    width: 100%;
+    height: 4rem;
+    background-color: #f1c40f;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+.loginForm {
+    width: 100%;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: #dce775;
+}
+
+
+.loginForm label {
+    margin-right: 0.5rem;
+}
+
+.loginInputDiv {
+    margin-bottom: 2rem;
+    width: 100%;
+    height: auto;
+    text-align: right;
+}
+
+#loginFormUsernameDiv {
+    margin-top: 1rem;
+}
+
+.loginPageButton {
+    width: 100%;
+    border-radius: 0;
+    background-color: #f1c40f; /*#02b3e4*/
+    cursor: pointer;
+}
+
+#loginFormLinktoSignup {
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    width: 100%;
+    height: 4rem;
+    background-color: gainsboro;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+#loginFormLinktoSignup span {
+    color: crimson;
+    cursor: pointer;
+}
+
+#loginFormLinktoSignup span:hover {
+    text-decoration: underline;
+}
+
+/*=====================*/
+
+
+/* Signup Page */
+/*=====================*/
+#signupFormWrapper {
+    margin: 6rem auto 1rem;
+    width: 40rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+#signupFormWrapper input {
+    width: 27rem;
+}
+
+#smsVerificationCodeDiv input {
+    width: 15rem;
+}
+
+#captchaDiv input {
+    width: 18rem;
+}
+
+#captchaDiv img {
+    display: inline-block;
+    width: 8.5rem;
+    height: auto;
+}
+
+#smsBtn {
+    display: inline-block;
+    text-align: center;
+    padding: 0.2rem;
+    color: rgba(0,0,0,0.7);
+    background-color: #f1c40f;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 0 3px 0px rgba(46, 60, 73, 0.4);
+    width: 11.5rem;
+}
+
+#smsBtn:hover {
+    color: rgba(0,0,0,0.9);
+    box-shadow: 0 0 7px 0px rgba(46, 60, 73, 0.8);
+    background-color: orange;
+}
+
+.smsErrorMsg {
+    margin-top: -1.8rem;
+    color: red;
+    text-align: center;
+}
+
+#smsBtn.disabled {
+    cursor: default;
+    background-color: silver;
+}
+
+#smsBtn.disabled:hover {
+    color: rgba(0,0,0,0.7);
+    box-shadow: 0 0 3px 0px rgba(46, 60, 73, 0.4);
+}
+
+/*=====================*/
+
+
+
+/* Show My Info Page */
+/*=====================*/
+.studentInfoItem {
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    height: auto;
+    text-align: left;
+}
+
+#signupMobile {
+    padding-left: 4.5rem;
+}
+
+
+#lastStudentInfoItem {
+    margin-bottom: 0rem;
+}
+
+.updateInfoInputDiv {
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    height: auto;
+    text-align: left;
+}
+/*=====================*/
+
+
+
+/* Courses Main Page */
+/*=====================*/
+#courseCardsSection {
+    margin: 3rem auto;
+}
+
+.card {
+    margin-bottom: 5rem;
+    box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+}
+
+.card:hover {
+    box-shadow: 5px 5px 5px 0 rgba(46,61,73,.2);
+    transition: 0.35s ease;
+}
+
+/*Mimics the card-deck in Bootstrap but make it responsive in the number of columns on each row*/
+@media (min-width: 576px) {
+    .mycard-deck {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+        justify-content: space-between;
+    }
+      .mycard-deck .card {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+            flex-direction: column;
+        -ms-flex: 0 0 48%;
+            flex: 0 0 48%;
+    }
+}
+
+@media (min-width: 992px) {
+    .mycard-deck .card {
+        -ms-flex: 0 0 31%;
+        flex: 0 0 31%;
+  }
+        /*panelCardDeck is in the Panel page*/
+        .mycard-deck.panelCardDeck .card {
+        -ms-flex: 0 0 23%;
+            flex: 0 0 23%;
+    }
+}
+
+@media (min-width: 1500px) {
+    .mycard-deck .card {
+        -ms-flex: 0 0 31.3%;
+        flex: 0 0 31.3%;
+  }
+    
+    .mycard-deck.panelCardDeck .card {
+        -ms-flex: 0 0 23%;
+            flex: 0 0 23%;
+    }
+}
+
+@media (min-width: 1800px) {
+    .mycard-deck .card {
+        -ms-flex: 0 0 31.5%;
+        flex: 0 0 31.5%;
+  }
+    .mycard-deck.panelCardDeck .card {
+        -ms-flex: 0 0 23%;
+            flex: 0 0 23%;
+    }
+}
+
+@media (min-width: 2000px) {
+    .mycard-deck .card {
+        -ms-flex: 0 0 31.7%;
+        flex: 0 0 31.7%;
+  }
+    
+    .mycard-deck.panelCardDeck .card {
+        -ms-flex: 0 0 23%;
+            flex: 0 0 23%;
+    }
+}
+
+.imageOverlayColorWrapper {
+    position: relative;
+}
+
+#courseOneOverlay {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(2,179,228,.8);
+    z-index: 999;
+}
+
+#courseTwoOverlay {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(2,204,186,.8);
+    z-index: 999;
+}
+
+#courseThreeOverlay {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(255,84,131,.8); 
+    z-index: 999;
+}
+
+#courseFourOverlay {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(169,81,237,.8); 
+    z-index: 999;
+}
+
+#courseFiveOverlay {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(125,151,173,.8); 
+    z-index: 999;
+}
+
+#courseSixOverlay {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(255,162,52,.8);  
+    z-index: 999;
+}
+
+.card .card-title {
+    margin-bottom: 2rem; /*Override same quality in Bootstrap */
+    color: #02b3e4;
+}
+
+.card-text {
+    font-size: 1.2rem;
+}
+
+.card-teacher-info {
+    font-size: 1.4rem;
+}
+
+/*=====================*/
+
+/*Individual Course Page (internal)*/
+/*=====================*/
+#classTitleSection {
+    background-color: #11ACCD;
+}
+
+.classTitleBox {
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    font-size: 2.5rem;
+    color: #fff;
+    text-align: center;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+
+.classProgressInfoBox {
+    color:#fff;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    font-size: 1.7rem;
+    text-align: center;
+    padding-top: 1.7rem;
+    /*padding-bottom: 1.7rem;*/
+    /*margin-bottom: 3rem;*/
+}
+
+#classLessonsSection {
+    margin: 3rem auto 10rem;
+}
+
+.classLessonsWrapper {
+    margin: 0 auto;
+    width: 50rem;
+}
+
+.lessonBlock {
+    width: 100%;
+    padding-top: 1.1rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid silver;
+    font-size: 1.6rem;
+    text-align: left;
+    display: flex;
+}
+
+.extraMaterialBlock {
+    width: 100%;
+    border-bottom: 1px solid silver;
+    font-size: 1.5rem;
+    font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
+    text-align: left;
+}
+
+.extraMaterialBlock .LMContainer {
+    padding-left: 8rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    font-size: 1.5rem;
+    color: darkblue; 
+    cursor: pointer;
+}
+
+.extraMaterialBlock .LMContainer:hover {
+    background-color: #fff;
+}
+
+.unitBlock {
+    width: 100%;
+    padding-top: 1.1rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid silver;
+    text-align: left;
+    display: flex;
+    margin-top: 3.5rem;
+    font-size: 2rem;
+    font-weight: bolder;
+    color: #11ACCD;
+}
+
+.lessonIconContainer {
+    padding-left: 2rem;
+    display: inline-block;
+}
+
+.lessonIconContainer i {
+    position: absolute;
+    top: 50%;
+    right: -15px;
+}
+
+.lessonTitleContainer {
+    display: inline-block;
+    padding-left: 1.5rem;
+}
+
+.lessonCheckContainer {
+    padding-right: 1.5rem;
+}
+
+.classLessonsWrapper .lessonLink {
+    color: black;
+}
+/*=====================*/
+
+
+/* Individual Video Lecture Page */
+/*=====================*/
+body.lectureBody {
+    background-color: #FAF7F5;
+}
+
+#videoBox {
+    margin: 1.7rem auto 0;
+    /*border: 10px solid #008080;*/
+    box-shadow: 8px 10px 20px 0 rgba(46, 61, 73, 0.6);
+    width: 80rem;
+    height: auto;
+    position: relative;
+}
+
+#videoBox video {
+    width: 100%;
+}
+
+#exerciseBox {
+    position: absolute;
+    bottom: -13.6rem;
+    left: 0px;
+    width: 100%;
+    height: 14rem;
+    text-align: center;
+    font-size: 2rem;
+    background-color: #fff;
+    border: 8px solid #008080;
+    display: none;
+}
+
+#exerciseBox.show {
+    display: block;
+}
+
+#selectionsBox {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+#exerciseBox span {
+    font-size: 2rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 3rem;
+    margin-left: 3rem;
+    width: 13rem;
+    /*border-radius: 0.7rem;*/
+    background-color: rgba(255, 204, 0, 1);
+    box-shadow: 4px 4px 5px 0 rgba(46, 60, 73, 0.4);
+    position: relative;
+}
+
+#exerciseBox span:hover {
+    box-shadow: 0.5px 0.5px 5px 0 rgba(46, 60, 73, 0.4);
+}
+
+#exerciseBox span.selected {
+    box-shadow: 0.5px 0.5px 5px 0 rgba(46, 60, 73, 0.4);
+    background-color: indianred;
+    color: #fff;
+}
+
+button.checkAnswer, button.wrongAnswerButton,
+button.nextLecture {
+    cursor: pointer;
+    display: block;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 750;
+    letter-spacing: 0.15rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background-color: #02b3e4;
+    margin: 3rem auto 0;
+    border: none;
+    border-radius: 0.4rem;
+    box-shadow: 12px 15px 20px rgba(0, 0, 0, 0.1);
+    padding: 0.8rem 2.5rem; /* 1.2rem 4rem;*/
+    /*--------transition--------*/
+    transition-property: box-shadow, background-color;
+    transition-duration: 0.2s, 0.2s;
+    transition-timing-function: ease-in-out, ease-in-out;
+    transition-delay: initial, initial; 
+}
+
+button:hover,
+button:active {
+    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.3);
+    background-color: #148bb1;
+}
+
+button.notActive {
+    cursor: default;
+    box-shadow: none;
+    background-color: lightgray;
+    color: gray; 
+}
+
+button.wrongAnswerButton {
+    margin: 1.5rem auto 0.5rem;
+    background-color: #26a69a;
+}
+
+#wrongAnswerFeedback {
+    position: absolute;
+    top: -9999px;
+    left: 0px;
+    width: 35rem;
+    height: auto;
+    font-size: 2.5rem;
+    display: none;
+}
+
+#wrongAnswerFeedback.show {
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: 4px solid black;
+    box-shadow: 8px 10px 20px 0 rgba(46, 61, 73, 0.6);
+    background-color: #fff;
+    padding: 0.5rem;
+}
+
+#rightAnswerFeedback {
+    position: absolute;
+    top: -9999px;
+    left: 0px;
+    width: 35rem;
+    height: 35rem;
+    display: none;
+}
+
+#rightAnswerFeedback img {
+    width: 100%;
+    height: 100%;
+}
+
+#rightAnswerFeedback.show {
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#nextButtonBox {
+    position: absolute;
+    bottom: -13.6rem;
+    left: 0px;
+    width: 100%;
+    height: 14rem;
+    text-align: center;
+    font-size: 2rem;
+    display: none;
+}
+
+#nextButtonBox.show {
+    display: block;
+}
+/*=====================*/
