@@ -72,6 +72,10 @@ DATABASES = {
     }
 }
 
+#Starting with Django 3.2, the datatype of implicit primary fields must
+#be specified in the settings file. 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -153,6 +157,13 @@ AWS_LOCATION = 'static'
 #STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 AWS_CLOUDFRONT_DOMAIN = config('AWS_CLOUDFRONT_DOMAIN')
 STATIC_URL = 'https://%s/%s/' % (AWS_CLOUDFRONT_DOMAIN, AWS_LOCATION)
+
+#----------------
+VIDEO_URL = 'gnw/assets/video/'
+IMAGE_URL = 'gnw/assets/img/'
+JS_URL = 'gnw/assets/scripts/'
+CSS_URL = 'gnw/assets/style/'
+#----------------
 #----------------------------------------------------------
 
 

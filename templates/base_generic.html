@@ -21,7 +21,7 @@
       {% endblock headUsualJS %}
         
       {% block css %}
-            <link href="{% static 'gnw/assets/style/css_main_v3_4.css' %}" rel="stylesheet">
+            <link href="{% static 'gnw/assets/style/css_main_v3_5.css' %}" rel="stylesheet">
       {% endblock css %}
         
     </head>
@@ -40,32 +40,32 @@
                                     <a href="{% url 'index'%}" class="nav-link first-nav-link">首页</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{% url 'courses_main_page'%}" class="nav-link">课程</a>
+                                    <a href="#" class="nav-link">课程</a>
                                 </li> 
                                 {% if user.is_authenticated %}
-                                <li class="nav-item">
-                                    <a href="{% url 'panel'%}" class="nav-link">我的教室</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fas fa-user"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a href="{% url 'show_my_info'%}" class="dropdown-item">
-                                            <i class="fas fa-user-circle fa-lg"></i> 我的信息
+                                    <li class="nav-item">
+                                        <a href="{% url 'panel'%}" class="nav-link">我的教室</a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fas fa-user"></i>
                                         </a>
-                                        <a href="{% url 'logout'%}" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt fa-lg"></i> 退出登录
-                                        </a>
-                                    </div>
-                                </li>
+                                        <div class="dropdown-menu">
+                                            <a href="{% url 'show_my_info'%}" class="dropdown-item">
+                                                <i class="fas fa-user-circle fa-lg"></i> 我的信息
+                                            </a>
+                                            <a href="{% url 'logout'%}" class="dropdown-item">
+                                                <i class="fas fa-sign-out-alt fa-lg"></i> 退出登录
+                                            </a>
+                                        </div>
+                                    </li>
                                 {% else %}
-                                <li class="nav-item">
-                                    <a href="{% url 'login'%}" class="nav-link login">登录</a>
-                                </li> 
-                                <li class="nav-item">
-                                    <a href="{% url 'signup'%}" class="nav-link signup">注册</a>
-                                </li> 
+                                    <li class="nav-item">
+                                        <a href="{% url 'login'%}" class="nav-link login">登录</a>
+                                    </li> 
+                                    <li class="nav-item">
+                                        <a href="{% url 'signup'%}" class="nav-link signup">注册</a>
+                                    </li> 
                                 {% endif %}
                             </ul>
                         </div>

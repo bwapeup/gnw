@@ -4,6 +4,7 @@ from gnw import views as gnw_views
 from sms import views as sms_views
 from people import views as people_views
 
+
 urlpatterns = [
     url(r'^ycchtliaaau/', admin.site.urls, name='admin-page'),
     url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
@@ -17,13 +18,8 @@ urlpatterns += [
     url(r'^panel/$', gnw_views.panel, name='panel'),
     url(r'^panel/update_my_info/$', people_views.update_student_info, name='update_student_info'),
     url(r'^panel/show_my_info/$', people_views.show_my_info, name='show_my_info'),
-    url(r'^panel/my_courses/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
-    url(r'^panel/my_courses/(?P<slug>[\w-]+)/lecture/(?P<uuid>\d+)/$', gnw_views.lecture, name='VD'),
-]
-
-#The main courses page listing all the courses available with links to each individual course
-urlpatterns += [
-    url(r'^courses/$', gnw_views.courses_main_page, name='courses_main_page'),
+    url(r'^my_courses/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
+    url(r'^my_courses/(?P<slug>[\w-]+)/video/(?P<uuid>\d+)/$', gnw_views.video, name='video'),
 ]
 
 #Ajax to request sms sign-up verification
