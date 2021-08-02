@@ -8,6 +8,7 @@ from django.conf import settings
 #======================================================
 class CustomUser(AbstractUser):
     name = models.CharField(max_length = 100, blank=True)
+    mobile = models.CharField(max_length = 11, unique=True)
 
     def __str__(self):
         if self.name == '':
@@ -21,15 +22,14 @@ class CustomUser(AbstractUser):
 #======================================================
 class Student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    mobile = models.CharField(max_length = 25, blank=True)
     parent_name = models.CharField(max_length = 25, blank=True)
     student_name = models.CharField(max_length = 25, blank=True)
 
     MALE = 'M'
     FEMALE = 'F'
     GENDER_CHOICES = (
-        (MALE, '男'),
-        (FEMALE, '女'),
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
     )
 
     student_gender = models.CharField(

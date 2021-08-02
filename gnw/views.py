@@ -13,6 +13,7 @@ index_template = 'gnw/index.html'
 panel_template = 'gnw/panel.html'
 course_template = 'gnw/course.html'
 video_template = 'gnw/video.html'
+quiz_template = 'gnw/quiz.html'
 #--------------------------------------
 
 def index(request):
@@ -29,8 +30,6 @@ def course(request, slug):
     if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
         return redirect(reverse('panel'))
     
-    #Below should not use first(). If there more than one course with the same slug, it should error out
-    # so that it can be corrected.
     course = Course.objects.filter(slug=slug).prefetch_related('unit_set__lesson_set').first()
 
     #The block below is used to track completed lessons and enforce, if chosen to do so, 
@@ -64,15 +63,39 @@ def video(request, slug, uuid):
     img_url = settings.IMAGE_URL
     css_url = settings.CSS_URL
 
-    context = {'video_file_url':video_file_url, 'js_url':js_url, 'img_url':img_url, 'css_url':css_url, 'course_slug':course_slug}
+    context = {'video_file_url':video_file_url, 'js_url':js_url, 'img_url':img_url, 'css_url':css_url, 'course_slug':course_slug, 'lesson_id':uuid}
     context.update(next_lesson_dict)
-
-    #Get interactive in-video question info:
-    #(1). Get querySet for all Video_Question objects with foreign key on Video
-    #(2). For each Video_Question, construct data structure to pass to JS
-    #(3). Set up JS to implement each Video_Question
 
     video_questions_dict = video.get_video_questions_context()
     context['video_questions_dict'] = video_questions_dict
     return render(request, video_template, context)
 
+@login_required
+def quiz(request, slug, uuid):
+    if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
+        return redirect(reverse('panel'))
+
+    lesson = get_object_or_404(Lesson, random_slug=uuid)
+
+    if lesson.quiz is None:
+        raise Http404("No quiz assigned to this lesson")
+    else:
+        quiz = lesson.quiz
+
+    course_slug = lesson.unit.course.slug
+    next_lesson_dict = lesson.get_next_lesson()
+
+    js_url = settings.JS_URL
+    img_url = settings.IMAGE_URL
+    css_url = settings.CSS_URL
+    audio_url = settings.AUDIO_URL
+
+    context = {'js_url':js_url, 'img_url':img_url, 'css_url':css_url, 'audio_url':audio_url, 'course_slug':course_slug, 'lesson_id':uuid}
+    context.update(next_lesson_dict)
+
+    quiz_questions_dict = quiz.get_quiz_questions_context()
+    context['quiz_questions_dict'] = quiz_questions_dict
+    return render(request, quiz_template, context)
+
+
+    

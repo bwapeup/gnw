@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import StudentInfoUpdateForm
-from .models import Student
 
 
 @login_required
@@ -30,7 +29,7 @@ def show_my_info(request):
     if hasattr(request.user, 'student'):
         student = request.user.student
         context['is_student'] = True
-        context['mobile'] = student.mobile
+        context['mobile'] = request.user.mobile
         context['parent_name'] = student.parent_name
         context['student_name'] = student.student_name
 

@@ -2,7 +2,7 @@ from django.forms import ModelForm, SelectDateWidget
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser, Student
 
-BIRTH_YEAR_CHOICES=[str(i) for i in range(2018, 1999, -1)]
+BIRTH_YEAR_CHOICES=[str(i) for i in range(2020, 1999, -1)]
 
 class CustomUserCreationForm(UserCreationForm):
 

@@ -20,6 +20,7 @@ urlpatterns += [
     url(r'^panel/show_my_info/$', people_views.show_my_info, name='show_my_info'),
     url(r'^my_courses/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
     url(r'^my_courses/(?P<slug>[\w-]+)/video/(?P<uuid>\d+)/$', gnw_views.video, name='video'),
+    url(r'^my_courses/(?P<slug>[\w-]+)/quiz/(?P<uuid>\d+)/$', gnw_views.quiz, name='quiz'),
 ]
 
 #Ajax to request sms sign-up verification

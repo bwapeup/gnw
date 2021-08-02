@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% csrf_token %}
+
 {% block exercise %}
     <div id="videoBox">
         <video id="myvideo" controls preload="auto">
@@ -10,6 +12,8 @@
         <div class="" id="nextButtonBox">
             {% if next_lesson_type == 'VIDEO' %}
                 <a href="{% url 'video' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
+            {% elif next_lesson_type == 'QUIZ' %}
+                <a href="{% url 'quiz' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
             {% elif next_lesson_type == 'NONE' %}
                 <a href="{% url 'class' slug=course_slug %}"><button class="nextLecture">Home</button></a>
             {% endif %}
@@ -22,10 +26,12 @@
         <script>
             let video_questions = JSON.parse(document.getElementById('video_questions_dict').textContent);
         </script>
+        <script>let lesson_type = "VIDEO";</script>
         <script>
             let img_url = "{% static img_url %}";
+            let lesson_id = "{{lesson_id}}";
         </script>
-        {% with js_url|add:'videojs_v2_42.js' as video_js_url %}
+        {% with js_url|add:'lesson_v1.js' as video_js_url %}
             <script src="{% static video_js_url %}"></script>
         {% endwith %}
 {% endblock js %}

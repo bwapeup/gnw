@@ -76,6 +76,11 @@ DATABASES = {
 #be specified in the settings file. 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+AUTHENTICATION_BACKENDS = [
+    'people.backends.MobileBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -125,7 +130,7 @@ MANAGERS = [('Manager', config('FEIMAO_MANAGER_EMAIL', default=''))]
 # Internationalization
 #----------------------------------------------------------
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -160,6 +165,7 @@ AWS_CLOUDFRONT_DOMAIN = config('AWS_CLOUDFRONT_DOMAIN')
 
 #----------------
 VIDEO_URL = 'gnw/assets/video/'
+AUDIO_URL = 'gnw/assets/audio/'
 IMAGE_URL = 'gnw/assets/img/'
 JS_URL = 'gnw/assets/scripts/'
 CSS_URL = 'gnw/assets/style/'

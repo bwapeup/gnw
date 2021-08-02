@@ -8,6 +8,7 @@ from gnw.models import Lesson
 class Completed_Lessons(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    results = models.TextField(max_length = 10000, blank=True)
 
     def __str__(self):
         if self.enrollment.is_current == True:

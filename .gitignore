@@ -112,3 +112,4 @@ tests/report/
 .vscode/
 serverless.yml
 old_*
+audio/
