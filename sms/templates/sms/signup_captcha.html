@@ -1,7 +1,5 @@
 {% extends 'base_generic.html' %}
 
-{% load static %}
-
 {% block content %}
 
     {% if mobile_already_registered %}
@@ -43,7 +41,7 @@
 
 {% endblock %}
 
-{% block js %}
+{% block body-internal-js %}
     <script>
         $(function() {
             document.getElementById('id_captcha_1').setAttribute('required', '');
@@ -64,4 +62,5 @@
             });
         });
     </script>
-{% endblock js %}
+{% endblock body-internal-js %}
+

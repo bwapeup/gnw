@@ -1,10 +1,14 @@
-if (lesson_type.toUpperCase()==="QUIZ")
+if (lesson_js_signal.toUpperCase()==="QUIZ")
 {
     quiz();
 }
-else if (lesson_type.toUpperCase()==="VIDEO")
+else if (lesson_js_signal.toUpperCase()==="VIDEO")
 {
     video();
+}
+else if (lesson_js_signal.toUpperCase()==="COURSE MENU")
+{
+    course_menu_setup();
 }
 
 function quiz()
@@ -585,8 +589,12 @@ function video()
         }
     }
 
-    pauseTime.lastCall = [-1, -1.0];
-    function pauseTime(index, option='click')
+    //lastCall[0] = last action_time called, lastCall[1] = when this call happened
+    //If the function was called for the same action_time within the last 2 seconds,
+    //it should not be called again because it's just 'timeupdate' firing multiple events
+    //within 1 second
+    pauseTime.lastCall = [-1, -1.0]; 
+    function pauseTime(index, option='click') //option: placeholder for other options like speech recognition
     {
         vid.pause();
         vid.removeAttribute("controls");
@@ -642,7 +650,7 @@ function video()
 
     function set_up_click_options(index)
     {
-        //If the chocies box already exists, it should be removed first.
+        //If the multiple chocies box already exists, it should be removed first.
         let choices_div = document.getElementById("choicesdiv");
         if (choices_div !== null)
         {
@@ -662,6 +670,7 @@ function video()
         choices_div.style.transform = "translate(-50%,-50%)";
         choices_div.style.width = "60rem";
         choices_div.style.height = "30rem";
+        choices_div.style.zIndex = "2147483647";
 
         let video_box = document.getElementById("videoBox");
         video_box.appendChild(choices_div);
@@ -765,4 +774,34 @@ function record_results_api(lesson_id, lesson_results='')
         console.log( "Status: " + status );
         console.dir( xhr );
     })
+}
+
+
+function course_menu_setup()
+{
+    let last_lesson_number = 0;
+    let lesson_number = 0;
+
+    let lesson_number_spans = document.querySelectorAll(".lesson-number");
+
+    for (let i=0; i<lesson_number_spans.length; i++)
+    {
+        lesson_number = parseInt(lesson_number_spans[i].textContent);
+
+        if (lesson_number < last_lesson_number)
+        {
+            lesson_number = last_lesson_number + 1;
+        }
+
+        last_lesson_number = lesson_number;
+
+        if (lesson_number >= 10)
+        {
+            lesson_number_spans[i].textContent = lesson_number;
+        }
+        else 
+        {
+            lesson_number_spans[i].textContent = '0' + lesson_number;
+        }
+    }
 }

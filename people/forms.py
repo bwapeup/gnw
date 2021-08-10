@@ -1,8 +1,11 @@
+from datetime import datetime
 from django.forms import ModelForm, SelectDateWidget
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser, Student
 
-BIRTH_YEAR_CHOICES=[str(i) for i in range(2020, 1999, -1)]
+current_year = datetime.today().year
+start_year = current_year - 100
+BIRTH_YEAR_CHOICES=[str(i) for i in range(current_year, start_year, -1)]
 
 class CustomUserCreationForm(UserCreationForm):
 

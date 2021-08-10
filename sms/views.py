@@ -19,6 +19,17 @@ from uuid import uuid4
 User = get_user_model()
 yunpian_apikey = getattr(settings, 'YUNPIAN_APIKEY', '')
 
+#Templates:
+#--------------------------------------
+signup_captcha_template = 'sms/signup_captcha.html'
+activate_new_user_template = 'sms/activate_new_user.html'
+reset_password_captcha_template = 'sms/reset_password_captcha.html'
+reset_password_sms_template = 'sms/reset_password_sms.html'
+reset_password_template = 'sms/reset_password.html'
+#--------------------------------------
+
+template_context = {}
+
 def signup_captcha(request):
     if request.user.is_authenticated:
         return redirect(reverse('panel'))
@@ -27,16 +38,19 @@ def signup_captcha(request):
         if form.is_valid():
             mobile_number = form.cleaned_data.get('mobile')
             if User.objects.filter(username = mobile_number).exists():
-                return render(request, 'sms/signup_captcha.html', {'form': form, 'mobile_already_registered':True})
+                template_context.update({'form': form, 'mobile_already_registered':True})
+                return render(request, signup_captcha_template, template_context)
             else:
                 token_string = str(uuid4().hex)
                 Registration_Token.objects.create(mobile=mobile_number, token_hex_str=token_string, created = timezone.now())
                 return redirect(reverse('activate_new_user', kwargs={'token': token_string}))
         else:
-            return render(request, 'sms/signup_captcha.html', {'form': form})
+            template_context.update({'form': form})
+            return render(request, signup_captcha_template, template_context)
     else:
         form = CaptchaScreenForm()
-        return render(request, 'sms/signup_captcha.html', {'form': form})
+        template_context.update({'form': form})
+        return render(request, signup_captcha_template, template_context)
 
 
 def activate_new_user(request, token):
@@ -48,7 +62,8 @@ def activate_new_user(request, token):
             return redirect(reverse('signup'))
     if request.method != 'POST':
         form = SignUpForm()
-        return render(request, 'sms/activate_new_user.html', {'form': form, 'token_hex_str':token, 'mobile':registration_token.mobile})
+        template_context.update({'form': form, 'token_hex_str':token, 'mobile':registration_token.mobile})
+        return render(request, activate_new_user_template, template_context)
     else:
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -62,28 +77,25 @@ def activate_new_user(request, token):
                 
             sms = SMS_Code.objects.filter(mobile=registration_token.mobile, verified=False, expired=False, tries__lt=3).order_by('-created').first()
             if sms is None:
-                context = {}
-                context['form'] = form
-                context['token_hex_str'] = token
-                context['mobile'] = registration_token.mobile
-                context['sms_authentication_failed'] = True
-                return render(request, 'sms/activate_new_user.html', context)
+                template_context['form'] = form
+                template_context['token_hex_str'] = token
+                template_context['mobile'] = registration_token.mobile
+                template_context['sms_authentication_failed'] = True
+                return render(request, activate_new_user_template, template_context)
             if sms.code != form.cleaned_data.get('verification_code'):
                 sms.tries = F('tries') + 1
                 sms.save()
-                context = {}
-                context['form'] = form
-                context['token_hex_str'] = token
-                context['mobile'] = registration_token.mobile
-                context['sms_authentication_failed'] = True
-                return render(request, 'sms/activate_new_user.html', context)
+                template_context['form'] = form
+                template_context['token_hex_str'] = token
+                template_context['mobile'] = registration_token.mobile
+                template_context['sms_authentication_failed'] = True
+                return render(request, activate_new_user_template, template_context)
             if (timezone.now() - sms.created).total_seconds() > 90: #Consider using F() and timedelta(seconds=xxx)
-                context = {}
-                context['form'] = form
-                context['token_hex_str'] = token
-                context['mobile'] = registration_token.mobile
-                context['sms_authentication_failed'] = True
-                return render(request, 'sms/activate_new_user.html', context)
+                template_context['form'] = form
+                template_context['token_hex_str'] = token
+                template_context['mobile'] = registration_token.mobile
+                template_context['sms_authentication_failed'] = True
+                return render(request, activate_new_user_template, template_context)
             if User.objects.filter(username = registration_token.mobile).exists():
                 return redirect(reverse('signup'))
             else:
@@ -103,11 +115,10 @@ def activate_new_user(request, token):
                 )
                 return redirect(reverse('panel'))
         else:
-            context = {}
-            context['form'] = form
-            context['token_hex_str'] = token
-            context['mobile'] = registration_token.mobile
-            return render(request, 'sms/activate_new_user.html', context)
+            template_context['form'] = form
+            template_context['token_hex_str'] = token
+            template_context['mobile'] = registration_token.mobile
+            return render(request, activate_new_user_template, template_context)
 
 
 def reset_password_captcha(request):
@@ -118,16 +129,19 @@ def reset_password_captcha(request):
         if form.is_valid():
             mobile_number = form.cleaned_data.get('mobile')
             if not User.objects.filter(username = mobile_number).exists():
-                return render(request, 'sms/reset_password_captcha.html', {'form': form})
+                template_context.update({'form': form})
+                return render(request, reset_password_captcha_template, template_context)
             else:
                 token_string = str(uuid4().hex)
                 Registration_Token.objects.create(mobile=mobile_number, token_hex_str=token_string, created = timezone.now())
                 return redirect(reverse('reset_password_sms', kwargs={'token': token_string}))
         else:
-            return render(request, 'sms/reset_password_captcha.html', {'form': form})
+            template_context.update({'form': form})
+            return render(request, reset_password_captcha_template, template_context)
     else:
         form = CaptchaScreenForm()
-        return render(request, 'sms/reset_password_captcha.html', {'form': form})
+        template_context.update({'form': form})
+        return render(request, reset_password_captcha_template, template_context)
 
 
 def reset_password_sms(request, token):
@@ -139,34 +153,32 @@ def reset_password_sms(request, token):
             return redirect(reverse('reset_password_captcha'))
     if request.method != 'POST':
         form = RequestSMSCodeForm()
-        return render(request, 'sms/reset_password_sms.html', {'form': form, 'token_hex_str':token, 'mobile':registration_token.mobile})
+        template_context.update({'form': form, 'token_hex_str':token, 'mobile':registration_token.mobile})
+        return render(request, reset_password_sms_template, template_context)
     else:
         form = RequestSMSCodeForm(request.POST)
         if form.is_valid():                
             sms = SMS_Code.objects.filter(mobile=registration_token.mobile, verified=False, expired=False, tries__lt=3).order_by('-created').first()
             if sms is None:
-                context = {}
-                context['form'] = form
-                context['token_hex_str'] = token
-                context['mobile'] = registration_token.mobile
-                context['sms_authentication_failed'] = True
-                return render(request, 'sms/reset_password_sms.html', context)
+                template_context['form'] = form
+                template_context['token_hex_str'] = token
+                template_context['mobile'] = registration_token.mobile
+                template_context['sms_authentication_failed'] = True
+                return render(request, reset_password_sms_template, template_context)
             if (timezone.now() - sms.created).total_seconds() > 90: #Consider using F() and timedelta(seconds=xxx)
-                context = {}
-                context['form'] = form
-                context['token_hex_str'] = token
-                context['mobile'] = registration_token.mobile
-                context['sms_authentication_failed'] = True
-                return render(request, 'sms/reset_password_sms.html', context)
+                template_context['form'] = form
+                template_context['token_hex_str'] = token
+                template_context['mobile'] = registration_token.mobile
+                template_context['sms_authentication_failed'] = True
+                return render(request, reset_password_sms_template, template_context)
             if sms.code != form.cleaned_data.get('verification_code'):
                 sms.tries = F('tries') + 1
                 sms.save()
-                context = {}
-                context['form'] = form
-                context['token_hex_str'] = token
-                context['mobile'] = registration_token.mobile
-                context['sms_authentication_failed'] = True
-                return render(request, 'sms/reset_password_sms.html', context)
+                template_context['form'] = form
+                template_context['token_hex_str'] = token
+                template_context['mobile'] = registration_token.mobile
+                template_context['sms_authentication_failed'] = True
+                return render(request, reset_password_sms_template, template_context)
             current_user = User.objects.filter(username = registration_token.mobile).first()
             if current_user is None:
                 return redirect(reverse('reset_password_captcha')) #This should never happen
@@ -179,11 +191,10 @@ def reset_password_sms(request, token):
             Token.objects.create(mobile=registration_token.mobile, session_key=request.session.session_key, token_hex_str=token_string, created = timezone.now())
             return redirect(reverse('reset_password_confirm', kwargs={'token': token_string}))
         else:
-            context = {}
-            context['form'] = form
-            context['token_hex_str'] = token
-            context['mobile'] = registration_token.mobile
-            return render(request, 'sms/reset_password_sms.html', context)
+            template_context['form'] = form
+            template_context['token_hex_str'] = token
+            template_context['mobile'] = registration_token.mobile
+            return render(request, reset_password_sms_template, template_context)
 
 
 def reset_password_confirm(request, token):
@@ -194,7 +205,8 @@ def reset_password_confirm(request, token):
         return redirect(reverse('reset_password_captcha'))
     if request.method != 'POST':
         form = SetPasswordForm(request.user)
-        return render(request, 'sms/reset_password.html', {'form': form, 'token_hex_str':token})
+        template_context.update({'form': form, 'token_hex_str':token})
+        return render(request, reset_password_template, template_context)
     else:
         if (timezone.now() - change_psswd_token.created).total_seconds() > 600: #Consider using F() and timedelta(seconds=600)
             return redirect(reverse('reset_password_captcha'))
@@ -207,7 +219,8 @@ def reset_password_confirm(request, token):
             messages.success(request, '密码更改成功。下次登陆请记住输入新密码。')
             return redirect(reverse('panel'))
         else:
-            return render(request, 'sms/reset_password.html', {'form': form, 'token_hex_str':token, 'password_change_failed': True})
+            template_context.update({'form': form, 'token_hex_str':token, 'password_change_failed': True})
+            return render(request, reset_password_template, template_context)
 
 
 def ajax_send_sms_verification_code(request, token):

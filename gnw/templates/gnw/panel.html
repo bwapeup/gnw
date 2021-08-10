@@ -27,29 +27,11 @@
     </div>
 {% endif %}
 
-<section id="controlPanelCardBoxesSection">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="controlPanelCardBox myBlue">我的测试</div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="controlPanelCardBox myLightBlue">学习资源</div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="controlPanelCardBox myGreen">家长空间</div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="controlPanelCardBox myRed">系统设定</div>
-            </div>
-        </div>
-    </div>
-</section>
 <section id="enrolledClassesHeadingSection">
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <div id="enrolledClassesHeading">我正在上的课程：</div>
+                <div id="enrolledClassesHeading">我的课程：</div>
             </div>
         </div>
     </div>
@@ -83,14 +65,14 @@
 
 {% endblock content %}
 
-{% block js %}
+{% block body-internal-js %}
 
-{% if messages %}
-    <script>
-        $(document).ready(function(){
-            $("#firstVisitModal").modal('show');
-        });
-    </script>
-{% endif %}
+  {% if messages %}
+      <script>
+          $(document).ready(function(){
+              $("#firstVisitModal").modal('show');
+          });
+      </script>
+  {% endif %}
 
-{% endblock js %}
+{% endblock body-internal-js %}

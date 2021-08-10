@@ -5,6 +5,7 @@ from sms import views as sms_views
 from people import views as people_views
 
 
+
 urlpatterns = [
     url(r'^ycchtliaaau/', admin.site.urls, name='admin-page'),
     url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),

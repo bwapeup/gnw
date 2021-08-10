@@ -3,19 +3,6 @@
 {% load static %}
 
 {% block content %}
-
-<section id="classTitleSection">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="classTitleBox">{{course_name}}</div>
-                <div class="classProgressInfoBox">
-                    <div id="progressStatus">已经学完：<span id="lessonsCompletedNumber"></span>/<span id="totalLessonsNumber"></span> 课</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <section id="classLessonsSection">
     <div class="container">
         <div class="row">
@@ -30,15 +17,25 @@
                             {% if lesson.lesson_type == 'VIDEO' %}
                                 <a href="{% url 'video' slug=course_slug uuid=lesson.random_slug %}" class="lessonLink">
                                     <div class="lessonBlock">
-                                        <div class="lessonIconContainer"><i class="far fa-star"></i></div>
-                                        <div class="lessonTitleContainer">Lesson {{forloop.counter}}: {{lesson.lesson_name}}</div>
+                                        <div class="lessonIconContainer"><span class="lesson-number">{{forloop.counter}}</span></div>
+                                        <div class="lessonTitleContainer">{{lesson.lesson_name}}</div>
+                                        {% if lesson.random_slug in completed_Lessons %}
+                                            <div class="lesson-completed-check ml-auto align-self-center"></div>
+                                        {% else %}
+                                            <div class="lesson-circle ml-auto align-self-center"></div>
+                                        {% endif %}
                                     </div>
                                 </a>
                             {% elif lesson.lesson_type == 'QUIZ' %}
                                 <a href="{% url 'quiz' slug=course_slug uuid=lesson.random_slug %}" class="lessonLink">
                                     <div class="lessonBlock">
-                                        <div class="lessonIconContainer"><i class="far fa-star"></i></div>
-                                        <div class="lessonTitleContainer">Lesson {{forloop.counter}}: {{lesson.lesson_name}}</div>
+                                        <div class="lessonIconContainer"><span class="lesson-number">{{forloop.counter}}</span></div>
+                                        <div class="lessonTitleContainer">{{lesson.lesson_name}}</div>
+                                        {% if lesson.random_slug in completed_Lessons %}
+                                            <div class="lesson-completed-check ml-auto align-self-center"></div>
+                                        {% else %}
+                                            <div class="lesson-circle ml-auto align-self-center"></div>
+                                        {% endif %}
                                     </div>
                                 </a>
                             {% endif %}
@@ -54,298 +51,8 @@
 </section>
 {% endblock content %}
 
-{% block js %}
-
-<script>
-    (function course_page_setup()
-    {
-        var enforce_LM_order = true; //Set it to false if no order of study is to be enforced
-        var current_LM_in_unit = {};
-        var completed_lesson = 0;
-        var incomplete_lessons = 0;
-
-        //Put a green checkmark next to a completed LM and Lesson or a gray
-        //next to an incomplete Lesson
-        (function update_icons()
-        {
-            var completed_LMs = document.querySelectorAll("[data-completed]");
-            for(var i=0;i<completed_LMs.length;i++)
-                {
-                    completed_LMs[i].insertAdjacentHTML('beforeend', '<i class="fas fa-check" style="color:lawngreen"></i>');
-                }
-            var collapseBoxes = document.querySelectorAll(".extraMaterialBlock");
-            for(var i=0;i<collapseBoxes.length;i++)
-                {
-                    var incomplete_LMs = collapseBoxes[i].querySelectorAll("[data-incomplete]");
-                    var complete_LMs = collapseBoxes[i].querySelectorAll("[data-completed]");
-
-                    if (incomplete_LMs.length === 0 && complete_LMs.length === 0) //Empty lesson, still under construction
-                        {
-                            $(collapseBoxes[i]).prev().children(".lessonBlock").append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="far fa-circle" style="color:silver"></i></div>');
-                            incomplete_lessons++;
-                        }
-                    else if (incomplete_LMs.length > 0 && complete_LMs.length === 0 || incomplete_LMs.length > 0 && complete_LMs.length > 0)
-                        {
-                            $(collapseBoxes[i]).prev().children(".lessonBlock").append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="far fa-circle" style="color:silver"></i></div>');
-                            incomplete_lessons++;
-                        }
-                    else
-                        {
-                            $(collapseBoxes[i]).prev().children(".lessonBlock").append('<div class="lessonCheckContainer d-inline-block ml-auto"><i class="fas fa-check" style="color:lawngreen"></i></div>');
-                            completed_lesson++;
-                        }
-                }
-        })();
-        
-
-        //Indicate how many lessons have been completed below the course title at the top
-        (function update_lessons_completed_number()
-        {
-            document.getElementById("lessonsCompletedNumber").textContent = completed_lesson + "";
-            document.getElementById("totalLessonsNumber").textContent = (completed_lesson + incomplete_lessons) + "";
-        })();
-        
-        //Attach event to file download links so that when it's clicked 
-        //it's recorded as complete via ajax to the server
-        file_download_update.ajaxsent = {};
-        var file_download_links = document.querySelectorAll("[data-download='true']");
-        for(var i=0; i<file_download_links.length; i++)
-            {
-                file_download_links[i].addEventListener("click", file_download_update);
-                var uuid = file_download_links[i].getAttribute("data-uuid");
-
-                if (file_download_links[i].hasAttribute("data-incomplete"))
-                    {
-                        file_download_update.ajaxsent[uuid] = false;
-                    }
-                else
-                    {
-                        file_download_update.ajaxsent[uuid] = true;
-                    }
-            }
-
-        function file_download_update(e)
-        {
-            var eventTrigger = e.target;
-            var link;
-
-            if (eventTrigger.classList.contains("LMContainer")) //The link itself was clicked on
-                 {
-                     link = eventTrigger;
-                 }
-            else
-                {
-                    var foundLink = false;
-
-                    while(!foundLink)
-                        {
-                            eventTrigger = eventTrigger.parentElement;
-                            if (eventTrigger.classList.contains("LMContainer"))
-                                {
-                                    link = eventTrigger;
-                                    foundLink = true;
-                                }
-                        }
-                }
-
-            var download_link = document.createElement('a');
-            download_link.href = link.getAttribute("data-href");
-            download_link.setAttribute('download', '');
-            var uuid = link.getAttribute("data-uuid");
-            
-            download_link.dispatchEvent(new MouseEvent('click'));
-                    
-            if (file_download_update.ajaxsent[uuid]===false)
-                {
-                    ajax_record_completed_LM(uuid);
-                }
-        }
-
-        //Attach event to other LM links so that when it's clicked 
-        //it's rendered and the student is taken to the new page in current browser
-        var LM_links = document.querySelectorAll("[data-download='false']");
-        for(var i=0; i<LM_links.length; i++)
-            {
-                LM_links[i].addEventListener("click", view_LM);
-            }
-
-        function view_LM(e)
-        {            
-            var eventTrigger = e.target;
-            var link;
-
-            if (eventTrigger.classList.contains("LMContainer")) //The link itself was clicked on
-                 {
-                     link = eventTrigger;
-                 }
-            else
-                {
-                    var foundLink = false;
-
-                    while(!foundLink)
-                        {
-                            eventTrigger = eventTrigger.parentElement;
-                            if (eventTrigger.classList.contains("LMContainer"))
-                                {
-                                    link = eventTrigger;
-                                    foundLink = true;
-                                }
-                        }
-                }
-
-            var link_href = link.getAttribute("data-href");
-            window.location.assign(link_href);
-        }
-
-        //Attach event to each incomplete LM so that order is enforced
-        //Also create a dict to store latest LM in each unit that should be worked on
-        if (enforce_LM_order)
-            {
-                var LM_set = document.querySelectorAll("[data-incomplete]");
-                for(var i=0;i<LM_set.length;i++)
-                    {
-                        var unit_number = LM_set[i].getAttribute("data-unit-number");
-                        if (!(unit_number in current_LM_in_unit))
-                            {
-                                current_LM_in_unit[unit_number] = {}; 
-                                current_LM_in_unit[unit_number]["lesson_number"] = LM_set[i].getAttribute("data-lesson-number");
-                                current_LM_in_unit[unit_number]["LM_number"] = LM_set[i].getAttribute("data-LM-number");
-                                current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
-                            }
-                        else
-                            {
-                                var test_lesson_number = LM_set[i].getAttribute("data-lesson-number");
-                                if (test_lesson_number < current_LM_in_unit[unit_number]["lesson_number"])
-                                    {
-                                        current_LM_in_unit[unit_number]["lesson_number"] = test_lesson_number;
-                                        current_LM_in_unit[unit_number]["LM_number"] = LM_set[i].getAttribute("data-LM-number");
-                                        current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
-                                    }
-                                else if (test_lesson_number === current_LM_in_unit[unit_number]["lesson_number"])
-                                    {
-                                        var test_LM_number = LM_set[i].getAttribute("data-LM-number");
-                                        if (test_LM_number < current_LM_in_unit[unit_number]["LM_number"])
-                                            {
-                                                current_LM_in_unit[unit_number]["LM_number"] = test_LM_number;
-                                                current_LM_in_unit[unit_number]["LM_title"] = LM_set[i].textContent;
-                                            }
-                                    }
-                            }   
-                    }
-
-                //Remove the normal event listeners on all out-of-order LMs and attach warning instead
-                for(var i=0;i<LM_set.length;i++)
-                    {
-                        var LM = LM_set[i];
-                        var unit_number = LM.getAttribute("data-unit-number");
-                        var lesson_number = LM.getAttribute("data-lesson-number");
-                        var LM_number = LM.getAttribute("data-LM-number");
-
-                        if (current_LM_in_unit[unit_number]["lesson_number"] !== lesson_number)
-                            {
-                                LM.setAttribute("data-href", "");
-
-                                if ($(LM).data("download")===true)
-                                    {
-                                        LM.removeEventListener("click", file_download_update);
-                                    }
-                                else
-                                    {
-                                        LM.removeEventListener("click", view_LM);
-                                    }
-                                LM.addEventListener("click", enforce_order);
-                            }
-                        else
-                            {
-                                if (current_LM_in_unit[unit_number]["LM_number"] !== LM_number)
-                                    {
-                                        LM.setAttribute("data-href", "");
-
-                                        if ($(LM).data("download")===true)
-                                            {
-                                                LM.removeEventListener("click", file_download_update);
-                                            }
-                                        else
-                                            {
-                                                LM.removeEventListener("click", view_LM);
-                                            }
-                                        LM.addEventListener("click", enforce_order);
-                                    }
-                            }
-                    }
-            }
-        function enforce_order(e)
-        {
-            e.preventDefault();
-            var LM = e.target;
-            var unit_number = LM.getAttribute("data-unit-number");
-
-            alert("请按顺序学习，先完成 Lesson " + current_LM_in_unit[unit_number]["lesson_number"] + "- " + current_LM_in_unit[unit_number]["LM_title"]);
-        }
-    })();
-    
-    function ajax_record_completed_LM(uuid)
-        {
-            var ajax_url = "/progress/ajax/record_completed_lm/";
-
-            function getCookie(name) 
-            {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') 
-                {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) 
-                    {
-                        var cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) 
-                        {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-
-            var csrftoken = getCookie('csrftoken');
-
-            function csrfSafeMethod(method) 
-            {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-
-            $.ajax({
-                url: ajax_url,
-                data: {random_slug: uuid},
-                type: "POST",
-                dataType : "text",
-            })
-            // Code to run if the request succeeds (is done);
-            // The response is passed to the function
-            .done(function(result){
-                setTimeout(function(){
-                    window.location.reload(); //Reload the page after a download is downloaded for the 1st time.
-                }, 3000)
-            }) //
-            // Code to run if the request fails; the raw request and
-            // status codes are passed to the function
-            .fail(function( xhr, status, errorThrown ) {
-                console.log( "Error: " + errorThrown );
-                console.log( "Status: " + status );
-                console.dir( xhr );
-            })
-        }
-</script>
-
-{% endblock js %}
+{% block body-internal-js %}
+    <script>let lesson_js_signal = "COURSE MENU";</script>
+    {{block.super}}
+{% endblock body-internal-js %}
 

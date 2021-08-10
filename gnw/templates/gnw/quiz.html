@@ -4,9 +4,9 @@
 
 {% csrf_token %}
 
-{% block exercise %}
+{% block content %}
   <div id="exerciseArea">
-    <div id="bottomBufferDiv"></div>
+    <div class="bottomBufferDiv"></div>
     <div class="" id="nextButtonBox">
         {% if next_lesson_type == 'VIDEO' %}
             <a href="{% url 'video' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
@@ -16,21 +16,20 @@
             <a href="{% url 'class' slug=course_slug %}"><button class="nextLecture">Home</button></a>
         {% endif %}
     </div>
+    <div class="bottomBufferDiv"></div>
   </div>
-{% endblock exercise %}
+{% endblock content %}
 
-{% block js %}
+{% block body-internal-js %}
         {{ quiz_questions_dict|json_script:"quiz_questions_dict" }}
         <script>
             let quiz_questions = JSON.parse(document.getElementById('quiz_questions_dict').textContent);
         </script>
-        <script>let lesson_type = "QUIZ";</script>
+        <script>let lesson_js_signal = "QUIZ";</script>
         <script>
           let img_url = "{% static img_url %}";
           let audio_url = "{% static audio_url %}";
           let lesson_id = "{{lesson_id}}";
         </script>
-        {% with js_url|add:'lesson_v1.js' as quiz_js_url %}
-            <script src="{% static quiz_js_url %}"></script>
-        {% endwith %}
-{% endblock js %}
+        {{block.super}}
+{% endblock body-internal-js %}

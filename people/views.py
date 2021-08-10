@@ -4,13 +4,21 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import StudentInfoUpdateForm
 
+#Templates:
+#--------------------------------------
+update_student_info_template = 'people/update_student_info.html'
+show_student_info_template = 'people/show_student_info.html'
+#--------------------------------------
+
+template_context = {}
 
 @login_required
 def update_student_info(request):
     if hasattr(request.user, 'student'):
         student = request.user.student
     else:
-        return render(request, 'people/update_student_info.html', {'no_student_account':True})
+        template_context.update({'no_student_account':True})
+        return render(request, update_student_info_template, template_context)
     if request.method == 'POST':
         form = StudentInfoUpdateForm(request.POST, instance=student)
         if form.is_valid():
@@ -18,20 +26,21 @@ def update_student_info(request):
             messages.success(request, '信息更改成功！')
             return redirect(reverse('show_my_info'))
         else:
-            return render(request, 'people/update_student_info.html', {'form': form}) 
+            template_context.update({'form': form})
+            return render(request, update_student_info_template, template_context) 
     else:
         form = StudentInfoUpdateForm(instance=student)
-        return render(request, 'people/update_student_info.html', {'form': form})
+        template_context.update({'form': form})
+        return render(request, update_student_info_template, template_context) 
 
 @login_required
 def show_my_info(request):
-    context = {}
     if hasattr(request.user, 'student'):
         student = request.user.student
-        context['is_student'] = True
-        context['mobile'] = request.user.mobile
-        context['parent_name'] = student.parent_name
-        context['student_name'] = student.student_name
+        template_context['is_student'] = True
+        template_context['mobile'] = request.user.mobile
+        template_context['parent_name'] = student.parent_name
+        template_context['student_name'] = student.student_name
 
         if student.student_gender == student.MALE:
             gender = '男'
@@ -39,23 +48,23 @@ def show_my_info(request):
             gender = '女'
         else:
             gender = ''
-        context['student_gender'] = gender
+        template_context['student_gender'] = gender
 
         if student.student_birth_date is not None:
-            context['student_birth_date'] = student.student_birth_date
+            template_context['student_birth_date'] = student.student_birth_date
         else:
-            context['student_birth_date'] = ''
-        context['city'] = student.city
+            template_context['student_birth_date'] = ''
+        template_context['city'] = student.city
     else:
-        context['is_student'] = False
+        template_context['is_student'] = False
         if request.user.name != '':
-            context['username'] = request.user.name
+            template_context['username'] = request.user.name
         else:
-            context['username'] = request.user.username
-        context['parent_name'] = ''
-        context['student_name'] = ''
-        context['student_gender'] = ''
-        context['student_birth_date'] = ''
-        context['city'] = ''
+            template_context['username'] = request.user.username
+        template_context['parent_name'] = ''
+        template_context['student_name'] = ''
+        template_context['student_gender'] = ''
+        template_context['student_birth_date'] = ''
+        template_context['city'] = ''
 
-    return render(request, 'people/show_student_info.html', context)
+    return render(request, show_student_info_template, template_context)

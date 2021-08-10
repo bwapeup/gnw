@@ -163,15 +163,6 @@ AWS_LOCATION = 'static'
 AWS_CLOUDFRONT_DOMAIN = config('AWS_CLOUDFRONT_DOMAIN')
 #STATIC_URL = 'https://%s/%s/' % (AWS_CLOUDFRONT_DOMAIN, AWS_LOCATION)
 
-#----------------
-VIDEO_URL = 'gnw/assets/video/'
-AUDIO_URL = 'gnw/assets/audio/'
-IMAGE_URL = 'gnw/assets/img/'
-JS_URL = 'gnw/assets/scripts/'
-CSS_URL = 'gnw/assets/style/'
-#----------------
-#----------------------------------------------------------
-
 
 # Security
 #----------------------------------------------------------

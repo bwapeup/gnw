@@ -1,5 +1,8 @@
 from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 #======================================================
 #Course
@@ -7,12 +10,17 @@ from django.db import models
 class Course(models.Model):
     course_name = models.CharField(max_length = 200, unique=True)
 
-    #Enter a URL-friendly name (using hyphens and underscores and no spaces) 
-    #to be part of the URL:
-    slug = models.SlugField(max_length = 200, unique=True)
+    slug = models.SlugField(max_length = 200, unique=True, blank=True, help_text='Enter a URL-friendly course name without spaces and using only letters, digits, hypens, and underscores; leave it blank to auto generate from course name')
+
+    is_public = models.BooleanField(default=False)
 
     def __str__(self):
         return self.course_name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.course_name)
+        super().save(*args, **kwargs)
 
 #======================================================
 #Unit
@@ -41,6 +49,7 @@ class Unit(models.Model):
         if not self.unit_number:
             self.unit_number = self.generate_unit_order_number()
         super().save(*args, **kwargs)
+
 #======================================================
 #Lesson
 #======================================================
@@ -50,6 +59,8 @@ class Lesson(models.Model):
     lesson_name = models.CharField(max_length = 200)
 
     lesson_number = models.PositiveIntegerField(blank=True, help_text="Do not change unless re-ordering lessons") 
+
+    is_public = models.BooleanField(default=False)
 
     def random_id_generator():
         id_not_generated = True
@@ -68,8 +79,7 @@ class Lesson(models.Model):
 
     lesson_type = models.CharField(max_length = 25, choices=LESSON_TYPE_CHOICES)
 
-    #All possible formats of this lesson:
-    #To-do: Exactly one of the following must be non-null
+    #All possible formats of this lesson (choose exactly one and leave the rest blank):
     #--------------------------------
     video = models.ForeignKey('Video', blank=True, null=True, on_delete=models.PROTECT)
     quiz = models.ForeignKey('Quiz', blank=True, null=True, on_delete=models.PROTECT)
@@ -106,6 +116,21 @@ class Lesson(models.Model):
         else:
             return 1
             
+    def clean(self):
+        """
+        Make sure each lesson has exactly one lesson type.
+        This is called by ModelForm when saving through ModelForm (e.g. Admin site).
+        Be sure to call full_clean() if creating or updating by calling save().
+        """
+        if not self.video and not self.quiz:
+            raise ValidationError(_('Each lesson must point to a video or a quiz. They cannot both be empty.'))
+        elif self.video and self.quiz:
+            raise ValidationError(_('The lesson must point to a video or a quiz. You can only choose one.'))
+        elif self.lesson_type == 'VIDEO' and self.quiz:
+            raise ValidationError(_('Lesson Type = video, but you are pointing it to a quiz.'))
+        elif self.lesson_type == 'QUIZ' and self.video:
+            raise ValidationError(_('Lesson Type = quiz, but you are pointing it to a video.'))
+
     def save(self, *args, **kwargs):
         if not self.lesson_number:
             self.lesson_number = self.generate_lesson_order_number()

@@ -4,11 +4,16 @@
 
 {% csrf_token %}
 
-{% block exercise %}
-    <div id="videoBox">
-        <video id="myvideo" controls preload="auto">
-            <source src="{% static video_file_url %}" type="video/mp4">
-        </video>
+{% block content %}
+    <div id="exerciseArea">
+        <div id="videoBox">
+            <video id="myvideo" controls controlsList="nodownload" preload="auto">
+                {% with video_url|add:video_name as video_file_url %}
+                    <source src="{% static video_file_url %}" type="video/mp4">
+                {% endwith %}
+            </video>
+        </div>
+        <div class="bottomBufferDiv"></div>
         <div class="" id="nextButtonBox">
             {% if next_lesson_type == 'VIDEO' %}
                 <a href="{% url 'video' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
@@ -18,20 +23,19 @@
                 <a href="{% url 'class' slug=course_slug %}"><button class="nextLecture">Home</button></a>
             {% endif %}
         </div>
+        <div class="bottomBufferDiv"></div>
     </div>
-{% endblock exercise %}
+{% endblock content %}
 
-{% block js %}
+{% block body-internal-js %}
         {{ video_questions_dict|json_script:"video_questions_dict" }}
         <script>
             let video_questions = JSON.parse(document.getElementById('video_questions_dict').textContent);
         </script>
-        <script>let lesson_type = "VIDEO";</script>
+        <script>let lesson_js_signal = "VIDEO";</script>
         <script>
             let img_url = "{% static img_url %}";
             let lesson_id = "{{lesson_id}}";
         </script>
-        {% with js_url|add:'lesson_v1.js' as video_js_url %}
-            <script src="{% static video_js_url %}"></script>
-        {% endwith %}
-{% endblock js %}
+        {{block.super}}
+{% endblock body-internal-js %}

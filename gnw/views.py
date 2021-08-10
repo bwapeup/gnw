@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.urls import reverse
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from gnw.models import Course, Lesson
 from enrollment.models import Enrollment
 from progress.models import Completed_Lessons
+
 
 #Templates:
 #--------------------------------------
@@ -16,13 +16,28 @@ video_template = 'gnw/video.html'
 quiz_template = 'gnw/quiz.html'
 #--------------------------------------
 
-def index(request):
-    return render(request, index_template)
+#Context Data
+#----------------
+video_url = 'gnw/assets/video/'
+audio_url = 'gnw/assets/audio/'
+img_url = 'gnw/assets/img/'
+
+template_context = {
+    'img_url':img_url,
+    'video_url':video_url,
+    'audio_url':audio_url
+}
+#----------------------------------------------------------
+
+
+def index(request): 
+    return render(request, index_template, template_context)
 
 @login_required
 def panel(request):
     enrolled_classes = Enrollment.objects.filter(user=request.user, is_current=True).select_related('course')
-    return render(request, panel_template, {'enrolled_classes':enrolled_classes})
+    template_context.update({'enrolled_classes':enrolled_classes})
+    return render(request, panel_template, template_context)
 
 @login_required 
 def course(request, slug):
@@ -36,10 +51,11 @@ def course(request, slug):
     #learning sequence
     a = Completed_Lessons.objects
     b = a.filter(enrollment__user=request.user, enrollment__is_current=True, lesson__unit__course__slug=slug)
-    clms = b.values_list('lesson__random_slug', flat=True)
+    cls = b.values_list('lesson__random_slug', flat=True)
 
-    context = {'course':course, 'course_name':course.course_name, 'course_slug':slug, 'completed_LMs':clms}
-    return render(request, course_template, context)
+    template_context.update({'course':course, 'course_name':course.course_name, 'course_slug':slug, 
+               'completed_Lessons':cls}) 
+    return render(request, course_template, template_context)
     
 @login_required
 def video(request, slug, uuid):
@@ -57,18 +73,13 @@ def video(request, slug, uuid):
     course_slug = lesson.unit.course.slug
 
     next_lesson_dict = lesson.get_next_lesson()
+    template_context.update(next_lesson_dict)
 
-    video_file_url = settings.VIDEO_URL + video_name
-    js_url = settings.JS_URL
-    img_url = settings.IMAGE_URL
-    css_url = settings.CSS_URL
-
-    context = {'video_file_url':video_file_url, 'js_url':js_url, 'img_url':img_url, 'css_url':css_url, 'course_slug':course_slug, 'lesson_id':uuid}
-    context.update(next_lesson_dict)
+    template_context.update({'video_name':video_name, 'course_slug':course_slug, 'lesson_id':uuid}) 
 
     video_questions_dict = video.get_video_questions_context()
-    context['video_questions_dict'] = video_questions_dict
-    return render(request, video_template, context)
+    template_context['video_questions_dict'] = video_questions_dict
+    return render(request, video_template, template_context)
 
 @login_required
 def quiz(request, slug, uuid):
@@ -84,18 +95,13 @@ def quiz(request, slug, uuid):
 
     course_slug = lesson.unit.course.slug
     next_lesson_dict = lesson.get_next_lesson()
+    template_context.update(next_lesson_dict)
 
-    js_url = settings.JS_URL
-    img_url = settings.IMAGE_URL
-    css_url = settings.CSS_URL
-    audio_url = settings.AUDIO_URL
-
-    context = {'js_url':js_url, 'img_url':img_url, 'css_url':css_url, 'audio_url':audio_url, 'course_slug':course_slug, 'lesson_id':uuid}
-    context.update(next_lesson_dict)
+    template_context.update({'course_slug':course_slug, 'lesson_id':uuid}) 
 
     quiz_questions_dict = quiz.get_quiz_questions_context()
-    context['quiz_questions_dict'] = quiz_questions_dict
-    return render(request, quiz_template, context)
+    template_context['quiz_questions_dict'] = quiz_questions_dict
+    return render(request, quiz_template, template_context)
 
 
     
