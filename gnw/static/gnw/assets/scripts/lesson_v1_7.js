@@ -564,7 +564,7 @@ function video()
         {
             let action_time = Math.floor(vid.currentTime); 
             let call_time_milli = Date.now();
-            console.log(action_time);
+            //console.log(action_time);
             let index = action_times_array.indexOf(action_time);
 
             if (index > -1)
@@ -597,7 +597,7 @@ function video()
     function pauseTime(index, option='click') //option: placeholder for other options like speech recognition
     {
         vid.pause();
-        vid.removeAttribute("controls");
+        hide_controls();
 
         if (option.toUpperCase()==='CLICK')
         {
@@ -638,7 +638,7 @@ function video()
         choices_div.remove();
 
         vid.play();
-        vid.setAttribute("controls", "");
+        show_controls();
     }
 
     function convert_hhmmss_to_seconds(hhmmss_str)
@@ -710,6 +710,18 @@ function video()
             elem.addEventListener("click", jump);
             choices_div.appendChild(elem);
         }
+    }
+
+    function hide_controls()
+    {
+        //"#video-controls" is in the HTML, as part of the code that creates the video player
+        document.getElementById("video-controls").classList.add("hidden");
+    }
+
+    function show_controls()
+    {
+        //"#video-controls" is in the HTML, as part of the code that creates the video player
+        document.getElementById("video-controls").classList.remove("hidden");
     }
 }
 
