@@ -79,8 +79,6 @@ myvideo.addEventListener('timeupdate', updateTimeElapsed);
 function updateProgress() {
     progressBar.value = Math.floor(myvideo.currentTime);
     seek.value = Math.floor(myvideo.currentTime);
-    console.log("Progress value: " + progressBar.value);
-    console.log("Seek value: " + seek.value);
 }
 
 myvideo.addEventListener('timeupdate', updateProgress);

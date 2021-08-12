@@ -27,9 +27,11 @@ INSTALLED_APPS = [
     #'storages',
     'admin_honeypot',
     'captcha',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -199,4 +201,13 @@ CAPTCHA_OUTPUT_FORMAT = u'%(text_field)s %(hidden_field)s %(image)s'
 LOGIN_REDIRECT_URL = '/panel'  
 LOGOUT_REDIRECT_URL = '/panel'
 AUTH_USER_MODEL = 'people.CustomUser'
+#----------------------------------------------------------
+
+#For django debug toolbar
+#----------------------------------------------------------
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
 #----------------------------------------------------------
