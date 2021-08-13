@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from gnw.models import Course, Lesson
 from enrollment.models import Enrollment
 from progress.models import Completed_Lessons
@@ -41,7 +42,6 @@ def panel(request):
 
 @login_required 
 def course(request, slug):
-    #Check (1) whether the course requested exists, and (2) whether the user is enrolled in it
     if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
         return redirect(reverse('panel'))
     
@@ -50,7 +50,7 @@ def course(request, slug):
     #The block below is used to track completed lessons and enforce, if chosen to do so, 
     #learning sequence
     a = Completed_Lessons.objects
-    b = a.filter(enrollment__user=request.user, enrollment__is_current=True, lesson__unit__course__slug=slug)
+    b = a.filter(enrollment__user=request.user, enrollment__is_current=True, enrollment__course=course)
     cls = b.values_list('lesson__random_slug', flat=True)
 
     template_context.update({'course':course, 'course_name':course.course_name, 'course_slug':slug, 
@@ -62,7 +62,13 @@ def video(request, slug, uuid):
     if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
         return redirect(reverse('panel'))
 
-    lesson = get_object_or_404(Lesson, random_slug=uuid)
+    try:
+        lesson = Lesson.objects.filter(random_slug=uuid).select_related('video', 'unit__course').get()
+    except ObjectDoesNotExist:
+        raise Http404("This lesson does not exist")
+
+    if lesson.unit.course.slug != slug:
+        raise Http404("This lesson does not exist")
 
     if lesson.video is None:
         raise Http404("No video assigned to this lesson")
@@ -86,7 +92,13 @@ def quiz(request, slug, uuid):
     if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
         return redirect(reverse('panel'))
 
-    lesson = get_object_or_404(Lesson, random_slug=uuid)
+    try:
+        lesson = Lesson.objects.filter(random_slug=uuid).select_related('quiz', 'unit__course').get()
+    except ObjectDoesNotExist:
+        raise Http404("This lesson does not exist")
+
+    if lesson.unit.course.slug != slug:
+        raise Http404("This lesson does not exist")
 
     if lesson.quiz is None:
         raise Http404("No quiz assigned to this lesson")
@@ -103,5 +115,6 @@ def quiz(request, slug, uuid):
     template_context['quiz_questions_dict'] = quiz_questions_dict
     return render(request, quiz_template, template_context)
 
-
+        
+        
     

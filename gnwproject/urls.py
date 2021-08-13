@@ -1,4 +1,4 @@
-import debug_toolbar
+#import debug_toolbar
 from django.conf.urls import url, include
 from django.contrib import admin
 from gnw import views as gnw_views
@@ -22,9 +22,9 @@ urlpatterns += [
     url(r'^panel/$', gnw_views.panel, name='panel'),
     url(r'^panel/update_my_info/$', people_views.update_student_info, name='update_student_info'),
     url(r'^panel/show_my_info/$', people_views.show_my_info, name='show_my_info'),
-    url(r'^my_courses/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
-    url(r'^my_courses/(?P<slug>[\w-]+)/video/(?P<uuid>\d+)/$', gnw_views.video, name='video'),
-    url(r'^my_courses/(?P<slug>[\w-]+)/quiz/(?P<uuid>\d+)/$', gnw_views.quiz, name='quiz'),
+    url(r'^course/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
+    url(r'^course/(?P<slug>[\w-]+)/video/(?P<uuid>\d+)/$', gnw_views.video, name='video'),
+    url(r'^course/(?P<slug>[\w-]+)/quiz/(?P<uuid>\d+)/$', gnw_views.quiz, name='quiz'),
 ]
 
 #Ajax to request sms sign-up verification
@@ -45,7 +45,7 @@ urlpatterns += [
 
 urlpatterns += [
     url(r'^captcha/', include('captcha.urls')),
-    path('__debug__/', include(debug_toolbar.urls)),
+    #path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 

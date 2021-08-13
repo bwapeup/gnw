@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+    {% block body-open %}
+      <body class="lectureBody">
+    {% endblock body-open %}
+
+        {% block pushWrapper-top %}{% endblock pushWrapper-top %} 
+            
+        {% block navbar %}
+          <nav class="navbar navbar-expand-sm navbar-light nav-fill sticky-top py-0">
+            <div class="container">
+                <a href="{% url 'index' %}" class="navbar-brand py-0"><i class="fas fa-home"></i></a>
+            </div>
+          </nav>
+        {% endblock navbar %}
+        
+        {% block content %}
+          <div class="container">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <div class="my-5 container text-center">
+                        <h1 class="display-1 my-5">404</h1>
+                        <h1 class="display-3 my-5">您迷路了吗?</h1>
+                        <h1 class="display-3 my-5">Page not found</h1>
+                    </div>
+                </div>
+            </div>
+          </div>
+        {% endblock content %}
+
+        {% block pushWrapper-bottom %}{% endblock pushWrapper-bottom %}
+        
+        {% block footer %}{% endblock footer %}
+        
+        {% block body-internal-js %}{% endblock body-internal-js %}
