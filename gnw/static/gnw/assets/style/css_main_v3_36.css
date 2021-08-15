@@ -608,158 +608,55 @@ footer a:hover {
     margin: 3rem auto;
 }
 
-.card {
+.mycard-deck {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.mycard-deck a {
+    display:inline-block;
+    box-sizing: border-box;
+}
+
+.mycard-deck .card {
+    width: 375px;
     margin-bottom: 5rem;
+    margin-right: 3rem;
     box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
     font-family: "Open Sans", Helvetica, "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun, STXihei, "华文细黑", sans-serif;
 }
 
-.card:hover {
+
+.mycard-deck .card:hover {
     box-shadow: 5px 5px 5px 0 rgba(46,61,73,.2);
     transition: 0.35s ease;
 }
 
-/*Mimics the card-deck in Bootstrap but make it responsive in the number of columns on each row*/
-@media (min-width: 576px) {
-    .mycard-deck {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-flow: row wrap;
-            flex-flow: row wrap;
-        justify-content: space-between;
-    }
-      .mycard-deck .card {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-direction: column;
-            flex-direction: column;
-        -ms-flex: 0 0 48%;
-            flex: 0 0 48%;
-    }
+.mycard-deck a {
+    text-decoration: none;
 }
 
-@media (min-width: 992px) {
-    .mycard-deck .card {
-        -ms-flex: 0 0 31%;
-        flex: 0 0 31%;
-  }
-        /*panelCardDeck is in the Panel page*/
-        .mycard-deck.panelCardDeck .card {
-        -ms-flex: 0 0 23%;
-            flex: 0 0 23%;
-    }
-}
-
-@media (min-width: 1500px) {
-    .mycard-deck .card {
-        -ms-flex: 0 0 31.3%;
-        flex: 0 0 31.3%;
-  }
-    
-    .mycard-deck.panelCardDeck .card {
-        -ms-flex: 0 0 23%;
-            flex: 0 0 23%;
-    }
-}
-
-@media (min-width: 1800px) {
-    .mycard-deck .card {
-        -ms-flex: 0 0 31.5%;
-        flex: 0 0 31.5%;
-  }
-    .mycard-deck.panelCardDeck .card {
-        -ms-flex: 0 0 23%;
-            flex: 0 0 23%;
-    }
-}
-
-@media (min-width: 2000px) {
-    .mycard-deck .card {
-        -ms-flex: 0 0 31.7%;
-        flex: 0 0 31.7%;
-  }
-    
-    .mycard-deck.panelCardDeck .card {
-        -ms-flex: 0 0 23%;
-            flex: 0 0 23%;
-    }
-}
-
-.imageOverlayColorWrapper {
-    position: relative;
-}
-
-#courseOneOverlay {
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color: rgba(2,179,228,.8);
-    z-index: 999;
-}
-
-#courseTwoOverlay {
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color: rgba(2,204,186,.8);
-    z-index: 999;
-}
-
-#courseThreeOverlay {
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color: rgba(255,84,131,.8); 
-    z-index: 999;
-}
-
-#courseFourOverlay {
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color: rgba(169,81,237,.8); 
-    z-index: 999;
-}
-
-#courseFiveOverlay {
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color: rgba(125,151,173,.8); 
-    z-index: 999;
-}
-
-#courseSixOverlay {
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color: rgba(255,162,52,.8);  
-    z-index: 999;
-}
-
-.card .card-title {
-    margin-bottom: 2rem; /*Override same quality in Bootstrap */
+.mycard-deck .mycard-title {
     color: #02b3e4;
+    font-size: 1.8rem;
 }
 
-.card-text {
-    font-size: 1.2rem;
+.card-description {
+    height: 100%;
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
 }
 
-.card-teacher-info {
-    font-size: 1.4rem;
+.card-description span {
+    display: inline-block;
 }
 
 /*=====================*/
@@ -911,7 +808,7 @@ body.lectureBody {
     visibility: 0;
 }
 
-/*========Custom Video Player=============*/
+    /*--------------Custom Video Player--------------*/
 :root {
     --youtube-red: #FE0900;
 }
@@ -1218,11 +1115,31 @@ display: block;
     cursor: pointer;
   }
 
-/*========Custom Video Player=============*/
+    /*--------------Custom Video Player End--------------*/
 
+#choicesdiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 60rem;
+    height: 30rem;
+    z-index: 2147483647;
+}
 
-
-
+#choicesdiv img {
+    width: auto;
+    height: 25%;
+    background-color: white;
+    border: 2px solid orange;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 5px 5px 5px 1px rgba(46, 61, 73, 0.6);
+    
+}
 
 #exerciseBox {
     position: absolute;

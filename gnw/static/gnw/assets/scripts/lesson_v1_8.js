@@ -661,17 +661,6 @@ function video()
         choices_div = document.createElement("div");
         choices_div.id = "choicesdiv";
 
-        choices_div.style.display = "flex";
-        choices_div.style.alignItems = "center";
-        choices_div.style.justifyContent = "space-around";
-        choices_div.style.position = "absolute";
-        choices_div.style.top = "50%";
-        choices_div.style.left = "50%";
-        choices_div.style.transform = "translate(-50%,-50%)";
-        choices_div.style.width = "60rem";
-        choices_div.style.height = "30rem";
-        choices_div.style.zIndex = "2147483647";
-
         let video_box = document.getElementById("videoBox");
         video_box.appendChild(choices_div);
 
@@ -691,14 +680,6 @@ function video()
                 elem.classList.add("branching");
                 elem.setAttribute("data-branchingjumptoindex", (i-1).toString()); 
             }
-            
-            elem.style.width = "auto";
-            elem.style.height = "25%";
-            elem.style.backgroundColor = "white";
-            elem.style.border = "2px solid orange";
-            elem.style.borderRadius = "50%";
-            elem.style.cursor = "pointer";
-            elem.style.boxShadow = "5px 5px 5px 1px rgba(46, 61, 73, 0.6)";
 
             if (correct_choice === i)
             {

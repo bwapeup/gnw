@@ -40,23 +40,30 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <div class="mycard-deck panelCardDeck">
+              <div class="mycard-deck">
                   {% for class in enrolled_classes %}
-                      <div class="card">
-                        <div class="imageOverlayColorWrapper">
-                            {% static 'gnw/assets/img/courses/coursecoverimg9.jpg' as cover_photo%}
-                            <img class="card-img-top img-fluid" src="{{cover_photo}}" alt="">
-                            <div id="courseOneOverlay"></div>
-                        </div>
-                        <div class="card-body">
-                          <h2 class="card-title">{{class.course.course_name}}</h2>
-                        </div>
-                        <div class="card-footer bg-white">
-                          <a href="{% url 'class' slug=class.course.slug %}" class="myLinkBtn coverCurriculumButton courseBtn">进入课堂</a>
+                  <a href="{% url 'class' slug=class.course.slug %}">
+                      <div class="card mb-3">
+                        <div class="row no-gutters">
+                          <div class="col-3 bg-light">
+                            {% if class.course.course_name|upper == "SYLLOGISM 1" %}
+                              <img class="img-fluid" src="{% static 'gnw/assets/img/venn_diagram.svg' %}">
+                            {% elif class.course.course_name|upper == "LOGIC 101" %}
+                              <img class="img-fluid" src="{% static 'gnw/assets/img/venn_diagram.svg' %}">
+                            {% elif class.course.course_name|upper == "LOGICAL FALLACIES: STRAW MAN" %}
+                              <img class="img-fluid" src="{% static 'gnw/assets/img/venn_diagram.svg' %}">
+                            {% endif %}
+                          </div>
+                          <div class="col-9">
+                            <div class="card-description">
+                              <span class="mycard-title">{{ class.course.course_name }}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                    </a>
                   {% endfor %}
-                </div>
+              </div>
             </div>
         </div>
     </div>
