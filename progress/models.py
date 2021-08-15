@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from enrollment.models import Enrollment
 from gnw.models import Lesson
 
@@ -22,4 +23,8 @@ class Completed_Lessons(models.Model):
         display += 'unit ' + str(self.lesson.unit.unit_number) + ' ' + 'lesson '
         display += str(self.lesson.lesson_number)
         return  display 
+
+    def clean(self):
+        if self.lesson.unit.course.id != self.enrollment.course.id:
+            raise ValidationError('This lesson does not belong to the course associated with this enrollment.')
     
