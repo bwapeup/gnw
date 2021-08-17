@@ -10,10 +10,10 @@ update_student_info_template = 'people/update_student_info.html'
 show_student_info_template = 'people/show_student_info.html'
 #--------------------------------------
 
-template_context = {}
 
 @login_required
 def update_student_info(request):
+    template_context = {}
     if hasattr(request.user, 'student'):
         student = request.user.student
     else:
@@ -35,10 +35,12 @@ def update_student_info(request):
 
 @login_required
 def show_my_info(request):
+    template_context = {}
+    template_context['mobile'] = request.user.mobile
     if hasattr(request.user, 'student'):
         student = request.user.student
         template_context['is_student'] = True
-        template_context['mobile'] = request.user.mobile
+        template_context['username'] = request.user.username
         template_context['parent_name'] = student.parent_name
         template_context['student_name'] = student.student_name
 
@@ -57,10 +59,7 @@ def show_my_info(request):
         template_context['city'] = student.city
     else:
         template_context['is_student'] = False
-        if request.user.name != '':
-            template_context['username'] = request.user.name
-        else:
-            template_context['username'] = request.user.username
+        template_context['username'] = request.user.username
         template_context['parent_name'] = ''
         template_context['student_name'] = ''
         template_context['student_gender'] = ''
