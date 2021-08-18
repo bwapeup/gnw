@@ -146,80 +146,10 @@ class Video(models.Model):
     def __str__(self):
         return self.video_file_name
 
-    def get_video_questions_context(self):
-        video_questions_dict = {}
-        
-        number_of_questions = 0
-        video_questions = self.video_question_set.all()
-        for question in video_questions:
-            number_of_questions += 1
-            video_questions_dict['question_' + str(number_of_questions)] = {}
-            video_questions_dict['question_' + str(number_of_questions)]['pause_time'] = question.pause_time
-            video_questions_dict['question_' + str(number_of_questions)]['resume_time'] = question.resume_time
-
-            num_choices = question.number_of_choices
-            video_questions_dict['question_' + str(number_of_questions)]['number_of_choices'] = num_choices
-            video_questions_dict['question_' + str(number_of_questions)]['correct_choice'] = question.correct_choice
-
-            video_is_branching = question.branching_video
-            video_questions_dict['question_' + str(number_of_questions)]['branching_video'] = video_is_branching
-
-            if video_is_branching:
-                for i in range(1, num_choices + 1):
-                    video_questions_dict['question_' + str(number_of_questions)]['start_time_branch_'+str(i)]=getattr(question, 'start_time_branch_'+str(i))
-                    video_questions_dict['question_' + str(number_of_questions)]['end_time_branch_'+str(i)]=getattr(question, 'end_time_branch_'+str(i))
-
-        return video_questions_dict
+    def get_video_questions_context_json(self):
+        return self.properties
 
     
-#======================================================
-#Video_Question
-#======================================================
-class Video_Question(models.Model):
-    video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    pause_time = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>")
-    resume_time = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>")
-
-    class Number_of_Choices(models.IntegerChoices):
-        TWO = 2
-        THREE = 3
-        FOUR = 4
-
-    number_of_choices = models.PositiveIntegerField(choices=Number_of_Choices.choices)
-
-    class Choice(models.IntegerChoices):
-        CHOICE_ONE = 1
-        CHOICE_TWO = 2
-        CHOICE_THREE = 3
-        CHOICE_FOUR = 4
-
-    correct_choice = models.PositiveIntegerField(choices=Choice.choices)
-
-    branching_video  = models.BooleanField(default=False)
-
-    start_time_branch_1 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-    end_time_branch_1 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-
-    start_time_branch_2 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-    end_time_branch_2 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-
-    start_time_branch_3 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-    end_time_branch_3 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-
-    start_time_branch_4 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-    end_time_branch_4 = models.TimeField(help_text="format: <em>HH:MM:SS e.g. 00:01:29</em>", blank=True, null=True)
-
-    def __str__(self):
-        return self.video.video_file_name + ' ' + str(self.pause_time)
-
-    #to-do:
-    #(1). Check: correct_choice should be <= number_of_choices
-    #(2). Check: if branching_video is True, then there should be a number of non-null
-    #      branching times euqal to number_of_choices
-    #(3). Conditional: Unless branching_video is set to be True, the branching times should
-    #      not allow user input
-
-
 #======================================================
 #Quiz
 #======================================================

@@ -525,16 +525,16 @@ function video()
             if (branching)
             {
                 times = [];
-                for (let i=1; i<=number_of_choices; i++)
+                for (let i=0; i<number_of_choices; i++)
                 {
-                    seconds = convert_hhmmss_to_seconds(video_questions[question]['start_time_branch_' + i]);
+                    seconds = convert_hhmmss_to_seconds(video_questions[question]['start_times'][i]);
                     times.push(seconds);
                 }
                 jump_to_times_array.push(times);
 
-                for (let j=1; j<=number_of_choices; j++)
+                for (let j=0; j<number_of_choices; j++)
                 {
-                    seconds = convert_hhmmss_to_seconds(video_questions[question]['end_time_branch_' + j]); 
+                    seconds = convert_hhmmss_to_seconds(video_questions[question]['end_times'][j]); 
 
                     action_times_array.push(seconds);
                     functions_array.push(jumpTime);
@@ -555,9 +555,12 @@ function video()
         }
     }
 
-    set_up_question_data();
+    if (video_questions)
+    {
+        set_up_question_data();
+        vid.addEventListener("timeupdate", identify_action_times);
+    }
 
-    vid.addEventListener("timeupdate", identify_action_times);
     function identify_action_times()
     {
         if (!vid.paused) //If the user is just seeking, then it should not trigger function.
@@ -644,7 +647,7 @@ function video()
     function convert_hhmmss_to_seconds(hhmmss_str)
     {
         let hms = hhmmss_str.split(":");
-        let seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+        let seconds = (+hms[0]) * 60 + (+hms[1]);
         return seconds;
     }
 

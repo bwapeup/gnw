@@ -83,8 +83,8 @@ def video(request, slug, uuid):
 
     template_context.update({'video_name':video_name, 'course_slug':course_slug, 'lesson_id':uuid}) 
 
-    video_questions_dict = video.get_video_questions_context()
-    template_context['video_questions_dict'] = video_questions_dict
+    video_questions_list = video.get_video_questions_context_json()
+    template_context['video_questions_list'] = video_questions_list
     return render(request, video_template, template_context)
 
 @login_required
