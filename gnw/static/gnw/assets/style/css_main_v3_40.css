@@ -936,6 +936,7 @@ display: block;
 
     /*--------------Custom Video Player End--------------*/
 
+
 #choicesdiv {
     display: flex;
     align-items: center;
@@ -1179,5 +1180,128 @@ button.notActive {
     width: 100%;
     font-size: 1.5rem;
 }
+
+    /*--------------Custom Audio Player--------------*/
+    .audio-player {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        /*box-shadow: 8px 10px 20px 0 rgba(46, 61, 73, 0.6);*/
+    }
+    
+    .audio-player:hover {
+        cursor: pointer;
+    }
+    
+    .audio-player-controls {
+        position: absolute;
+    
+        width: 50px;
+        height: 50px;
+    
+        left: 25px; 
+        top: 25px; 
+    
+        text-align: center;
+    }
+    
+    .audio-player-button {
+        height: 50px;
+    }
+    
+    .audio-player-back-ring {
+        width: 90px; 
+        height: 90px;
+    
+        top: 5px; 
+        left: 5px;
+    
+        position: absolute;
+    
+        background-color: gray;
+        border-radius: 50%;
+        box-shadow: 0 0 7px gray;
+    }
+    
+    .audio-player-back-ring-center {
+        width: 86px; 
+        height: 86px;
+    
+        top: 7px; 
+        left: 7px;
+    
+        position: absolute;
+    
+        background-color: white;
+        border-radius: 43px;
+    }
+    
+    .audio-player-progress-ring {
+        width: 100px; 
+        height: 100px;
+    
+        top: 0px; 
+        left: 0px;
+    
+        position: absolute;
+    
+        border-radius: 50%;
+    
+        overflow: hidden;
+    }
+    
+    .audio-player-progress-ring-center {
+        width: 80px; 
+        height: 80px;
+    
+        top: 10px; 
+        left: 10px;
+    
+        position: absolute;
+    
+        background-color: white;
+        border-radius: 50%;
+    }
+    
+    .audio-player-progress-segment {
+        position: absolute;
+        background-color: #FE0900;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .audio-player-progress-segment-1 {
+        top: 0;
+        left: 50px;
+        transform-origin: bottom left;
+    
+        background: #FE0900; 
+    }
+    
+    .audio-player-progress-segment-2 {
+        top: 50px;
+        left: 50px;
+        transform-origin: top left;
+    
+        background: #FE0900;
+    }
+    
+    .audio-player-progress-segment-3 {
+        top: 50px;
+        left: 0px;
+        transform-origin: top right;
+    
+        background: #FE0900;
+    }
+    
+    .audio-player-progress-segment-4 {
+        top: 0;
+        left: 0px;
+        transform-origin: bottom left;
+    
+        background: #FE0900;
+    }
+
+    /*--------------Custom Audio Player End--------------*/
 
 /*=====================*/

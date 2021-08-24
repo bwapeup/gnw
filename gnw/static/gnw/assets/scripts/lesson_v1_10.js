@@ -60,6 +60,7 @@ function quiz()
         let question = mc_questions[index];
         let exercise_area_div = document.getElementById("exerciseArea");
         let old_quizBox_div = document.getElementById("quizBox");
+        let includes_audio = false;
 
         if (old_quizBox_div !== null)
         {
@@ -85,8 +86,25 @@ function quiz()
             }
             else if (question['media_file_type'].toUpperCase() === 'AUDIO')
             {
+                includes_audio = true;
                 let src = audio_url + question['media_file_name'];
-                HTML_str += `<div id="mediaFileContainer" class="my-5 container embed-responsive text-center"><audio src="` + src + `" autoplay controls>Your browser does not support the <code>audio</code> element.</audio></div>`;
+                HTML_str += `<div id="mediaFileContainer" class="my-5 container embed-responsive text-center">
+                                <audio src="` + src + `">Your browser does not support the <code>audio</code> element.</audio>
+                                <div class="audio-player">
+                                    <div class="audio-player-back-ring"></div>
+                                    <div class="audio-player-back-ring-center"></div>
+                                    <div class="audio-player-progress-ring">
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-1" style="display: none;"></div>
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-2" style="display: none;"></div>
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-3" style="display: none;"></div>
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-4" style="display: none;"></div>
+                                        <div class="audio-player-progress-ring-center"></div>
+                                    </div>
+                                    <div class="audio-player-controls">
+                                        <img src="` + img_url + `Audio-Play.svg" class="audio-player-button">
+                                    </div>
+                                </div>
+                             </div>`;
             }
         }
 
@@ -146,6 +164,11 @@ function quiz()
 
             let submit_button = document.querySelector("button.submit");
             submit_button.addEventListener("click", submit_answer);
+        }
+
+        if (includes_audio)
+        {
+            audio_player();
         }
     }
 
@@ -324,6 +347,7 @@ function quiz()
         let question = mc_questions[index];
         let exercise_area_div = document.getElementById("exerciseArea");
         let old_quizBox_div = document.getElementById("quizBox");
+        let includes_audio = false;
 
         if (old_quizBox_div !== null)
         {
@@ -349,8 +373,25 @@ function quiz()
             }
             else if (question['media_file_type'].toUpperCase() === 'AUDIO')
             {
-                src = audio_url + question['media_file_name'];
-                HTML_str += `<div id="mediaFileContainer" class="my-5 container embed-responsive text-center"><audio src="` + src + `" autoplay controls>Your browser does not support the <code>audio</code> element.</audio></div>`;
+                includes_audio = true;
+                let src = audio_url + question['media_file_name'];
+                HTML_str += `<div id="mediaFileContainer" class="my-5 container embed-responsive text-center">
+                                <audio src="` + src + `">Your browser does not support the <code>audio</code> element.</audio>
+                                <div class="audio-player">
+                                    <div class="audio-player-back-ring"></div>
+                                    <div class="audio-player-back-ring-center"></div>
+                                    <div class="audio-player-progress-ring">
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-1" style="display: none;"></div>
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-2" style="display: none;"></div>
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-3" style="display: none;"></div>
+                                        <div class="audio-player-progress-segment audio-player-progress-segment-4" style="display: none;"></div>
+                                        <div class="audio-player-progress-ring-center"></div>
+                                    </div>
+                                    <div class="audio-player-controls">
+                                        <img src="` + img_url + `Audio-Play.svg" class="audio-player-button">
+                                    </div>
+                                </div>
+                             </div>`;
             }
         }
 
@@ -414,6 +455,11 @@ function quiz()
 
             let submit_button = document.querySelector("button.submit");
             submit_button.addEventListener("click", submit_answer);
+        }
+
+        if (includes_audio)
+        {
+            audio_player();
         }
     }
 
