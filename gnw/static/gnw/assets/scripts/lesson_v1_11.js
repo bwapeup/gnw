@@ -69,26 +69,27 @@ function quiz()
 
         let quizBox_div = document.createElement("div");
         quizBox_div.id = "quizBox";
-        quizBox_div.classList.add("container", "mt-sm-5", "my-1"); //Bootstrap 4
+        quizBox_div.classList.add("container-md", "mt-5"); //Bootstrap 4
 
         let current_question_number = index + 1;
 
         let HTML_str = `<div id="questionNumberIndicator" class="mb-3">`;
         HTML_str += `<span>(` + current_question_number + ` of ` + mc_questions.length + `)</span></div>`;
-        HTML_str += `<div class="question ml-sm-5 pl-sm-5 pt-2">`;
+        //HTML_str += `<div class="question ml-5 pl-5 pt-2">`;
+        HTML_str += `<div class="container-md question pt-2">`;
 
         if (question['media_file_type'].toUpperCase() !== "NONE" && question['media_file_name'] !== null)
         {
             if (question['media_file_type'].toUpperCase() === 'IMAGE')
             {
                 let src = img_url + question['media_file_name'];
-                HTML_str += `<div id="mediaFileContainer" class="my-5 container text-center"><img src="` + src + `" class="img-fluid"></div>`;
+                HTML_str += `<div id="mediaFileContainer" class="mb-3 container-md text-center"><img src="` + src + `" class="img-fluid"></div>`;
             }
             else if (question['media_file_type'].toUpperCase() === 'AUDIO')
             {
                 includes_audio = true;
                 let src = audio_url + question['media_file_name'];
-                HTML_str += `<div id="mediaFileContainer" class="my-5 container embed-responsive text-center">
+                HTML_str += `<div id="mediaFileContainer" class="mb-3 container-md embed-responsive text-center">
                                 <audio src="` + src + `">Your browser does not support the <code>audio</code> element.</audio>
                                 <div class="audio-player">
                                     <div class="audio-player-back-ring"></div>
@@ -108,8 +109,8 @@ function quiz()
             }
         }
 
-        HTML_str += `<div id="questionTitle" class="py-2 h5">` + question['question_title'] + `</div>`;
-        HTML_str += `<div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">`;
+        HTML_str += `<div id="questionTitle" class="h5">` + question['question_title'] + `</div>`;
+        HTML_str += `<div id="options">`;
         HTML_str += `<label class="options"><span id="textOption1" class="textOption">` + question['option_1'] + `</span><input type="radio" name="radio" data-option="1"><span class="checkmark"></span></label>`; 
         HTML_str += `<label class="options"><span id="textOption2" class="textOption">` + question['option_2'] + `</span><input type="radio" name="radio" data-option="2"><span class="checkmark"></span></label>`; 
         HTML_str += `<label class="options"><span id="textOption3" class="textOption">` + question['option_3'] + `</span><input type="radio" name="radio" data-option="3"><span class="checkmark"></span></label>`; 
@@ -126,7 +127,7 @@ function quiz()
 
         if (!review || (review && review_answers.last_question === false))
         {
-            HTML_str += `<div class="d-flex align-items-right pt-3"><div class="ml-auto mr-sm-5"><button class="btn btn-success submit">` + button_text + `</button></div></div>`;
+            HTML_str += `<div class="d-flex align-items-right pt-3"><div class="ml-auto mr-5"><button class="btn btn-success submit">` + button_text + `</button></div></div>`;
         }
         
         quizBox_div.insertAdjacentHTML("afterbegin", HTML_str);
@@ -271,7 +272,7 @@ function quiz()
 
         let quizBox_div = document.createElement("div");
         quizBox_div.id = "quizBox";
-        quizBox_div.classList.add("container", "mt-sm-5", "my-1"); //Bootstrap 4
+        quizBox_div.classList.add("container-md", "mt-5"); //Bootstrap 4
 
         let num_questions = mc_questions.length;
         let num_correct = answered_correctly.reduce((a,b)=>a+b, 0);
@@ -302,7 +303,7 @@ function quiz()
         if (num_wrong > 0)
         {
             HTML_str = `<div class="d-flex align-items-right pt-3">
-                <div class="ml-auto mr-sm-5"> <button class="btn btn-success" id="reviewWrongAnswers">Review</button></div>
+                <div class="ml-auto mr-5"> <button class="btn btn-success" id="reviewWrongAnswers">Review</button></div>
                 </div>`;
             quizBox_div.insertAdjacentHTML("beforeend", HTML_str);
 
@@ -356,26 +357,26 @@ function quiz()
 
         let quizBox_div = document.createElement("div");
         quizBox_div.id = "quizBox";
-        quizBox_div.classList.add("container", "mt-sm-5", "my-1"); //Bootstrap 4
+        quizBox_div.classList.add("container-md", "mt-5"); //Bootstrap 4
 
         let current_question_number = index + 1;
 
         let HTML_str = `<div id="questionNumberIndicator" class="mb-3">`;
         HTML_str += `<span>(` + current_question_number + ` of ` + mc_questions.length + `)</span></div>`;
-        HTML_str += `<div class="question ml-sm-5 pl-sm-5 pt-2">`;
+        HTML_str += `<div class="container-md question pt-2">`;
 
         if (question['media_file_type'].toUpperCase() !== "NONE" && question['media_file_name'] !== null)
         {
             if (question['media_file_type'].toUpperCase() === 'IMAGE')
             {
                 src = img_url + question['media_file_name'];
-                HTML_str += `<div id="mediaFileContainer" class="my-5 container text-center"><img src="` + src + `" class="img-fluid"></div>`;
+                HTML_str += `<div id="mediaFileContainer" class="mb-3 container-md text-center"><img src="` + src + `" class="img-fluid"></div>`;
             }
             else if (question['media_file_type'].toUpperCase() === 'AUDIO')
             {
                 includes_audio = true;
                 let src = audio_url + question['media_file_name'];
-                HTML_str += `<div id="mediaFileContainer" class="my-5 container embed-responsive text-center">
+                HTML_str += `<div id="mediaFileContainer" class="mb-3 container-md embed-responsive text-center">
                                 <audio src="` + src + `">Your browser does not support the <code>audio</code> element.</audio>
                                 <div class="audio-player">
                                     <div class="audio-player-back-ring"></div>
@@ -395,8 +396,8 @@ function quiz()
             }
         }
 
-        HTML_str += `<div id="questionTitle" class="py-2 h5">` + question['question_title'] + `</div>`;
-        HTML_str += `<div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0" id="options">`;
+        HTML_str += `<div id="questionTitle" class="h5">` + question['question_title'] + `</div>`;
+        HTML_str += `<div id="options">`;
         HTML_str += `<div class="row w-75 my-5 justify-content-between"><div class="col-5 px-0 text-center imageOption position-relative" id="imageOption1" data-option="1"><img src="` + img_url + question['option_1'] + `" class="img-fluid mx-auto"></div><div class="col-5 px-0 text-center imageOption position-relative" id="imageOption2" data-option="2"><img src="` + img_url + question['option_2'] + `" class="img-fluid mx-auto"></div></div>`;
         HTML_str += `<div class="row w-75 my-5 justify-content-between"><div class="col-5 px-0 text-center imageOption position-relative" id="imageOption3" data-option="3"><img src="` + img_url + question['option_3'] + `" class="img-fluid mx-auto"></div><div class="col-5 px-0 text-center imageOption position-relative" id="imageOption4" data-option="4"><img src="` + img_url + question['option_4'] + `" class="img-fluid mx-auto"></div></div></div></div>`;
         
@@ -411,7 +412,7 @@ function quiz()
 
         if (!review || (review && review_answers.last_question === false))
         {
-            HTML_str += `<div class="d-flex align-items-right pt-3"><div class="ml-auto mr-sm-5"><button class="btn btn-success submit">` + button_text + `</button></div></div>`;
+            HTML_str += `<div class="d-flex align-items-right pt-3"><div class="ml-auto mr-5"><button class="btn btn-success submit">` + button_text + `</button></div></div>`;
         }
         
         quizBox_div.insertAdjacentHTML("afterbegin", HTML_str);
