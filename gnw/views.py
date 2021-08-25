@@ -18,31 +18,32 @@ quiz_template = 'gnw/quiz.html'
 #--------------------------------------
 
 #Context Data
-#----------------
-video_url = 'gnw/assets/video/'
-audio_url = 'gnw/assets/audio/'
-img_url = 'gnw/assets/img/'
-
-template_context = {
-    'img_url':img_url,
-    'video_url':video_url,
-    'audio_url':audio_url
-}
+#----------------------------------------------------------
+def initialize_context(keys={'img_url'}):
+    ctx_items = [
+        ('img_url', 'gnw/assets/img/'),
+        ('video_url', 'gnw/assets/video/'),
+        ('audio_url', 'gnw/assets/audio/'),
+        ]
+    ctx = {key: url for key, url in ctx_items if key in keys}
+    return ctx
 #----------------------------------------------------------
 
 
-def index(request): 
+def index(request):
+    template_context = initialize_context() 
     return render(request, index_template, template_context)
 
 @login_required
 def panel(request):
     enrolled_classes = Enrollment.objects.filter(user=request.user, is_current=True).select_related('course')
+    template_context = initialize_context()
     template_context.update({'enrolled_classes':enrolled_classes})
     return render(request, panel_template, template_context)
 
 @login_required 
 def course(request, slug):
-    if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
+    if not user_allowed_to_access_course(request, slug):
         return redirect(reverse('panel'))
     
     course = Course.objects.filter(slug=slug).prefetch_related('unit_set__lesson_set').first()
@@ -53,13 +54,14 @@ def course(request, slug):
     b = a.filter(enrollment__user=request.user, enrollment__is_current=True, enrollment__course=course)
     cls = b.values_list('lesson__random_slug', flat=True)
 
+    template_context = initialize_context()
     template_context.update({'course':course, 'course_name':course.course_name, 'course_slug':slug, 
                'completed_Lessons':cls}) 
     return render(request, course_template, template_context)
     
 @login_required
 def video(request, slug, uuid):
-    if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
+    if not user_allowed_to_access_course(request, slug):
         return redirect(reverse('panel'))
 
     try:
@@ -76,9 +78,11 @@ def video(request, slug, uuid):
         video = lesson.video
 
     video_name = video.video_file_name
-    course_slug = lesson.unit.course.slug
+    course_slug = slug
 
     next_lesson_dict = lesson.get_next_lesson()
+
+    template_context = initialize_context({'img_url', 'video_url'})
     template_context.update(next_lesson_dict)
 
     template_context.update({'video_name':video_name, 'course_slug':course_slug, 'lesson_id':uuid}) 
@@ -89,7 +93,7 @@ def video(request, slug, uuid):
 
 @login_required
 def quiz(request, slug, uuid):
-    if not Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists():
+    if not user_allowed_to_access_course(request, slug):
         return redirect(reverse('panel'))
 
     try:
@@ -107,6 +111,8 @@ def quiz(request, slug, uuid):
 
     course_slug = lesson.unit.course.slug
     next_lesson_dict = lesson.get_next_lesson()
+
+    template_context = initialize_context({'img_url', 'audio_url'})
     template_context.update(next_lesson_dict)
 
     template_context.update({'course_slug':course_slug, 'lesson_id':uuid}) 
@@ -116,5 +122,11 @@ def quiz(request, slug, uuid):
     return render(request, quiz_template, template_context)
 
         
-        
+def user_allowed_to_access_course(request, slug):
+    return is_enrolled(request, slug) or has_subscription(request, slug)  
     
+def has_subscription(request, slug):
+    pass
+
+def is_enrolled(request, slug):
+    return Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists()
