@@ -21,9 +21,9 @@
 {% endblock content %}
 
 {% block body-internal-js %}
-        {{ quiz_questions_dict|json_script:"quiz_questions_dict" }}
+        {{ quiz_questions_list|json_script:"quiz_questions_list" }}
         <script>
-            let quiz_questions = JSON.parse(document.getElementById('quiz_questions_dict').textContent);
+            let mc_questions = JSON.parse(document.getElementById('quiz_questions_list').textContent);
         </script>
         <script>let lesson_js_signal = "QUIZ";</script>
         <script>

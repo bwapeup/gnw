@@ -97,19 +97,14 @@ def quiz(request, slug, uuid):
         return redirect(reverse('panel'))
 
     try:
-        lesson = Lesson.objects.filter(random_slug=uuid).select_related('quiz', 'unit__course').get()
+        lesson = Lesson.objects.filter(random_slug=uuid).select_related('unit__course').get()
     except ObjectDoesNotExist:
         raise Http404("This lesson does not exist")
 
     if lesson.unit.course.slug != slug:
         raise Http404("This lesson does not exist")
 
-    if lesson.quiz is None:
-        raise Http404("No quiz assigned to this lesson")
-    else:
-        quiz = lesson.quiz
-
-    course_slug = lesson.unit.course.slug
+    course_slug = slug
     next_lesson_dict = lesson.get_next_lesson()
 
     template_context = initialize_context({'img_url', 'audio_url'})
@@ -117,8 +112,8 @@ def quiz(request, slug, uuid):
 
     template_context.update({'course_slug':course_slug, 'lesson_id':uuid}) 
 
-    quiz_questions_dict = quiz.get_quiz_questions_context()
-    template_context['quiz_questions_dict'] = quiz_questions_dict
+    quiz_questions_list = lesson.get_quiz_questions_context_json()
+    template_context['quiz_questions_list'] = quiz_questions_list
     return render(request, quiz_template, template_context)
 
         
@@ -126,7 +121,7 @@ def user_allowed_to_access_course(request, slug):
     return is_enrolled(request, slug) or has_subscription(request, slug)  
     
 def has_subscription(request, slug):
-    pass
+    return False
 
 def is_enrolled(request, slug):
     return Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists()

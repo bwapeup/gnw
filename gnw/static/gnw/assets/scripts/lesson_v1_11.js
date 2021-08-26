@@ -13,14 +13,8 @@ else if (lesson_js_signal.toUpperCase()==="COURSE MENU")
 
 function quiz()
 {
-    let mc_questions = [];
     let answered_correctly = [];
     let student_answers = [];
-
-    for (question in quiz_questions)
-    {
-        mc_questions.push(quiz_questions[question]);
-    }
 
     give_quiz.this_question_index = 0;
     function give_quiz()
