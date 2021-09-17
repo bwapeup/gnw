@@ -7,8 +7,6 @@ from people import views as people_views
 from django.urls import path
 
 
-
-
 urlpatterns = [
     url(r'^ycchtliaaau/', admin.site.urls, name='admin-page'),
     url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
@@ -25,6 +23,11 @@ urlpatterns += [
     url(r'^course/(?P<slug>[\w-]+)/$', gnw_views.course, name='class'),
     url(r'^course/(?P<slug>[\w-]+)/video/(?P<uuid>\d+)/$', gnw_views.video, name='video'),
     url(r'^course/(?P<slug>[\w-]+)/quiz/(?P<uuid>\d+)/$', gnw_views.quiz, name='quiz'),
+    url(r'^course/(?P<slug>[\w-]+)/assignment/(?P<uuid>\d+)/$', gnw_views.assignment, name='assignment'),
+]
+
+urlpatterns += [
+    url(r'^api/submit-photo-assignment/', gnw_views.submit_image_assignment, name='submit-photo-assignment'),
 ]
 
 #Ajax to request sms sign-up verification

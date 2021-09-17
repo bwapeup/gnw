@@ -38,6 +38,18 @@
                                         {% endif %}
                                     </div>
                                 </a>
+                            {% elif lesson.lesson_type == 'ASSIGNMENT' %}
+                                <a href="{% url 'assignment' slug=course_slug uuid=lesson.random_slug %}" class="lessonLink">
+                                    <div class="lessonBlock">
+                                        <div class="lessonIconContainer"><span class="lesson-number">{{forloop.counter}}</span></div>
+                                        <div class="lessonTitleContainer">{{lesson.lesson_name}}</div>
+                                        {% if lesson.random_slug in completed_Lessons %}
+                                            <div class="lesson-completed-check ml-auto align-self-center"></div>
+                                        {% else %}
+                                            <div class="lesson-circle ml-auto align-self-center"></div>
+                                        {% endif %}
+                                    </div>
+                                </a>
                             {% endif %}
                             
                         {% endfor %}

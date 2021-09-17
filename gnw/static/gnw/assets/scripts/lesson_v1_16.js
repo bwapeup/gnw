@@ -6,6 +6,10 @@ else if (lesson_js_signal.toUpperCase()==="VIDEO")
 {
     video();
 }
+else if (lesson_js_signal.toUpperCase()==="ASSIGNMENT")
+{
+    assignment();
+}
 else if (lesson_js_signal.toUpperCase()==="COURSE MENU")
 {
     course_menu_setup();
@@ -510,7 +514,7 @@ function quiz()
 
 function video()
 {
-    var vid = document.querySelector("video");
+    let vid = document.querySelector("video");
 
     //When the video finishes, display button to go next
     //=========================================================
@@ -750,8 +754,348 @@ function video()
     }
 }
 
+//=========================================================================================================
+//=========================================================================================================
+//========================================ASSIGNMENT=======================================================
+//=========================================================================================================
+//=========================================================================================================
 
+function assignment()
+{
+    if (assignment_details['assignment_type'].toUpperCase()==='PHOTO_UPLOAD')
+    {
+        if (assignment_submitted === false)
+        {
+            set_up_photo_upload_page();
+        }
+        else
+        {
+            if (submitted_assignment_details['graded']===true)
+            {
+                set_up_graded_photos_assignment_page();
+            }
+            else
+            {
+                set_up_photos_submitted_page();
+            }
+        }
+    }
 
+    function set_up_photo_upload_page()
+    {
+        let exercise_area_div = document.getElementById("exerciseArea");
+        let old_uploadBox_div = document.getElementById("uploadBox");
+
+        if (old_uploadBox_div !== null)
+        {
+            old_uploadBox_div.remove();
+        }
+
+        let uploadBox_div = document.createElement("div");
+        uploadBox_div.id = "uploadBox";
+        uploadBox_div.classList.add("container-md", "mt-5"); //Bootstrap 4
+
+        HTML_str = `<div id="instructionsBox">
+                <p>请完成上一节课的作业，然后拍照上传。</p>
+                <p>最多可以上传<span style="color:red;padding-left:4px;padding-right:4px;">8</span>张照片。</p>
+                <p>老师会在一周内批改作业，批改好的作业会上传到此页。</p>
+            </div>`;
+        HTML_str += `<input type="file" id="fileElem" multiple accept="image/*">`;
+        HTML_str += `<div id="upload_buttons" class="d-flex justify-content-center mt-4 mb-3"><button class="btn btn-success choose-files">选择照片</button></div>`;
+        uploadBox_div.insertAdjacentHTML("afterbegin", HTML_str);
+        exercise_area_div.insertAdjacentElement("afterbegin", uploadBox_div);
+
+        const image_picker_button = document.querySelector("button.choose-files");
+        image_picker_button.addEventListener("click", choose_files);
+
+        const inputElement = document.getElementById("fileElem");
+        inputElement.addEventListener("change", validateFiles, false);
+    }
+
+    function choose_files()
+    {
+        const fileElem = document.getElementById("fileElem");
+        if (fileElem)
+        {
+            fileElem.click();
+        }
+    }
+
+    function validateFiles() 
+    {
+        const fileList = this.files; 
+        let errors = [];
+        let max_files_error = "最多只能上传 8 张照片";
+        let min_file_error = "请至少选择一张照片上传";
+        let file_size_error = "每张图片大小不能超过 10 MB";
+        let file_type_error = "只支持以下几种图片格式：jpg, jpeg, png, gif";
+
+        //Check the number of files: max = 8, min=1
+        if (fileList.length > 8)
+        {
+            errors.push(max_files_error);
+        }
+        if (fileList.length <= 0)
+        {
+            errors.push(min_file_error);
+        }
+        
+        //Check the size of each file: max = 10 mb per file
+        //Check the file types
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        for (let i=0; i<fileList.length; i++)
+        {
+            if (fileList[i].size > 10000000) 
+            {
+                errors.push(file_size_error);
+            }   
+
+            if (!validImageTypes.includes(fileList[i].type.toLowerCase()))
+            {
+                errors.push(file_type_error);
+                break;
+            }
+        }
+
+        if (errors.length > 0)
+        {
+            //If there are errors, uploading is disabled.
+            let upload_button = document.querySelector("button.upload-files");
+            if (upload_button)
+            {
+                upload_button.disabled = true;
+            }
+
+            let header = '操作错误';
+            let body ='';
+
+            for (let i=0; i<errors.length; i++)
+            {
+                body += `<p>` + errors[i] + `</p>`;
+                if (i === errors.length - 1)
+                {
+                    body += `<p>请重新选择</p>`;
+                }
+            }
+
+            show_modal_message(body, header);
+        }
+        else
+        {
+            show_thumbnails(fileList);
+        }
+    }
+
+    function show_thumbnails(fileList)
+    {
+        let old_thumbnail_list = document.getElementById("thumbnailList");
+        if (old_thumbnail_list !== null)
+        {
+            old_thumbnail_list.remove();
+        }
+
+        let thumbnail_div = document.createElement("div");
+        thumbnail_div.id = "thumbnailList";
+        document.getElementById("uploadBox").appendChild(thumbnail_div);
+
+        for (let i = 0; i < fileList.length; i++) 
+        {
+            const image_frame = document.createElement("div");
+            thumbnail_div.appendChild(image_frame);
+
+            const img = document.createElement("img");
+            img.classList.add("obj");
+            img.file = fileList[i];
+            img.src = URL.createObjectURL(fileList[i]);
+            img.height = 100;
+
+            img.onload = function() {
+                URL.revokeObjectURL(this.src);
+            }
+
+            image_frame.appendChild(img);
+        }
+
+        const buttons_div = document.getElementById("upload_buttons");
+        const image_picker_button = document.querySelector("button.choose-files");
+
+        image_picker_button.textContent = "重新选择";
+        image_picker_button.blur();
+
+        let upload_button = document.querySelector("button.upload-files");
+        
+        if (upload_button === null)
+        {
+            let HTML_str = `<button class="btn btn-success upload-files">上传照片</button>`;
+            buttons_div.insertAdjacentHTML("beforeend", HTML_str);
+            const file_upload_button = document.querySelector("button.upload-files");
+
+            file_upload_button.addEventListener("click", handle_upload_request);
+        }
+        else
+        {
+            upload_button.blur();
+            upload_button.disabled = false;
+        }
+    }
+
+    function handle_upload_request()
+    {
+        document.querySelector("button.choose-files").disabled = true;
+        document.querySelector("button.upload-files").disabled = true;
+
+        show_fake_progress_bar("文件上传中...");
+
+        let files = document.getElementById("fileElem").files;
+
+        let fd = new FormData();
+
+        fd.append('lesson_uuid', lesson_id);
+        fd.append('course_slug', course_slug);
+
+        for (let i=0;i<files.length;i++)
+        {
+            fd.append('image'+(i+1), files[i])
+        }
+
+        let instructions = {};
+        instructions['get_csrftoken'] = true;
+
+        let call_body = {};
+        call_body['type'] = 'post';
+        call_body['data'] = fd;
+        call_body['url'] = '/api/submit-photo-assignment/';
+        call_body['contentType'] = false;
+        call_body['processData'] = false;
+
+        //Reload the page if upload successful
+        function force_reload()
+        {
+            window.location.reload();
+        }
+
+        //Show error message in modal if upload fails
+        function show_error(xhr, status, errorThrown) 
+        {
+            remove_fake_progress_bar();
+
+            let header = '上传失败';
+            let body = `<p>作业上传失败，请再试一次。</p>
+                        <p>如果连续失败，请联系我们。</p>
+                        <p>error: `+ xhr.status + ` (` + xhr.statusText +`)</p>`;
+
+            show_modal_message(body, header);
+
+            document.querySelector("button.choose-files").disabled = false;
+            document.querySelector("button.upload-files").disabled = false;
+        }
+
+        make_ajax_call(instructions, call_body, force_reload, show_error);
+    }
+
+    function set_up_photos_submitted_page()
+    {
+        let exercise_area_div = document.getElementById("exerciseArea");
+        let old_uploadBox_div = document.getElementById("uploadBox");
+
+        if (old_uploadBox_div !== null)
+        {
+            old_uploadBox_div.remove();
+        }
+
+        let uploadBox_div = document.createElement("div");
+        uploadBox_div.id = "uploadBox";
+        uploadBox_div.classList.add("container-md", "mt-5"); //Bootstrap 4
+
+        let submitted_datetime = submitted_assignment_details['submitted_time'];
+        let yyyy = submitted_datetime.substring(0,4);
+        let mm = submitted_datetime.substring(5,7);
+        let dd = submitted_datetime.substring(8,10);
+        let submit_date = yyyy + '年' + mm + '月' + dd + '日';
+
+        HTML_str = `<div id="instructionsBox">
+                <p>作业已上传。</p>
+                <p>上传日期：<span style="color:red;padding-left:4px;padding-right:4px;">`+submit_date+`</span></p>
+                <p>老师会在一周内批改作业，批改好的作业会上传到此页。</p>
+            </div>`;
+        
+        uploadBox_div.insertAdjacentHTML("afterbegin", HTML_str);
+        exercise_area_div.insertAdjacentElement("afterbegin", uploadBox_div);
+        document.getElementById("nextButtonBox").classList.add("show");
+    }
+
+    function show_fake_progress_bar(label_str)
+    {
+        let old_progress_div = document.getElementById("fakeProgressBarDiv");
+        if (old_progress_div !== null)
+        {
+            old_progress_div.remove();
+        }
+
+        let elem = document.createElement("div");
+        elem.id = "fakeProgressBarDiv";
+        elem.classList.add("container-md");
+        let HTML_str = 
+            `<div class="text-center" style="font-size:1.6rem;">`+label_str+`</div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+            </div>`;
+        elem.insertAdjacentHTML("afterbegin", HTML_str);
+        document.getElementById("instructionsBox").appendChild(elem);
+    }
+
+    function remove_fake_progress_bar()
+    {
+        let old_progress_div = document.getElementById("fakeProgressBarDiv");
+        if (old_progress_div !== null)
+        {
+            old_progress_div.remove();
+        }
+    }
+
+    function set_up_graded_photos_assignment_page()
+    {
+        let exercise_area_div = document.getElementById("exerciseArea");
+        let old_uploadBox_div = document.getElementById("uploadBox");
+
+        if (old_uploadBox_div !== null)
+        {
+            old_uploadBox_div.remove();
+        }
+
+        let uploadBox_div = document.createElement("div");
+        uploadBox_div.id = "uploadBox";
+        uploadBox_div.classList.add("container-md", "mt-5"); //Bootstrap 4
+
+        HTML_str = `<div id="instructionsBox">
+                <p style="color:red;">作业已批改。</p>
+                <p>下列图片是批改后的作业，内有老师的批改和评语。</p>
+                <p>请下载所有图片并仔细订正。</p>
+            </div>`;
+        
+        uploadBox_div.insertAdjacentHTML("afterbegin", HTML_str);
+        exercise_area_div.insertAdjacentElement("afterbegin", uploadBox_div);
+        document.getElementById("nextButtonBox").classList.add("show");
+
+        let thumbnail_div = document.createElement("div");
+        thumbnail_div.id = "thumbnailList";
+        document.getElementById("uploadBox").appendChild(thumbnail_div);
+
+        let imageList = submitted_assignment_details['photos'];
+
+        for (let i = 0; i < imageList.length; i++) 
+        {
+            const image_frame = document.createElement("div");
+            thumbnail_div.appendChild(image_frame);
+
+            const img = document.createElement("img");
+            img.src = imageList[i];
+            img.height = 100;
+
+            image_frame.appendChild(img);
+        }
+    }
+}
 
 function record_results_api(lesson_id, lesson_results='')
 {
@@ -841,4 +1185,117 @@ function course_menu_setup()
             lesson_number_spans[i].textContent = '0' + lesson_number;
         }
     }
+}
+
+
+function make_ajax_call(instruction_dict, call_body_dict, done_callback=null, fail_callback=null)
+{
+    if ('get_csrftoken' in instruction_dict && instruction_dict['get_csrftoken']===true)
+    {
+        var csrftoken = getCookie('csrftoken');
+    
+        function csrfSafeMethod(method) 
+        {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    }
+
+    /* Sample call body:
+    {
+        url: api_url,
+        data: {random_slug: lesson_id, results: lesson_results},
+        type: "POST",
+        dataType : "text",
+    }
+    */
+
+    //If no callbacks are passed in, use defaults.
+    if (done_callback === null)
+    {
+        done_callback = successful;
+    }
+
+    if (fail_callback === null)
+    {
+        fail_callback = unsuccessful;
+    }
+
+    $.ajax(call_body_dict)
+    .done(done_callback)
+    .fail(fail_callback)
+
+    function successful(response)
+    {
+        console.log(response);
+    }
+
+    function unsuccessful( xhr, status, errorThrown ) 
+    {
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
+    }
+    
+    function getCookie(name) 
+    {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') 
+        {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) 
+            {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) 
+                {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+}
+
+function show_modal_message(bodyHTML, headerHTML='')
+{
+    let old_modalDiv = document.getElementById("genericModalDiv");
+    if (old_modalDiv !== null)
+    {
+        old_modalDiv.remove();
+    }
+
+    let HTML_str = 
+        `<div class="modal" id="genericModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">`+ headerHTML +`</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">`+ bodyHTML +`</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+    let elem = document.createElement("div");
+    elem.id = "genericModalDiv";
+    elem.insertAdjacentHTML("afterbegin", HTML_str);
+    document.body.appendChild(elem);
+    
+    $('#genericModal').modal('show'); //Bootstrap function
 }

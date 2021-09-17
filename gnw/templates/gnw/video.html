@@ -71,6 +71,8 @@
             <a href="{% url 'video' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
             {% elif next_lesson_type == 'QUIZ' %}
             <a href="{% url 'quiz' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
+            {% elif next_lesson_type == 'ASSIGNMENT' %}
+            <a href="{% url 'assignment' slug=course_slug uuid=next_lesson_id %}"><button class="nextLecture">Next</button></a>
             {% elif next_lesson_type == 'NONE' %}
             <a href="{% url 'class' slug=course_slug %}"><button class="nextLecture">Home</button></a>
             {% endif %}

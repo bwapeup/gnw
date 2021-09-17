@@ -154,15 +154,16 @@ STATIC_URL = '/static/'
 #    os.path.join(BASE_DIR, 'sms/static'),
 #]
 
-AWS_LOCATION = 'static'
-#AWS_ACCESS_KEY_ID = config('AWS_KEY_ID')
-#AWS_SECRET_ACCESS_KEY = config('AWS_KEY')
-#AWS_STORAGE_BUCKET_NAME = config('AWS_BUCKET_NAME')
+AWS_LOCATION = 'assignments'
+AWS_ACCESS_KEY_ID = config('AWS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_BUCKET_NAME')
+AWS_REGION = config('AWS_REGION')
 #AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 #AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400',}
 #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 #STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-AWS_CLOUDFRONT_DOMAIN = config('AWS_CLOUDFRONT_DOMAIN')
+#AWS_CLOUDFRONT_DOMAIN = config('AWS_CLOUDFRONT_DOMAIN')
 #STATIC_URL = 'https://%s/%s/' % (AWS_CLOUDFRONT_DOMAIN, AWS_LOCATION)
 
 
@@ -179,7 +180,7 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Yunpian SMS
 #----------------------------------------------------------
-YUNPIAN_APIKEY = config('YUNPIAN_APIKEY')
+#YUNPIAN_APIKEY = config('YUNPIAN_APIKEY')
 #----------------------------------------------------------
 
 
@@ -210,4 +211,9 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+#----------------------------------------------------------
+
+#Cloud storage backend
+#----------------------------------------------------------
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 #----------------------------------------------------------

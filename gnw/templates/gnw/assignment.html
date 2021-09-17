@@ -6,6 +6,13 @@
 
 {% block content %}
   <div id="exerciseArea">
+      <div id="uploadBox" class="container-md mt-5">
+        <div id="instructionsBox">
+            <p>请完成上一节课的作业，然后拍照上传。</p>
+            <p>最多可以上传<span style="color:red;">8</span>张照片。</p>
+            <p>老师会在一周内批改作业，批改好的作业会上传到此页。</p>
+        </div>
+      </div>
     <div class="bottomBufferDiv"></div>
     <div class="" id="nextButtonBox">
         {% if next_lesson_type == 'VIDEO' %}
@@ -23,16 +30,27 @@
 {% endblock content %}
 
 {% block body-internal-js %}
-        {{ quiz_questions_list|json_script:"quiz_questions_list" }}
+        {{ assignment_details_dict|json_script:"assignment_details_dict" }}
         <script>
-            let mc_questions = JSON.parse(document.getElementById('quiz_questions_list').textContent);
+            let assignment_details = JSON.parse(document.getElementById('assignment_details_dict').textContent);
         </script>
-        <script>let lesson_js_signal = "QUIZ";</script>
+
+        {% if assignment_submitted %}
+          {{ submitted_assignment_details_dict|json_script:"submitted_assignment_details_dict" }}
+          <script>
+            let submitted_assignment_details = JSON.parse(document.getElementById('submitted_assignment_details_dict').textContent);
+            let assignment_submitted = true;
+          </script>
+        {% else %}
+          <script>
+            let assignment_submitted = false;
+            let course_slug = "{{course_slug}}";
+          </script>
+        {% endif %}
+
+        <script>let lesson_js_signal = "ASSIGNMENT";</script>
         <script>
-          let img_url = "{% static img_url %}";
-          let audio_url = "{% static audio_url %}";
           let lesson_id = "{{lesson_id}}";
         </script>
-        <script src="{% static 'gnw/assets/scripts/audio-player_v_1_1.js' %}"></script>
         {{block.super}}
 {% endblock body-internal-js %}

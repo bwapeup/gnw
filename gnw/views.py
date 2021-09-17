@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from gnw.models import Course, Lesson
+from django.views.decorators.http import require_POST
 from enrollment.models import Enrollment
 from progress.models import Completed_Lessons
-
+from progress.views import create_completed_lesson_record
+from gnw.models import Course, Assignment
+from gnw.helpers import user_allowed_to_access_course, get_lesson_or_404, initialize_context
+from gnw.forms import Submitted_Assignment_Form
 
 #Templates:
 #--------------------------------------
@@ -15,19 +17,8 @@ panel_template = 'gnw/panel.html'
 course_template = 'gnw/course.html'
 video_template = 'gnw/video.html'
 quiz_template = 'gnw/quiz.html'
+assignment_template = 'gnw/assignment.html'
 #--------------------------------------
-
-#Context Data
-#----------------------------------------------------------
-def initialize_context(keys={'img_url'}):
-    ctx_items = [
-        ('img_url', 'gnw/assets/img/'),
-        ('video_url', 'gnw/assets/video/'),
-        ('audio_url', 'gnw/assets/audio/'),
-        ]
-    ctx = {key: url for key, url in ctx_items if key in keys}
-    return ctx
-#----------------------------------------------------------
 
 
 def index(request):
@@ -64,13 +55,7 @@ def video(request, slug, uuid):
     if not user_allowed_to_access_course(request, slug):
         return redirect(reverse('panel'))
 
-    try:
-        lesson = Lesson.objects.filter(random_slug=uuid).select_related('video', 'unit__course').get()
-    except ObjectDoesNotExist:
-        raise Http404("This lesson does not exist")
-
-    if lesson.unit.course.slug != slug:
-        raise Http404("This lesson does not exist")
+    lesson = get_lesson_or_404(slug, uuid, 'VIDEO')
 
     if lesson.video is None:
         raise Http404("No video assigned to this lesson")
@@ -78,14 +63,13 @@ def video(request, slug, uuid):
         video = lesson.video
 
     video_name = video.video_file_name
-    course_slug = slug
 
     next_lesson_dict = lesson.get_next_lesson()
 
     template_context = initialize_context({'img_url', 'video_url'})
     template_context.update(next_lesson_dict)
 
-    template_context.update({'video_name':video_name, 'course_slug':course_slug, 'lesson_id':uuid}) 
+    template_context.update({'video_name':video_name, 'course_slug':slug, 'lesson_id':uuid}) 
 
     video_questions_list = video.get_video_questions_context_json()
     template_context['video_questions_list'] = video_questions_list
@@ -96,32 +80,75 @@ def quiz(request, slug, uuid):
     if not user_allowed_to_access_course(request, slug):
         return redirect(reverse('panel'))
 
-    try:
-        lesson = Lesson.objects.filter(random_slug=uuid).select_related('unit__course').get()
-    except ObjectDoesNotExist:
-        raise Http404("This lesson does not exist")
-
-    if lesson.unit.course.slug != slug:
-        raise Http404("This lesson does not exist")
-
-    course_slug = slug
+    lesson = get_lesson_or_404(slug, uuid, 'QUIZ')
     next_lesson_dict = lesson.get_next_lesson()
 
     template_context = initialize_context({'img_url', 'audio_url'})
     template_context.update(next_lesson_dict)
 
-    template_context.update({'course_slug':course_slug, 'lesson_id':uuid}) 
+    template_context.update({'course_slug':slug, 'lesson_id':uuid}) 
 
     quiz_questions_list = lesson.get_quiz_questions_context_json()
     template_context['quiz_questions_list'] = quiz_questions_list
     return render(request, quiz_template, template_context)
 
-        
-def user_allowed_to_access_course(request, slug):
-    return is_enrolled(request, slug) or has_subscription(request, slug)  
-    
-def has_subscription(request, slug):
-    return False
+@login_required
+def assignment(request, slug, uuid):
+    if not user_allowed_to_access_course(request, slug):
+        return redirect(reverse('panel'))
 
-def is_enrolled(request, slug):
-    return Enrollment.objects.filter(user=request.user, course__slug=slug, is_current=True).exists()
+    lesson = get_lesson_or_404(slug, uuid, 'ASSIGNMENT')
+
+    next_lesson_dict = lesson.get_next_lesson()
+
+    template_context = initialize_context({'img_url', 'audio_url'})
+    template_context.update(next_lesson_dict)
+    template_context.update({'course_slug':slug, 'lesson_id':uuid}) 
+
+    assignment_details_dict = lesson.get_assignment_details_json()
+    template_context['assignment_details_dict'] = assignment_details_dict
+
+    submitted_assignment_qrst = Assignment.objects.filter(lesson=lesson, user=request.user)
+
+    #The student has submitted this assignment
+    if submitted_assignment_qrst:
+        template_context['assignment_submitted'] = True
+        submitted_assignment = submitted_assignment_qrst[0]
+        submitted_assignment_details_dict = submitted_assignment.get_assignment_context()
+        template_context['submitted_assignment_details_dict'] = submitted_assignment_details_dict
+    else:
+        template_context['assignment_submitted'] = False
+
+    return render(request, assignment_template, template_context)
+
+@require_POST
+def submit_image_assignment(request):
+    if request.user.is_authenticated:
+
+        f = Submitted_Assignment_Form(request.POST, request.FILES)
+        if f.is_valid():
+            slug = f.cleaned_data['course_slug']
+            if not user_allowed_to_access_course(request, slug):
+                return HttpResponse(status=401)
+
+            uuid = f.cleaned_data['lesson_uuid']
+            lesson = get_lesson_or_404(slug, uuid, 'ASSIGNMENT')
+
+            if Assignment.objects.filter(user=request.user, lesson=lesson).exists():
+                return HttpResponse(status=403)
+
+            assignment = f.save(commit=False)
+            assignment.user = request.user
+            
+            assignment.lesson = lesson
+            assignment.assign_unique_names_to_images()
+            assignment.save()
+
+            #Below should be made async;the submitter should not have to wait for this
+            create_completed_lesson_record(request.user, lesson, '', assignment)
+            return HttpResponse("Success")
+        else:
+            return HttpResponse(status=400)
+    else:
+        return HttpResponse(status=401)
+

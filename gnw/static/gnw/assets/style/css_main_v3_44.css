@@ -1303,3 +1303,109 @@ button.notActive {
     /*--------------Custom Audio Player End--------------*/
 
 /*=====================*/
+
+
+/*Assignment*/
+/*=====================*/
+#uploadBox {
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    width: 700px;
+    box-shadow: 8px 10px 20px 0 rgba(46, 61, 73, 0.6);
+}
+
+#instructionsBox {
+    font-size: 1.8rem;
+    color: black;
+    width: 100%;
+    padding: 1.5rem;
+}
+
+#fileElem {
+    position: fixed;
+    top: -100rem;
+}
+
+.choose-files, .upload-files {
+    font-size: 1.5rem;
+    border: none;
+    width: 10rem;
+    vertical-align: middle;
+    box-shadow: 1px 1px 3px 0 rgba(122, 126, 129, 0.6);
+}
+
+.choose-files {
+    background-color: orange;
+    margin-right: 10px;
+}
+
+.upload-files {
+    background-color: red;
+    margin-left: 10px;
+}
+
+.choose-files:hover {
+    background-color: darkorange;
+    cursor: pointer;
+}
+
+.upload-files:hover {
+    background-color: darkred;
+    cursor: pointer;
+}
+
+button.btn-success.upload-files:disabled, 
+button.btn-success.upload-files:disabled:hover,
+button.btn-success.choose-files:disabled, 
+button.btn-success.choose-files:disabled:hover {
+    background-color: gray;
+    cursor: not-allowed;
+    box-shadow: none;
+    border-color: gray;
+    opacity: 0.5;
+}
+
+#thumbnailList {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+}
+
+#thumbnailList div {
+    margin: 10px;
+}
+
+#fakeProgressBarDiv {
+    width: 85%;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+#fakeProgressBarDiv .progress {
+    height: 2rem;
+    font-size: 1.5rem;
+    border-radius: 2rem;
+}
+
+#fakeProgressBarDiv .progress .progress-bar {
+    animation-duration: 15s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-name: fakeprogress;
+}
+
+@keyframes fakeprogress {
+    from {
+      width: 1%;
+    }
+  
+    to {
+      width: 99%;
+    }
+  }
+
+/*=====================*/
