@@ -502,7 +502,21 @@ function quiz()
             }
         }
 
-        record_results_api(lesson_id, data_string);
+        let instructions = {};
+        instructions['get_csrftoken'] = true;
+
+        let call_body = {};
+        call_body['url'] = '/progress/ajax/record_completed_lesson/';
+
+        let postdata = {};
+        postdata['random_slug'] = lesson_id;
+        postdata['results'] = data_string;
+
+        call_body['data'] = postdata;
+        call_body['type'] = 'POST';
+        call_body['dataType'] = 'text';
+
+        make_ajax_call(instructions, call_body);
     }
 }
 
@@ -521,8 +535,21 @@ function video()
     vid.addEventListener("ended", show_next_button_and_call_api);
     function show_next_button_and_call_api()
     {
-        let data_string = ``;
-        record_results_api(lesson_id, data_string);
+        let instructions = {};
+        instructions['get_csrftoken'] = true;
+
+        let call_body = {};
+        call_body['url'] = '/progress/ajax/record_completed_lesson/';
+
+        let postdata = {};
+        postdata['random_slug'] = lesson_id;
+        postdata['results'] = '';
+
+        call_body['data'] = postdata;
+        call_body['type'] = 'POST';
+        call_body['dataType'] = 'text';
+
+        make_ajax_call(instructions, call_body);
         
         document.getElementById("nextButtonBox").classList.add("show");
         vid.addEventListener("playing", runVideo);
@@ -1095,66 +1122,6 @@ function assignment()
             image_frame.appendChild(img);
         }
     }
-}
-
-function record_results_api(lesson_id, lesson_results='')
-{
-    let api_url = "/progress/ajax/record_completed_lesson/";
-    
-    function getCookie(name) 
-    {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') 
-        {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) 
-            {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) 
-                {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    
-    var csrftoken = getCookie('csrftoken');
-    
-    function csrfSafeMethod(method) 
-    {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-    
-    $.ajax({
-        url: api_url,
-        data: {random_slug: lesson_id, results: lesson_results},
-        type: "POST",
-        dataType : "text",
-    })
-    // Code to run if the request succeeds (is done);
-    // The response is passed to the function
-    .done(function(response){
-        console.log(response);
-    })
-    // Code to run if the request fails; the raw request and
-    // status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
 }
 
 
