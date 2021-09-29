@@ -9,6 +9,7 @@ from django.conf import settings
 class CustomUser(AbstractUser):
     name = models.CharField(max_length = 100, blank=True)
     mobile = models.CharField(max_length = 11, unique=True)
+    require_password_change = models.BooleanField(default=False)
 
     def __str__(self):
         if self.name == '':
@@ -44,6 +45,6 @@ class Student(models.Model):
 
     def __str__(self):
         if self.student_name == '':
-            return self.mobile
+            return self.user.mobile
         else:
             return self.student_name

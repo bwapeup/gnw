@@ -9,7 +9,7 @@ from progress.models import Completed_Lessons
 #======================================================================
 @require_POST
 def ajax_record_completed_lesson(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not request.user.require_password_change:
         uuid = request.POST.get('random_slug')
         lesson_results = request.POST.get('results')
         lm = Lesson.objects.filter(random_slug = uuid).first()

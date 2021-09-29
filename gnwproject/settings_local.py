@@ -200,7 +200,7 @@ CAPTCHA_OUTPUT_FORMAT = u'%(text_field)s %(hidden_field)s %(image)s'
 # Miscellaneous
 #----------------------------------------------------------
 LOGIN_REDIRECT_URL = '/panel'  
-LOGOUT_REDIRECT_URL = '/panel'
+LOGOUT_REDIRECT_URL = '/accounts/login'
 AUTH_USER_MODEL = 'people.CustomUser'
 #----------------------------------------------------------
 

@@ -30,7 +30,7 @@ class Token(models.Model):
     This has to be used during the same session, that is
     if the user logs out and then logs back in, this
     token is voided. The "created" field is used to set
-    a further restriction on by whaen it must be used.
+    a further restriction on by when it must be used.
     """
     mobile = models.CharField(max_length = 25)
     session_key = models.CharField(null=False, max_length=40)

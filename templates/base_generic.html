@@ -38,9 +38,11 @@
                                     <li class="nav-item">
                                         <a href="{% url 'login'%}" class="nav-link login">登录</a>
                                     </li> 
+                                    {% comment "Not allowing direct user signup for now" %}
                                     <li class="nav-item">
                                         <a href="{% url 'signup'%}" class="nav-link signup">注册</a>
                                     </li> 
+                                    {% endcomment %}
                                 {% endif %}
                             </ul>
                         </div>

@@ -6,9 +6,10 @@ from django.views.decorators.http import require_POST
 from enrollment.models import Enrollment
 from progress.models import Completed_Lessons
 from progress.views import create_completed_lesson_record
-from gnw.models import Course, Assignment
-from gnw.helpers import user_allowed_to_access_course, get_lesson_or_404, initialize_context
-from gnw.forms import Submitted_Assignment_Form
+from .models import Course, Assignment
+from .helpers import user_allowed_to_access_course, get_lesson_or_404, initialize_context
+from .forms import Submitted_Assignment_Form
+from .decorators import force_password_change_if_required
 
 #Templates:
 #--------------------------------------
@@ -25,6 +26,7 @@ def index(request):
     template_context = initialize_context() 
     return render(request, index_template, template_context)
 
+@force_password_change_if_required
 @login_required
 def panel(request):
     enrolled_classes = Enrollment.objects.filter(user=request.user, is_current=True).select_related('course')
@@ -32,6 +34,7 @@ def panel(request):
     template_context.update({'enrolled_classes':enrolled_classes})
     return render(request, panel_template, template_context)
 
+@force_password_change_if_required
 @login_required 
 def course(request, slug):
     if not user_allowed_to_access_course(request, slug):
@@ -50,6 +53,7 @@ def course(request, slug):
                'completed_Lessons':cls}) 
     return render(request, course_template, template_context)
     
+@force_password_change_if_required
 @login_required
 def video(request, slug, uuid):
     if not user_allowed_to_access_course(request, slug):
@@ -75,6 +79,7 @@ def video(request, slug, uuid):
     template_context['video_questions_list'] = video_questions_list
     return render(request, video_template, template_context)
 
+@force_password_change_if_required
 @login_required
 def quiz(request, slug, uuid):
     if not user_allowed_to_access_course(request, slug):
@@ -92,6 +97,7 @@ def quiz(request, slug, uuid):
     template_context['quiz_questions_list'] = quiz_questions_list
     return render(request, quiz_template, template_context)
 
+@force_password_change_if_required
 @login_required
 def assignment(request, slug, uuid):
     if not user_allowed_to_access_course(request, slug):
@@ -123,7 +129,7 @@ def assignment(request, slug, uuid):
 
 @require_POST
 def submit_image_assignment(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not request.user.require_password_change:
 
         f = Submitted_Assignment_Form(request.POST, request.FILES)
         if f.is_valid():

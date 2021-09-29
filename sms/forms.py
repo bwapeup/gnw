@@ -28,14 +28,18 @@ class CaptchaScreenForm(forms.Form):
 
     
 class SignUpForm(UserCreationForm):
+    """
+    This form is not used currently. We are not allowing users to sign up on the website. 
+    Users get signed up by us when they purchase our courses on the third-party ecommerce platform.
+    """
     verification_code = forms.CharField(max_length=7, min_length=7)
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password1', 'password2', 'verification_code', )
+        fields = ('username', 'mobile', 'password1', 'password2')
 
 
 class RequestSMSCodeForm(forms.Form):
-    verification_code = forms.CharField(max_length=7, min_length=7)
+    verification_code = forms.CharField(max_length=6, min_length=6)
 
     

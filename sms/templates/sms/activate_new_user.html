@@ -23,7 +23,10 @@
             <div class="studentInfoItem" id="signupMobile">
               <span>手机号码： </span>{{ mobile }}
             </div>
-            <input id='id_username' name='username' type='hidden' value='{{mobile}}'>
+            <input id='id_mobile' name='mobile' type='hidden' value='{{mobile}}'>
+            <div class="loginInputDiv" id="usernameInputDiv">
+              <label for="{{ form.username.id_for_label }}">用户名 </label>{{ form.username }}
+            </div>
             <div class="loginInputDiv" id="password1InputDiv">
               <label for="{{ form.password1.id_for_label }}">密码 </label>{{ form.password1 }}
             </div>

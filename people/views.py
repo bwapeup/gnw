@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from gnw.decorators import force_password_change_if_required
 from .forms import StudentInfoUpdateForm
 
 #Templates:
@@ -10,7 +11,7 @@ update_student_info_template = 'people/update_student_info.html'
 show_student_info_template = 'people/show_student_info.html'
 #--------------------------------------
 
-
+@force_password_change_if_required
 @login_required
 def update_student_info(request):
     template_context = {}
@@ -33,6 +34,7 @@ def update_student_info(request):
         template_context.update({'form': form})
         return render(request, update_student_info_template, template_context) 
 
+@force_password_change_if_required
 @login_required
 def show_my_info(request):
     template_context = {}

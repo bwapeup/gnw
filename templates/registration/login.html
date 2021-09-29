@@ -31,7 +31,7 @@
             </div>
         </form>
         <div id="loginFormLinktoSignup" class="d-flex justify-content-center align-items-center">
-            <div>没有账号？<a href="{% url 'signup'%}"><span>立即注册</span></a>&nbsp;|&nbsp;<a href="{% url 'reset_password_captcha'%}"><span>忘记密码?</span></a></div>
+            <div>{% comment %}没有账号？<a href="{% url 'signup'%}"><span>立即注册</span></a>&nbsp;|&nbsp;{% endcomment %}<a href="{% url 'reset_password_captcha'%}"><span>忘记密码?</span></a></div>
         </div>
     </div>
 

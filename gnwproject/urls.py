@@ -15,8 +15,8 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^$', gnw_views.index, name='index'),
-    url(r'^signup/$', sms_views.signup_captcha, name='signup'),
-    url(r'^signup/activate/(?P<token>\w+)/$', sms_views.activate_new_user, name='activate_new_user'),
+    #url(r'^signup/$', sms_views.signup_captcha, name='signup'), Turned off since we are not allowing direct user signups
+    #url(r'^signup/activate/(?P<token>\w+)/$', sms_views.activate_new_user, name='activate_new_user'),
     url(r'^panel/$', gnw_views.panel, name='panel'),
     url(r'^panel/update_my_info/$', people_views.update_student_info, name='update_student_info'),
     url(r'^panel/show_my_info/$', people_views.show_my_info, name='show_my_info'),
@@ -40,6 +40,7 @@ urlpatterns += [
     url(r'^reset_password_request/$', sms_views.reset_password_captcha, name='reset_password_captcha'),
     url(r'^reset_password_sms/(?P<token>\w+)/$', sms_views.reset_password_sms, name='reset_password_sms'),
     url(r'^reset_password_confirm/(?P<token>\w+)/$', sms_views.reset_password_confirm, name='reset_password_confirm'),
+    url(r'^require-password-change/$', sms_views.require_password_change, name='require_password_change'),
 ]
 
 urlpatterns += [
