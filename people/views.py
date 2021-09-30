@@ -17,22 +17,35 @@ def update_student_info(request):
     template_context = {}
     if hasattr(request.user, 'student'):
         student = request.user.student
-    else:
-        template_context.update({'no_student_account':True})
-        return render(request, update_student_info_template, template_context)
-    if request.method == 'POST':
-        form = StudentInfoUpdateForm(request.POST, instance=student)
-        if form.is_valid():
-            form.save()
-            messages.success(request, '信息更改成功！')
-            return redirect(reverse('show_my_info'))
+        if request.method == 'POST':
+            form = StudentInfoUpdateForm(request.POST, instance=student)
+            if form.is_valid():
+                form.save()
+                messages.success(request, '信息更改成功！')
+                return redirect(reverse('show_my_info'))
+            else:
+                template_context.update({'form': form})
+                return render(request, update_student_info_template, template_context) 
         else:
+            form = StudentInfoUpdateForm(instance=student)
             template_context.update({'form': form})
             return render(request, update_student_info_template, template_context) 
     else:
-        form = StudentInfoUpdateForm(instance=student)
-        template_context.update({'form': form})
-        return render(request, update_student_info_template, template_context) 
+        if request.method == 'POST':
+            form = StudentInfoUpdateForm(request.POST)
+            if form.is_valid():
+                student = form.save(commit=False)
+                student.user = request.user
+                student.save()
+                messages.success(request, '信息更改成功！')
+                return redirect(reverse('show_my_info'))
+            else:
+                template_context.update({'form': form})
+                return render(request, update_student_info_template, template_context) 
+        else:
+            form = StudentInfoUpdateForm()
+            template_context.update({'form': form})
+            return render(request, update_student_info_template, template_context)
 
 @force_password_change_if_required
 @login_required
@@ -41,8 +54,6 @@ def show_my_info(request):
     template_context['mobile'] = request.user.mobile
     if hasattr(request.user, 'student'):
         student = request.user.student
-        template_context['is_student'] = True
-        template_context['username'] = request.user.username
         template_context['parent_name'] = student.parent_name
         template_context['student_name'] = student.student_name
 
@@ -60,8 +71,6 @@ def show_my_info(request):
             template_context['student_birth_date'] = ''
         template_context['city'] = student.city
     else:
-        template_context['is_student'] = False
-        template_context['username'] = request.user.username
         template_context['parent_name'] = ''
         template_context['student_name'] = ''
         template_context['student_gender'] = ''

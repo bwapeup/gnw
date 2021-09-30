@@ -30,21 +30,9 @@
             <div>我的信息</div>
         </div>
         <div class="loginForm">
-            {% if is_student %}
-                <div class="studentInfoItem">
-                  <span>学生账户： 已注册</span>
-                </div>
-            {% else %}
-                <div class="studentInfoItem">
-                  <span>学生账户： 未注册</span>
-                </div>
-            {% endif %}
             <div class="studentInfoItem">
               <span>注册手机： </span>{{ mobile }}
-            </div>
-            <div class="studentInfoItem">
-              <span>用户名： </span>{{ username }}
-            </div>
+            </div>          
             <div class="studentInfoItem">
               <span>家长名字： </span>{{ parent_name }}
             </div>

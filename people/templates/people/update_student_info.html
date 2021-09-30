@@ -2,10 +2,6 @@
 
 {% block content %}
 
-    {% if no_student_account %}
-        <div class="loginErrorMessageDiv">您没有学生账号。如您需要帮助，请联系我们。</div>
-    {% else %}
-
         {% if form.errors %}
             {% for key,value in form.errors.items %} 
                 <div class="loginErrorMessageDiv">{{ value }}</div>
@@ -38,7 +34,6 @@
                 </div>
             </form>
         </div>
-    {% endif %}
 
 {% endblock %}
 
