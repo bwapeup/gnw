@@ -22,7 +22,7 @@ class Enrollment(models.Model):
 
     ENROLLMENT_TYPES = [
         ('TRIAL', 'Trial'),
-        ('REGULAR', 'regular'),
+        ('REGULAR', 'Regular'),
     ]
 
     enrollment_type = models.CharField(max_length = 100, choices=ENROLLMENT_TYPES)
