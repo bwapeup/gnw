@@ -20,19 +20,19 @@
       {% endblock meta %}
       
       {% block favicon %}
-            <link rel="shortcut icon" href="{% static 'gnw/assets/img/favicon.ico' %}">
+            <link rel="shortcut icon" href="{% static 'gnw/img/favicon.ico' %}">
       {% endblock favicon %}
         
       {% block head-external-CSS %}
-            <link href="{% static 'gnw/assets/style/bootstrap.min.css' %}" rel="stylesheet"> {# version 4.6.0 #}
+            <link href="{% static 'gnw/style/bootstrap.min.css' %}" rel="stylesheet"> {# version 4.6.0 #}
       {% endblock head-external-CSS %}
         
       {% block head-external-JS %}
-            <script defer src="{% static 'gnw/assets/scripts/all.min.js' %}"></script> {# font-awesome icons #}
+            <script defer src="{% static 'gnw/scripts/all.min.js' %}"></script> {# font-awesome icons #}
       {% endblock head-external-JS %}
         
       {% block head-internal-css %}
-            <link href="{% static 'gnw/assets/style/css_main_v3_44.css' %}" rel="stylesheet">
+            <link href="{% static 'gnw/style/css_main_v3_44.css' %}" rel="stylesheet">
       {% endblock head-internal-css %}
     
         </head>
@@ -52,12 +52,12 @@
         {% block footer %}{% endblock footer %}
 
         {% block body-external-JS %} 
-                <script src="{% static 'gnw/assets/scripts/jquery-3.6.0.min.js' %}"></script>
-                <script defer src="{% static 'gnw/assets/scripts/bootstrap.bundle.min.js' %}"></script> {# version 4.6.0 #}
+                <script src="{% static 'gnw/scripts/jquery-3.6.0.min.js' %}"></script>
+                <script defer src="{% static 'gnw/scripts/bootstrap.bundle.min.js' %}"></script> {# version 4.6.0 #}
         {% endblock body-external-JS %}
         
         {% block body-internal-js %}
-                <script src="{% static 'gnw/assets/scripts/lesson_v1_16.js' %}"></script>
+                <script src="{% static 'gnw/scripts/lesson_v1_16.js' %}"></script>
         {% endblock body-internal-js %}
 
         </body>

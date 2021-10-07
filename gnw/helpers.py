@@ -8,9 +8,9 @@ from gnw.models import Lesson
 #----------------------------------------------------
 def initialize_context(keys={'img_url'}):
     ctx_items = [
-        ('img_url', 'gnw/assets/img/'),
-        ('video_url', 'gnw/assets/video/'),
-        ('audio_url', 'gnw/assets/audio/'),
+        ('img_url', 'gnw/img/'),
+        ('video_url', 'gnw/video/'),
+        ('audio_url', 'gnw/audio/'),
         ]
     ctx = {key: url for key, url in ctx_items if key in keys}
     return ctx

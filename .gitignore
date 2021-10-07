@@ -103,7 +103,6 @@ ENV/
 # Extra ones
 bin/
 media/
-video/
 *.sqlite3
 *.bak
 docs/locale/
@@ -113,3 +112,4 @@ tests/report/
 serverless.yml
 old_*
 audio/
+video/

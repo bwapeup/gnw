@@ -24,12 +24,13 @@ INSTALLED_APPS = [
     'enrollment',
     'progress',
     'session_control',
-    'storages',
     'admin_honeypot',
     'captcha',
+    #'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -112,7 +113,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 
-DEFAULT_FROM_EMAIL = 'Feimao <noreply@feimaoclasstest.xyz>'
+#DEFAULT_FROM_EMAIL = 'Feimao <noreply@feimaoclasstest.xyz>'
 EMAIL_SUBJECT_PREFIX = '[Feimao System] '
 #----------------------------------------------------------
 
@@ -130,7 +131,7 @@ MANAGERS = [('Manager', config('FEIMAO_MANAGER_EMAIL', default=''))]
 # Internationalization
 #----------------------------------------------------------
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -152,15 +153,16 @@ USE_TZ = True
 #    os.path.join(BASE_DIR, 'sms/static'),
 #]
 
-AWS_LOCATION = 'static'
-#AWS_ACCESS_KEY_ID = config('AWS_KEY_ID')
-#AWS_SECRET_ACCESS_KEY = config('AWS_KEY')
-#AWS_STORAGE_BUCKET_NAME = config('AWS_BUCKET_NAME')
-#AWS_REGION = config('AWS_REGION')
-#AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_STATIC_FOLDER = 'static'
+#AWS_LOCATION = 'assignments'
+AWS_ACCESS_KEY_ID = config('AWS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_BUCKET_NAME')
+AWS_REGION = config('AWS_REGION')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 #AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400',}
 #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_FOLDER)
 #AWS_CLOUDFRONT_DOMAIN = config('AWS_CLOUDFRONT_DOMAIN')
 #STATIC_URL = 'https://%s/%s/' % (AWS_CLOUDFRONT_DOMAIN, AWS_LOCATION)
 
@@ -200,6 +202,15 @@ CAPTCHA_OUTPUT_FORMAT = u'%(text_field)s %(hidden_field)s %(image)s'
 LOGIN_REDIRECT_URL = '/panel'  
 LOGOUT_REDIRECT_URL = '/accounts/login'
 AUTH_USER_MODEL = 'people.CustomUser'
+#----------------------------------------------------------
+
+#For django debug toolbar
+#----------------------------------------------------------
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
 #----------------------------------------------------------
 
 #Cloud storage backend
