@@ -627,8 +627,25 @@ function video()
         }
     }
 
+    function preload_images()
+    {
+        //Preload the in-video multiple choice option images ('A', 'B', 'C', 'D') and make them hidden.
+        //Otherwise they'd have to be loaded at question time and possibly without having been cached,
+        //and if they fail to load or load too slowly, it'll look very bad.
+        //Not using <link 'rel=prefetch'> or similar approaches because cross-browser support is spotty.
+        let choice_dict = {1:"A", 2:"B", 3:"C", 4:"D"};
+        for (let i=1;i<=4;i++)
+        {
+            let img = document.createElement('img');
+            img.setAttribute("src", img_url + "orange_letter_" + choice_dict[i] + ".svg");
+            img.classList.add('preload_mc_image');
+            document.body.appendChild(img);
+        }
+    }
+
     if (video_questions)
     {
+        preload_images();
         set_up_question_data();
         vid.addEventListener("timeupdate", identify_action_times);
     }

@@ -936,6 +936,12 @@ display: block;
 
     /*--------------Custom Video Player End--------------*/
 
+.preload_mc_image {
+    position: fixed;
+    top: -100rem;
+    width: 1rem;
+    height: auto;
+}
 
 #choicesdiv {
     display: flex;
